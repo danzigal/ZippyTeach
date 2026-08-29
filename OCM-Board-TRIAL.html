@@ -507,6 +507,18 @@
       <button class="btn btn-primary" onclick="closeStudentsOfDayModal()" style="margin-top:16px;">Close</button>
     </div>
   </div>
+
+  <!-- UPGRADE LOCK MODAL (trial build only) -->
+  <div class="reward-modal" id="upgradeLockModal" onclick="closeUpgradeLock()">
+    <div class="reward-box" onclick="event.stopPropagation()" style="max-width:420px;">
+      <div style="font-size:44px; margin-bottom:8px;">🔒</div>
+      <h3 style="color:#333; margin-bottom:10px;">Full Version Feature</h3>
+      <p id="upgradeLockMessage" style="color:#555; margin-bottom:16px;"></p>
+      <p style="color:#0077b6; font-weight:700; margin-bottom:4px;">To unlock everything, contact:</p>
+      <p id="upgradeLockContact" style="color:#023e8a; font-weight:800; font-size:16px; margin-bottom:16px;"></p>
+      <button class="btn btn-primary" onclick="closeUpgradeLock()">Close</button>
+    </div>
+  </div>
 </div>
 
 <!-- STORAGE WARNING BANNERS (fixed, visible from any screen) -->
@@ -591,16 +603,17 @@ function makeClass() {
   return { desks: makeEmptyDesks(DESK_COUNT), rules: [...DEFAULT_RULES] };
 }
 
-let classes = {
-  'Class 1': makeClass(),
-  'Class 2': makeClass(),
-  'Class 3': makeClass(),
-  'Class 4': makeClass(),
-  'Class 5': makeClass(),
-  'Class 6': makeClass(),
-  'Class 7': makeClass(),
-  'Class 8': makeClass()
-};
+const TRIAL_CLASS_LIMIT = 1;
+const FULL_CLASS_LIMIT = 8;
+
+function makeInitialClasses() {
+  const limit = BUILD_TYPE === 'trial' ? TRIAL_CLASS_LIMIT : FULL_CLASS_LIMIT;
+  const obj = {};
+  for (let i = 1; i <= limit; i++) obj['Class ' + i] = makeClass();
+  return obj;
+}
+
+let classes = makeInitialClasses();
 let activeClass = 'Class 1';
 let audioCtx = null;
 let analyser = null;
@@ -626,7 +639,7 @@ const CIRCUMFERENCE = 2 * Math.PI * 110;
 let diceCount = 2;
 let diceValues = [];
 
-let groupCount = 4;
+let groupCount = BUILD_TYPE === 'trial' ? 3 : 4;
 
 const ROLE_CATEGORIES = [
   {
@@ -922,8 +935,13 @@ function bulkFillDesks() {
 
 function addClass() {
   const name = document.getElementById('newClassName').value.trim();
-  if (Object.keys(classes).length >= 8) {
-    alert('You already have the max of 8 classes. Rename or clear one first if you need a different one.');
+  const classLimit = BUILD_TYPE === 'trial' ? TRIAL_CLASS_LIMIT : FULL_CLASS_LIMIT;
+  if (Object.keys(classes).length >= classLimit) {
+    if (BUILD_TYPE === 'trial') {
+      showUpgradeLock('Adding more than ' + TRIAL_CLASS_LIMIT + ' class');
+    } else {
+      alert('You already have the max of ' + FULL_CLASS_LIMIT + ' classes. Rename or clear one first if you need a different one.');
+    }
     return;
   }
   if (name && !classes[name]) {
@@ -936,7 +954,7 @@ function addClass() {
   }
 }
 
-const MAX_POINTS = 500;
+const MAX_POINTS = BUILD_TYPE === 'trial' ? 20 : 500;
 
 function changePoints(idx, delta) {
   const desk = classes[activeClass].desks[idx];
@@ -1046,6 +1064,7 @@ function getDeskProfile(desk) {
 }
 
 function openProfileModal(idx) {
+  if (BUILD_TYPE === 'trial') { showUpgradeLock('Student Profiles'); return; }
   profileDeskIdx = idx;
   const desk = classes[activeClass].desks[idx];
   getDeskProfile(desk);
@@ -1350,10 +1369,7 @@ function importBackup(file) {
 
 function resetAllData() {
   if (!confirm('This will erase ALL classes, points, seating, and rules on this computer and cannot be undone. Continue?')) return;
-  classes = {
-    'Class 1': makeClass(), 'Class 2': makeClass(), 'Class 3': makeClass(), 'Class 4': makeClass(),
-    'Class 5': makeClass(), 'Class 6': makeClass(), 'Class 7': makeClass(), 'Class 8': makeClass()
-  };
+  classes = makeInitialClasses();
   activeClass = 'Class 1';
   saveState();
   renderClassGrid();
@@ -1488,6 +1504,7 @@ function updateWheel() {
 }
 
 function spinWheel() {
+  if (BUILD_TYPE === 'trial') { showUpgradeLock('The Wheel'); return; }
   if (wheelSpinning || wheelNames.length === 0) return;
   wheelSpinning = true;
   document.getElementById('wheelWinner').textContent = '';
@@ -1565,6 +1582,7 @@ function renderBingoBalls() {
 }
 
 function drawBingo() {
+  if (BUILD_TYPE === 'trial') { showUpgradeLock('Bingo'); return; }
   if (bingoShuffling || bingoNames.length === 0) return;
   bingoShuffling = true;
   document.getElementById('bingoWinner').textContent = '';
@@ -1728,6 +1746,7 @@ function rollDice() {
 
 // ========== GROUPS ==========
 function setGroupCount(n) {
+  if (BUILD_TYPE === 'trial' && n > 3) { showUpgradeLock('More than 3 groups'); return; }
   groupCount = n;
   document.getElementById('groupCountLabel').textContent = n + ' groups';
 }
@@ -1853,6 +1872,7 @@ function copyNotepad() {
 let voiceSessionExceeded = false;
 
 async function toggleMic() {
+  if (BUILD_TYPE === 'trial') { showUpgradeLock('The Voice Meter'); return; }
   const btn = document.getElementById('micBtn');
   if (micActive) {
     micActive = false;
@@ -1947,7 +1967,18 @@ function undoLastVoiceSession() {
 }
 
 // ========== STUDENTS OF THE DAY ==========
+// ========== TRIAL FEATURE LOCKS ==========
+function showUpgradeLock(featureName) {
+  document.getElementById('upgradeLockMessage').textContent = featureName + ' is available in the full version — the trial keeps this one locked so you can see what\'s possible.';
+  document.getElementById('upgradeLockContact').textContent = PURCHASE_CONTACT;
+  document.getElementById('upgradeLockModal').classList.add('show');
+}
+function closeUpgradeLock() {
+  document.getElementById('upgradeLockModal').classList.remove('show');
+}
+
 function drawStudentsOfDay() {
+  if (BUILD_TYPE === 'trial') { showUpgradeLock('Students of the Day'); return; }
   const seated = classes[activeClass].desks.filter(d => d.name);
   if (seated.length === 0) {
     alert('No students are seated in ' + activeClass + ' yet.');
