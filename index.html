@@ -74,7 +74,11 @@
   h2 { font-size: clamp(26px, 4vw, 38px); font-weight: 800; letter-spacing: -0.5px; margin: 0 0 16px; color: #052e6e; }
   .lede { font-size: 16px; line-height: 1.65; color: #1a4a7a; max-width: 600px; }
 
-  .tools { background: linear-gradient(180deg, #ffffff 0%, #eaf9fd 100%); }
+  .tools { background: linear-gradient(180deg, #ffffff 0%, #eaf9fd 100%); transition: background 0.6s ease; }
+  .tools.theme-preview-ocean { background: linear-gradient(180deg, #ffffff 0%, #a6e6f5 100%); }
+  .tools.theme-preview-jungle { background: linear-gradient(180deg, #fdf8ec 0%, #c8dfa0 100%); }
+  .tool-card[data-theme="jungle"] { transition: border-color 0.3s ease; }
+  .tool-card[data-theme="jungle"]:hover { border-color: #6b9c3f; }
   .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; margin-top: 44px; }
   .tool-card {
     background: #fff; border-radius: 18px; padding: 30px;
@@ -158,21 +162,21 @@
   <div class="section-inner">
     <div class="kicker">The toolkit</div>
     <h2>Tools we've built so far.</h2>
-    <p class="lede">Every ZippyTeach tool starts the same way: something a real classroom needed and nothing else quite solved.</p>
+    <p class="lede">Every ZippyTeach tool starts the same way: something a real classroom needed and nothing else quite solved. Hover a tool to preview its theme.</p>
     <div class="tool-grid">
-      <div class="tool-card">
+      <div class="tool-card" data-theme="ocean">
         <span class="tool-badge live">● Available now</span>
         <div class="icon-row">🌊🪑📊</div>
         <h3>OCM Board</h3>
         <p>ESL Ocean Classroom Manager Board — seating charts, behavior points, classroom rules, student profiles, name pickers, group roles, and a noise meter, all in one offline app. Built for large ESL classrooms in China, no internet connection required.</p>
         <a href="ocm-board-landing-page.html" class="tool-link">Learn more →</a>
       </div>
-      <div class="tool-card coming">
-        <span class="tool-badge soon">◐ In the works</span>
-        <div class="icon-row">🔧✨</div>
-        <h3>Next tool: TBD</h3>
-        <p>Whatever the next classroom problem turns out to be — that's what gets built next. Got a suggestion? Email us.</p>
-        <a href="mailto:danzigal1988@gmail.com" class="tool-link">Suggest a tool →</a>
+      <div class="tool-card coming" data-theme="jungle">
+        <span class="tool-badge soon">◐ In the making</span>
+        <div class="icon-row">🌴🦜🌿</div>
+        <h3>Jungle Board</h3>
+        <p>Same classroom manager toolkit you'd expect from ZippyTeach — reskinned in a jungle theme. In the making now. Want first access when it launches?</p>
+        <a href="mailto:danzigal1988@gmail.com" class="tool-link">Get notified →</a>
       </div>
     </div>
   </div>
@@ -228,6 +232,19 @@
     b.style.setProperty('--drift', drift);
     container.appendChild(b);
   }
+})();
+
+(function () {
+  const toolsSection = document.getElementById('tools');
+  const cards = document.querySelectorAll('.tool-card[data-theme]');
+  cards.forEach(card => {
+    const theme = card.dataset.theme;
+    const preview = () => { toolsSection.className = 'tools theme-preview-' + theme; };
+    const reset = () => { toolsSection.className = 'tools'; };
+    card.addEventListener('mouseenter', preview);
+    card.addEventListener('mouseleave', reset);
+    card.addEventListener('click', preview);
+  });
 })();
 </script>
 
