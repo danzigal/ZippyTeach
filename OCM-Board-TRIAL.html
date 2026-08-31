@@ -111,6 +111,17 @@
   .desk-btn-minus { background: #ef476f; }
   .desk-btn-plus { background: #06d6a0; }
   .desk-btn-star { background: #ffd166; color: #5c3d00; }
+  .seating-canvas { position: relative; width: 100%; aspect-ratio: 16/10; background: linear-gradient(180deg, #f7fdff 0%, #eaf9fd 100%); border: 2px dashed #caf0f8; border-radius: 14px; overflow: hidden; margin-bottom: 6px; touch-action: none; }
+  .seating-canvas::before { content: '🖥️ FRONT OF ROOM'; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 800; color: #90b8c9; letter-spacing: 1px; pointer-events: none; }
+  .desk-chip { position: absolute; width: 64px; height: 54px; margin-left: -32px; margin-top: -27px; background: white; border: 2px solid #caf0f8; border-radius: 10px; box-shadow: 0 2px 8px rgba(2,62,138,0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: grab; user-select: none; touch-action: none; transition: box-shadow 0.15s, border-color 0.15s; }
+  .desk-chip.desk-empty { background: #f0f9fb; border-style: dashed; opacity: 0.85; }
+  .desk-chip.dragging { cursor: grabbing; box-shadow: 0 8px 20px rgba(2,62,138,0.3); z-index: 50; opacity: 0.9; }
+  .desk-chip-num { position: absolute; top: 2px; left: 4px; font-size: 8px; font-weight: 800; color: #90b8c9; }
+  .desk-chip-name { font-size: 11px; font-weight: 700; color: #023e8a; text-align: center; max-width: 56px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .desk-chip-points { font-size: 10px; font-weight: 700; color: #06a97e; margin-top: 2px; }
+  .layout-picker { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .layout-picker button { flex: 1; min-width: 100px; }
+  .layout-picker button.active { outline: 3px solid #0077b6; outline-offset: -2px; }
   .desk-action-row { display: flex; gap: 4px; margin-top: 5px; }
   .desk-rule-btn, .desk-profile-btn { flex: 1; border: none; border-radius: 6px; padding: 5px 2px; font-size: 10px; font-weight: 700; cursor: pointer; color: white; }
   .desk-rule-btn { background: #5e60ce; }
@@ -524,6 +535,26 @@
       <button class="btn btn-primary" onclick="closeUpgradeLock()">Close</button>
     </div>
   </div>
+
+  <!-- DESK DETAIL MODAL -->
+  <div class="reward-modal" id="deskDetailModal" onclick="closeDeskDetail()">
+    <div class="reward-box" onclick="event.stopPropagation()" style="max-width:340px;">
+      <h3 id="deskDetailTitle" style="color:#333; margin-bottom:10px;">Desk</h3>
+      <input type="text" id="deskDetailNameInput" placeholder="+ Add Name" maxlength="18" style="width:100%; text-align:center; font-size:16px; font-weight:700; color:#023e8a; padding:10px; border:2px solid #caf0f8; border-radius:8px; margin-bottom:12px; box-sizing:border-box;">
+      <div id="deskDetailBadgeRow" style="min-height:20px; margin-bottom:8px;"></div>
+      <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:14px;">
+        <button class="desk-btn desk-btn-minus" id="deskDetailMinus" style="padding:8px 14px; font-size:14px;">-1</button>
+        <span id="deskDetailPoints" style="font-size:20px; font-weight:800; color:#023e8a; min-width:40px;">0</span>
+        <button class="desk-btn desk-btn-plus" id="deskDetailPlus" style="padding:8px 14px; font-size:14px;">+1</button>
+        <button class="desk-btn desk-btn-star" id="deskDetailStar" style="padding:8px 14px; font-size:14px;">+3</button>
+      </div>
+      <div style="display:flex; gap:8px; margin-bottom:10px;">
+        <button class="desk-rule-btn" id="deskDetailRuleBtn" style="flex:1;">🏆 Award Rule</button>
+        <button class="desk-profile-btn" id="deskDetailProfileBtn" style="flex:1;">📊 Profile</button>
+      </div>
+      <button class="btn btn-primary" onclick="closeDeskDetail()" style="width:100%;">Close</button>
+    </div>
+  </div>
 </div>
 
 <!-- STORAGE WARNING BANNERS (fixed, visible from any screen) -->
@@ -605,7 +636,112 @@ function makeEmptyDesks(n) {
 }
 
 function makeClass() {
-  return { desks: makeEmptyDesks(DESK_COUNT), rules: [...DEFAULT_RULES] };
+  return { desks: makeEmptyDesks(DESK_COUNT), rules: [...DEFAULT_RULES], groups: [], layoutType: 'flexible', deskPositions: null };
+}
+
+function getClassGroups(className) {
+  const cls = classes[className];
+  if (!cls.groups) cls.groups = [];
+  return cls.groups;
+}
+
+// ========== SEATING LAYOUTS ==========
+function layoutFlexible() {
+  const cols = 6, rows = 5;
+  const positions = [];
+  for (let i = 0; i < DESK_COUNT; i++) {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    positions.push({ x: 10 + col * (80 / (cols - 1)), y: 12 + row * (76 / (rows - 1)) });
+  }
+  return positions;
+}
+
+function layoutUShape() {
+  const positions = [];
+  const leftCount = 8, bottomCount = 14, rightCount = 8;
+  for (let i = 0; i < leftCount; i++) positions.push({ x: 8, y: 12 + i * (76 / (leftCount - 1)) });
+  for (let i = 0; i < bottomCount; i++) positions.push({ x: 8 + i * (84 / (bottomCount - 1)), y: 92 });
+  for (let i = 0; i < rightCount; i++) positions.push({ x: 92, y: 88 - i * (76 / (rightCount - 1)) });
+  return positions;
+}
+
+function layoutPairs() {
+  const positions = [];
+  const rows = 5, pairsPerRow = 3;
+  for (let r = 0; r < rows; r++) {
+    for (let p = 0; p < pairsPerRow; p++) {
+      const baseX = 20 + p * 30;
+      const y = 12 + r * 19;
+      positions.push({ x: baseX - 6, y: y });
+      positions.push({ x: baseX + 6, y: y });
+    }
+  }
+  return positions;
+}
+
+function layoutPods() {
+  const positions = [];
+  const podRows = 2, podCols = 3, perPod = 5;
+  const centers = [];
+  for (let r = 0; r < podRows; r++) {
+    for (let c = 0; c < podCols; c++) centers.push({ x: 18 + c * 32, y: 28 + r * 44 });
+  }
+  centers.forEach(center => {
+    for (let k = 0; k < perPod; k++) {
+      const angle = (k / perPod) * Math.PI * 2 - Math.PI / 2;
+      positions.push({ x: center.x + 11 * Math.cos(angle), y: center.y + 13 * Math.sin(angle) });
+    }
+  });
+  return positions;
+}
+
+const LAYOUT_OPTIONS = [
+  { type: 'flexible', label: '🔀 Flexible' },
+  { type: 'ushape', label: '🧲 U-Shape' },
+  { type: 'pairs', label: '👫 Pair Seating' },
+  { type: 'pods', label: '🍀 Clusters/Pods' }
+];
+
+function generateLayoutPositions(type) {
+  if (type === 'ushape') return layoutUShape();
+  if (type === 'pairs') return layoutPairs();
+  if (type === 'pods') return layoutPods();
+  return layoutFlexible();
+}
+
+function getDeskPositions(className) {
+  const cls = classes[className];
+  if (!cls.deskPositions || cls.deskPositions.length !== DESK_COUNT) {
+    cls.deskPositions = generateLayoutPositions(cls.layoutType || 'flexible');
+  }
+  return cls.deskPositions;
+}
+
+function applyLayout(type) {
+  const cls = classes[activeClass];
+  if (cls.deskPositions && cls.layoutType !== type) {
+    if (!confirm('Switching layouts will reset any manual desk positions you\'ve made for this class. Continue?')) return;
+  }
+  cls.layoutType = type;
+  cls.deskPositions = generateLayoutPositions(type);
+  saveState();
+  renderLayoutPicker();
+  renderSeatingCanvas();
+}
+
+function renderLayoutPicker() {
+  const picker = document.getElementById('layoutPicker');
+  if (!picker) return;
+  picker.innerHTML = '';
+  const current = classes[activeClass].layoutType || 'flexible';
+  LAYOUT_OPTIONS.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-teal' + (opt.type === current ? ' active' : '');
+    btn.textContent = opt.label;
+    btn.onclick = () => applyLayout(opt.type);
+    picker.appendChild(btn);
+  });
 }
 
 const TRIAL_CLASS_LIMIT = 1;
@@ -779,6 +915,7 @@ function switchToolsTab(tab) {
   document.querySelectorAll('#workspace-tools .sub-panel').forEach(p => p.classList.remove('active'));
   event.target.classList.add('active');
   document.getElementById('tools-panel-' + tab).classList.add('active');
+  if (tab === 'groups') renderGroupGrid();
 }
 
 function renderClassSelectors() {
@@ -826,12 +963,13 @@ function renderClassContent() {
   html += '</div>';
 
   html += '<div class="card"><h3 style="margin-bottom: 4px; color: #333;">🪑 ' + activeClass + ' Seating Chart <span style="color:#0077b6; font-size:14px; font-weight:600;">(' + filled + '/' + DESK_COUNT + ')</span></h3>';
-  html += '<p style="color:#888; font-size:13px; margin-bottom:10px;">Each desk is numbered to match your classroom layout. You can also type a name directly into any empty desk. Use the buttons on a desk to give or remove points.</p>';
+  html += '<p style="color:#888; font-size:13px; margin-bottom:10px;">Choose a layout, then drag any desk to fine-tune it. Tap a desk to edit the name, give points, or open their profile.</p>';
+  html += '<div class="layout-picker" id="layoutPicker"></div>';
   html += '<div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">';
   html += '<button class="btn btn-success" onclick="classWidePoints(1)" style="flex:1; min-width:140px;">➕ +1 to Whole Class</button>';
   html += '<button class="btn btn-danger" onclick="classWidePoints(-1)" style="flex:1; min-width:140px;">➖ -1 to Whole Class</button>';
   html += '</div>';
-  html += '<div class="desk-grid" id="deskGrid"></div>';
+  html += '<div class="seating-canvas" id="seatingCanvas"></div>';
   html += '</div>';
 
   html += '<div class="card"><h3 style="margin-bottom: 4px; color: #333;">📜 Classroom Rules</h3>';
@@ -843,66 +981,8 @@ function renderClassContent() {
 
   container.innerHTML = html;
 
-  const deskGrid = document.getElementById('deskGrid');
-  desks.forEach((d, i) => {
-    const card = document.createElement('div');
-    card.className = 'desk-card' + (d.name ? '' : ' desk-empty');
-    card.style.position = 'relative';
-
-    const numLabel = document.createElement('div');
-    numLabel.className = 'desk-number';
-    numLabel.textContent = i + 1;
-    card.appendChild(numLabel);
-
-    const nameInput = document.createElement('input');
-    nameInput.className = 'desk-name-input';
-    nameInput.type = 'text';
-    nameInput.value = d.name;
-    nameInput.placeholder = '+ Add Name';
-    nameInput.maxLength = 18;
-    nameInput.addEventListener('change', () => setDeskName(i, nameInput.value.trim()));
-    nameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') nameInput.blur(); });
-    card.appendChild(nameInput);
-
-    if (d.name) {
-      const badgeRow = document.createElement('div');
-      badgeRow.className = 'desk-badge-row';
-      badgeRow.innerHTML = getBadge(d.points);
-      card.appendChild(badgeRow);
-
-      const row = document.createElement('div');
-      row.className = 'desk-points-row';
-      row.innerHTML = `
-        <button class="desk-btn desk-btn-minus">-1</button>
-        <span class="desk-points">${d.points}</span>
-        <button class="desk-btn desk-btn-plus">+1</button>
-        <button class="desk-btn desk-btn-star">+3</button>
-      `;
-      row.children[0].onclick = () => changePoints(i, -1);
-      row.children[2].onclick = () => changePoints(i, 1);
-      row.children[3].onclick = () => changePoints(i, 3);
-      card.appendChild(row);
-
-      const actionRow = document.createElement('div');
-      actionRow.className = 'desk-action-row';
-
-      const ruleBtn = document.createElement('button');
-      ruleBtn.className = 'desk-rule-btn';
-      ruleBtn.textContent = '🏆 Rule';
-      ruleBtn.onclick = () => openRuleAwardModal(i);
-      actionRow.appendChild(ruleBtn);
-
-      const profileBtn = document.createElement('button');
-      profileBtn.className = 'desk-profile-btn';
-      profileBtn.textContent = '📊 Profile';
-      profileBtn.onclick = () => openProfileModal(i);
-      actionRow.appendChild(profileBtn);
-
-      card.appendChild(actionRow);
-    }
-
-    deskGrid.appendChild(card);
-  });
+  renderLayoutPicker();
+  renderSeatingCanvas();
 
   document.getElementById('bulkAddBtn').onclick = bulkFillDesks;
 
@@ -911,6 +991,122 @@ function renderClassContent() {
   document.getElementById('newRuleText').onkeypress = (e) => { if (e.key === 'Enter') addRule(); };
   document.getElementById('newRuleEmoji').onkeypress = (e) => { if (e.key === 'Enter') addRule(); };
   document.getElementById('resetRulesBtn').onclick = resetRules;
+}
+
+function renderSeatingCanvas() {
+  const canvas = document.getElementById('seatingCanvas');
+  if (!canvas) return;
+  const desks = classes[activeClass].desks;
+  const positions = getDeskPositions(activeClass);
+  canvas.innerHTML = '';
+
+  desks.forEach((d, i) => {
+    const pos = positions[i] || { x: 50, y: 50 };
+    const chip = document.createElement('div');
+    chip.className = 'desk-chip' + (d.name ? '' : ' desk-empty');
+    chip.style.left = pos.x + '%';
+    chip.style.top = pos.y + '%';
+
+    const numLabel = document.createElement('div');
+    numLabel.className = 'desk-chip-num';
+    numLabel.textContent = i + 1;
+    chip.appendChild(numLabel);
+
+    const nameLabel = document.createElement('div');
+    nameLabel.className = 'desk-chip-name';
+    nameLabel.textContent = d.name || '+ Add';
+    chip.appendChild(nameLabel);
+
+    if (d.name) {
+      const pointsLabel = document.createElement('div');
+      pointsLabel.className = 'desk-chip-points';
+      pointsLabel.textContent = d.points + ' pts';
+      chip.appendChild(pointsLabel);
+    }
+
+    attachDeskDrag(chip, canvas, i);
+    canvas.appendChild(chip);
+  });
+}
+
+function attachDeskDrag(chip, canvas, idx) {
+  let startX, startY, moved, pointerId;
+  chip.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    pointerId = e.pointerId;
+    chip.setPointerCapture(pointerId);
+    startX = e.clientX;
+    startY = e.clientY;
+    moved = false;
+    chip.classList.add('dragging');
+  });
+  chip.addEventListener('pointermove', (e) => {
+    if (pointerId === undefined || e.pointerId !== pointerId) return;
+    if (!chip.classList.contains('dragging')) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    if (Math.abs(dx) > 8 || Math.abs(dy) > 8) moved = true;
+    const rect = canvas.getBoundingClientRect();
+    let xPct = ((e.clientX - rect.left) / rect.width) * 100;
+    let yPct = ((e.clientY - rect.top) / rect.height) * 100;
+    xPct = Math.max(2, Math.min(98, xPct));
+    yPct = Math.max(4, Math.min(96, yPct));
+    chip.style.left = xPct + '%';
+    chip.style.top = yPct + '%';
+  });
+  chip.addEventListener('pointerup', (e) => {
+    if (pointerId === undefined || e.pointerId !== pointerId) return;
+    chip.classList.remove('dragging');
+    if (moved) {
+      const rect = canvas.getBoundingClientRect();
+      let xPct = ((e.clientX - rect.left) / rect.width) * 100;
+      let yPct = ((e.clientY - rect.top) / rect.height) * 100;
+      xPct = Math.max(2, Math.min(98, xPct));
+      yPct = Math.max(4, Math.min(96, yPct));
+      const positions = getDeskPositions(activeClass);
+      positions[idx] = { x: xPct, y: yPct };
+      saveState();
+    } else {
+      openDeskDetail(idx);
+    }
+    pointerId = undefined;
+  });
+}
+
+let deskDetailIdx = null;
+
+function openDeskDetail(idx) {
+  deskDetailIdx = idx;
+  const desk = classes[activeClass].desks[idx];
+  document.getElementById('deskDetailTitle').textContent = 'Desk ' + (idx + 1);
+  const nameInput = document.getElementById('deskDetailNameInput');
+  nameInput.value = desk.name;
+  nameInput.onchange = () => { setDeskNameFromDetail(idx, nameInput.value.trim()); };
+  document.getElementById('deskDetailBadgeRow').innerHTML = desk.name ? getBadge(desk.points) : '';
+  document.getElementById('deskDetailPoints').textContent = desk.points;
+  document.getElementById('deskDetailMinus').onclick = () => { changePoints(idx, -1); refreshDeskDetail(); };
+  document.getElementById('deskDetailPlus').onclick = () => { changePoints(idx, 1); refreshDeskDetail(); };
+  document.getElementById('deskDetailStar').onclick = () => { changePoints(idx, 3); refreshDeskDetail(); };
+  document.getElementById('deskDetailRuleBtn').onclick = () => { closeDeskDetail(); openRuleAwardModal(idx); };
+  document.getElementById('deskDetailProfileBtn').onclick = () => { closeDeskDetail(); openProfileModal(idx); };
+  document.getElementById('deskDetailModal').classList.add('show');
+}
+
+function setDeskNameFromDetail(idx, name) {
+  setDeskName(idx, name);
+  document.getElementById('deskDetailBadgeRow').innerHTML = name ? getBadge(classes[activeClass].desks[idx].points) : '';
+}
+
+function refreshDeskDetail() {
+  if (deskDetailIdx === null) return;
+  const desk = classes[activeClass].desks[deskDetailIdx];
+  document.getElementById('deskDetailPoints').textContent = desk.points;
+  document.getElementById('deskDetailBadgeRow').innerHTML = desk.name ? getBadge(desk.points) : '';
+}
+
+function closeDeskDetail() {
+  document.getElementById('deskDetailModal').classList.remove('show');
+  deskDetailIdx = null;
 }
 
 function setDeskName(idx, name) {
@@ -1765,8 +1961,6 @@ function setGroupCount(n) {
   document.getElementById('groupCountLabel').textContent = n + ' groups';
 }
 
-let lastGroups = [];
-
 function shuffleGroups() {
   const text = document.getElementById('groupNames').value;
   let names = text.split('\n').map(n => n.trim()).filter(n => n.length > 0);
@@ -1779,7 +1973,8 @@ function shuffleGroups() {
   names.forEach((name, i) => {
     groups[i % groupCount].push(name);
   });
-  lastGroups = groups;
+  classes[activeClass].groups = groups;
+  saveState();
   renderGroupGrid();
 }
 
@@ -1787,8 +1982,10 @@ const GROUP_COLORS = ['#e74c3c', '#3498db', '#06d6a0', '#f39c12', '#5e60ce', '#0
 
 function renderGroupGrid() {
   const grid = document.getElementById('groupGrid');
+  if (!grid) return;
+  const groups = getClassGroups(activeClass);
   grid.innerHTML = '';
-  lastGroups.forEach((g, i) => {
+  groups.forEach((g, i) => {
     const animal = animalGroups[i % animalGroups.length];
     const color = GROUP_COLORS[i % GROUP_COLORS.length];
     const card = document.createElement('div');
@@ -1803,10 +2000,12 @@ function renderGroupGrid() {
       let data;
       try { data = JSON.parse(e.dataTransfer.getData('text/plain')); } catch (err) { return; }
       if (!data || data.groupIdx === i) return;
-      const member = lastGroups[data.groupIdx] && lastGroups[data.groupIdx][data.memberIdx];
+      const liveGroups = getClassGroups(activeClass);
+      const member = liveGroups[data.groupIdx] && liveGroups[data.groupIdx][data.memberIdx];
       if (member === undefined) return;
-      lastGroups[data.groupIdx].splice(data.memberIdx, 1);
-      lastGroups[i].push(member);
+      liveGroups[data.groupIdx].splice(data.memberIdx, 1);
+      liveGroups[i].push(member);
+      saveState();
       renderGroupGrid();
     };
 
@@ -1863,7 +2062,8 @@ function renderGroupGrid() {
 }
 
 function awardGroupPoints(groupIdx, delta) {
-  const group = lastGroups[groupIdx];
+  const groups = getClassGroups(activeClass);
+  const group = groups[groupIdx];
   if (!group || group.length === 0) return;
   const desks = classes[activeClass].desks;
   let matched = 0;
