@@ -183,9 +183,14 @@
   .dice-controls { display: flex; gap: 12px; justify-content: center; margin-top: 16px; align-items: center; }
   .dice-sum { font-size: 28px; font-weight: 700; color: #e74c3c; text-align: center; margin-top: 12px; }
   .group-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px; }
-  .group-card { background: white; border-radius: 12px; padding: 16px; border-left: 5px solid; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .group-card { background: white; border-radius: 12px; padding: 16px; border-left: 5px solid; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: background 0.15s ease, box-shadow 0.15s ease; }
+  .group-card.group-card-dragover { background: #eef6f9; box-shadow: 0 0 0 3px #0077b6 inset; }
   .group-card h4 { margin: 0 0 10px 0; font-size: 16px; }
-  .group-member { padding: 6px 10px; background: #f8f9fa; border-radius: 6px; margin-bottom: 6px; font-size: 14px; font-weight: 500; }
+  .group-member-list { min-height: 34px; }
+  .group-member { padding: 6px 10px; background: #f8f9fa; border-radius: 6px; margin-bottom: 6px; font-size: 14px; font-weight: 500; cursor: grab; user-select: none; transition: opacity 0.15s ease; }
+  .group-member:active { cursor: grabbing; }
+  .group-member.dragging { opacity: 0.35; }
+  .group-empty-placeholder { padding: 10px; text-align: center; font-size: 12px; color: #aaa; font-style: italic; border: 2px dashed #e0e0e0; border-radius: 6px; }
   .group-input { width: 100%; min-height: 90px; padding: 12px; border: 2px solid #caf0f8; border-radius: 8px; font-size: 15px; resize: vertical; margin-bottom: 12px; }
   .role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 12px; }
   .role-card { background: white; border-radius: 12px; padding: 16px; border-top: 4px solid #5e60ce; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center; }
@@ -361,7 +366,7 @@
       <div id="tools-panel-groups" class="sub-panel">
         <div class="card">
           <h3 style="margin-bottom: 8px; color: #333;">👥 Group Organizer</h3>
-          <p style="color: #888; font-size: 13px; margin-bottom: 12px;">Paste names, choose group count, and shuffle! Or pull the current class roster in one tap.</p>
+          <p style="color: #888; font-size: 13px; margin-bottom: 12px;">Paste names, choose group count, and shuffle! Or pull the current class roster in one tap. Once shuffled, drag a name onto another group to move them.</p>
           <textarea class="group-input" id="groupNames"></textarea>
           <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
             <button class="btn btn-teal" onclick="syncNamesFromClass('groupNames')">🌊 Sync Roster</button>
@@ -1534,6 +1539,11 @@ function spinWheel() {
       document.getElementById('wheelWinner').innerHTML = '🎉 ' + winner + ' 🎉';
       launchConfetti();
       playChime();
+      wheelNames.splice(winnerIndex, 1);
+      const wheelNamesTextarea = document.getElementById('wheelNames');
+      if (wheelNamesTextarea) wheelNamesTextarea.value = wheelNames.join('\n');
+      wheelAngle = 0;
+      drawWheel();
     }
   }
   requestAnimationFrame(animate);
@@ -1612,6 +1622,10 @@ function drawBingo() {
       bingoShuffling = false;
       launchConfetti();
       playChime();
+      bingoNames.splice(winnerIndex, 1);
+      const bingoNamesTextarea = document.getElementById('bingoNames');
+      if (bingoNamesTextarea) bingoNamesTextarea.value = bingoNames.join('\n');
+      setTimeout(() => { renderBingoBalls(); }, 1400);
     }
   }, 120);
 }
@@ -1766,17 +1780,65 @@ function shuffleGroups() {
     groups[i % groupCount].push(name);
   });
   lastGroups = groups;
-  const groupColors = ['#e74c3c', '#3498db', '#06d6a0', '#f39c12', '#5e60ce', '#00b4d8', '#f58231', '#911eb4'];
+  renderGroupGrid();
+}
+
+const GROUP_COLORS = ['#e74c3c', '#3498db', '#06d6a0', '#f39c12', '#5e60ce', '#00b4d8', '#f58231', '#911eb4'];
+
+function renderGroupGrid() {
   const grid = document.getElementById('groupGrid');
   grid.innerHTML = '';
-  groups.forEach((g, i) => {
-    if (g.length === 0) return;
+  lastGroups.forEach((g, i) => {
     const animal = animalGroups[i % animalGroups.length];
+    const color = GROUP_COLORS[i % GROUP_COLORS.length];
     const card = document.createElement('div');
     card.className = 'group-card';
-    card.style.borderLeftColor = groupColors[i % groupColors.length];
-    let membersHtml = g.map(m => '<div class="group-member">' + m + '</div>').join('');
-    card.innerHTML = '<h4 style="color:' + groupColors[i % groupColors.length] + '; font-size:20px;">' + animal.icon + ' ' + animal.name + '</h4>' + membersHtml;
+    card.style.borderLeftColor = color;
+
+    card.ondragover = (e) => { e.preventDefault(); card.classList.add('group-card-dragover'); };
+    card.ondragleave = () => { card.classList.remove('group-card-dragover'); };
+    card.ondrop = (e) => {
+      e.preventDefault();
+      card.classList.remove('group-card-dragover');
+      let data;
+      try { data = JSON.parse(e.dataTransfer.getData('text/plain')); } catch (err) { return; }
+      if (!data || data.groupIdx === i) return;
+      const member = lastGroups[data.groupIdx] && lastGroups[data.groupIdx][data.memberIdx];
+      if (member === undefined) return;
+      lastGroups[data.groupIdx].splice(data.memberIdx, 1);
+      lastGroups[i].push(member);
+      renderGroupGrid();
+    };
+
+    const heading = document.createElement('h4');
+    heading.style.color = color;
+    heading.style.fontSize = '20px';
+    heading.textContent = animal.icon + ' ' + animal.name;
+    card.appendChild(heading);
+
+    const memberList = document.createElement('div');
+    memberList.className = 'group-member-list';
+    if (g.length === 0) {
+      const placeholder = document.createElement('div');
+      placeholder.className = 'group-empty-placeholder';
+      placeholder.textContent = 'Drag a name here';
+      memberList.appendChild(placeholder);
+    } else {
+      g.forEach((name, memberIdx) => {
+        const memberEl = document.createElement('div');
+        memberEl.className = 'group-member';
+        memberEl.textContent = name;
+        memberEl.draggable = true;
+        memberEl.ondragstart = (e) => {
+          e.dataTransfer.setData('text/plain', JSON.stringify({ groupIdx: i, memberIdx: memberIdx }));
+          memberEl.classList.add('dragging');
+        };
+        memberEl.ondragend = () => memberEl.classList.remove('dragging');
+        memberList.appendChild(memberEl);
+      });
+    }
+    card.appendChild(memberList);
+
     const btnRow = document.createElement('div');
     btnRow.style.display = 'flex';
     btnRow.style.gap = '6px';
