@@ -873,12 +873,17 @@ function layoutFlexible() {
   return positions;
 }
 
-function layoutUShape() {
+function layoutDiagonalRows() {
   const positions = [];
-  const leftCount = 8, bottomCount = 14, rightCount = 8;
-  for (let i = 0; i < leftCount; i++) positions.push({ x: 8, y: 12 + i * (76 / (leftCount - 1)) });
-  for (let i = 0; i < bottomCount; i++) positions.push({ x: 8 + i * (84 / (bottomCount - 1)), y: 92 });
-  for (let i = 0; i < rightCount; i++) positions.push({ x: 92, y: 88 - i * (76 / (rightCount - 1)) });
+  const perRow = 6, numRows = 5, tiltAmount = 14;
+  for (let r = 0; r < numRows; r++) {
+    const baseY = 14 + r * (76 / (numRows - 1));
+    for (let c = 0; c < perRow; c++) {
+      const x = 10 + c * (80 / (perRow - 1));
+      const tilt = (c / (perRow - 1) - 0.5) * tiltAmount;
+      positions.push({ x, y: Math.max(4, Math.min(96, baseY + tilt)) });
+    }
+  }
   return positions;
 }
 
@@ -914,13 +919,13 @@ function layoutPods() {
 
 const LAYOUT_OPTIONS = [
   { type: 'flexible', label: '🔀 Flexible' },
-  { type: 'ushape', label: '🧲 U-Shape' },
+  { type: 'diagonal', label: '↗️ Diagonal Rows' },
   { type: 'pairs', label: '👫 Pair Seating' },
   { type: 'pods', label: '🍀 Clusters/Pods' }
 ];
 
 function generateLayoutPositions(type) {
-  if (type === 'ushape') return layoutUShape();
+  if (type === 'diagonal') return layoutDiagonalRows();
   if (type === 'pairs') return layoutPairs();
   if (type === 'pods') return layoutPods();
   return layoutFlexible();
@@ -2519,33 +2524,40 @@ function generatePodPositionsForGroups(groups) {
   const numGroups = groups.length;
   const cols = Math.ceil(Math.sqrt(numGroups));
   const rows = Math.ceil(numGroups / cols);
-  const centers = [];
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      if (centers.length >= numGroups) break;
-      centers.push({
-        x: (100 / (cols + 1)) * (c + 1),
-        y: (100 / (rows + 1)) * (r + 1)
-      });
-    }
-  }
+
+  // Give every pod its own reserved rectangular region of the canvas, so pods
+  // can never overlap each other regardless of how many groups there are.
+  const marginX = 8, marginY = 10;
+  const usableW = 100 - marginX * 2;
+  const usableH = 100 - marginY * 2;
+  const regionW = usableW / cols;
+  const regionH = usableH / rows;
 
   const nameToPosition = {};
   groups.forEach((group, gi) => {
-    const center = centers[gi];
     const count = group.length;
     if (count === 0) return;
-    const radius = Math.min(15, 8 + count * 0.9);
+    const r = Math.floor(gi / cols);
+    const c = gi % cols;
+    const regionCenterX = marginX + regionW * (c + 0.5);
+    const regionCenterY = marginY + regionH * (r + 0.5);
+
+    // Arrange this group's own members in a small grid that fits safely
+    // inside its region — never spilling into a neighboring pod's space.
+    const gCols = Math.ceil(Math.sqrt(count));
+    const gRows = Math.ceil(count / gCols);
+    const cellSpacingX = gCols > 1 ? Math.min((regionW * 0.7) / (gCols - 1), 16) : 0;
+    const cellSpacingY = gRows > 1 ? Math.min((regionH * 0.7) / (gRows - 1), 16) : 0;
+
     group.forEach((name, mi) => {
-      if (count === 1) {
-        nameToPosition[name.trim().toLowerCase()] = { x: center.x, y: center.y };
-      } else {
-        const angle = (mi / count) * Math.PI * 2 - Math.PI / 2;
-        nameToPosition[name.trim().toLowerCase()] = {
-          x: Math.max(4, Math.min(96, center.x + radius * Math.cos(angle))),
-          y: Math.max(6, Math.min(94, center.y + radius * Math.sin(angle) * 0.85))
-        };
-      }
+      const gc = mi % gCols;
+      const gr = Math.floor(mi / gCols);
+      const offsetX = (gc - (gCols - 1) / 2) * cellSpacingX;
+      const offsetY = (gr - (gRows - 1) / 2) * cellSpacingY;
+      nameToPosition[name.trim().toLowerCase()] = {
+        x: Math.max(4, Math.min(96, regionCenterX + offsetX)),
+        y: Math.max(6, Math.min(94, regionCenterY + offsetY))
+      };
     });
   });
   return nameToPosition;
