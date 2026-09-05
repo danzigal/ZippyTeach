@@ -117,6 +117,7 @@
   .desk-chip.desk-empty { background: #f0f9fb; border-style: dashed; opacity: 0.85; }
   .desk-chip.dragging { cursor: grabbing; box-shadow: 0 8px 20px rgba(2,62,138,0.3); z-index: 50; opacity: 0.9; }
   .desk-chip-num { position: absolute; top: 2px; left: 4px; font-size: 8px; font-weight: 800; color: #90b8c9; }
+  .desk-chip-crown { position: absolute; top: -8px; right: -4px; font-size: 16px; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); }
   .desk-chip-name { font-size: 11px; font-weight: 700; color: #023e8a; text-align: center; max-width: 68px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .desk-chip-points { font-size: 10px; font-weight: 700; color: #06a97e; margin-top: 1px; }
   .desk-chip-actions { display: flex; gap: 3px; margin-top: 4px; }
@@ -153,6 +154,7 @@
   .manage-role-row { display: flex; align-items: center; gap: 10px; padding: 6px 4px; border-bottom: 1px solid #f0f0f0; }
   .manage-role-icon { font-size: 20px; width: 28px; text-align: center; }
   .manage-role-name { flex: 1; font-size: 14px; font-weight: 600; color: #333; }
+  .manage-group-name-input { flex: 1; font-size: 14px; font-weight: 600; color: #333; border: 1px solid #eee; border-radius: 6px; padding: 4px 8px; }
   .manage-role-delete { background: none; border: none; color: #ef476f; font-weight: 800; font-size: 15px; cursor: pointer; padding: 0 6px; }
 
   /* ===== DAILY HELPER ===== */
@@ -477,6 +479,13 @@
           </div>
           <button class="btn btn-success" onclick="shuffleGroups()" style="width: 100%; font-size: 16px; padding: 12px;">🔀 Shuffle into Groups!</button>
           <div class="group-grid" id="groupGrid"></div>
+          <button class="btn btn-teal" id="applyGroupsToSeatingBtn" onclick="applyGroupsToSeating()" style="width: 100%; font-size: 15px; padding: 11px; margin-top: 12px; display:none;">🪑 Apply to Seating Arrangement</button>
+        </div>
+        <div class="card">
+          <details id="manageGroupsDetails" ontoggle="if(this.open) renderManageGroups()">
+            <summary style="cursor:pointer; color:#0077b6; font-weight:700; font-size:14px;">✏️ Manage Group Names &amp; Icons</summary>
+            <div id="manageGroupsBody" style="margin-top:14px;"></div>
+          </details>
         </div>
       </div>
 
@@ -740,6 +749,7 @@
         <button class="desk-rule-btn" id="deskDetailRuleBtn" style="flex:1;">🏆 Award Rule</button>
         <button class="desk-profile-btn" id="deskDetailProfileBtn" style="flex:1;">📊 Profile</button>
       </div>
+      <button class="btn btn-teal" id="deskDetailLeaderBtn" style="width:100%; margin-bottom:10px;">👑 Mark as Group Leader</button>
       <button class="btn btn-primary" onclick="closeDeskDetail()" style="width:100%;">Close</button>
     </div>
   </div>
@@ -829,6 +839,11 @@ const TRAIT_CATEGORIES = [
     category: 'Communication Styles',
     icon: '💬',
     traits: ['Active Listening', 'Self-Advocacy']
+  },
+  {
+    category: 'Classroom Behavior',
+    icon: '📜',
+    traits: ['Following Class Rules']
   }
 ];
 
@@ -1019,7 +1034,7 @@ const DEFAULT_ROLE_CATEGORIES = [
 ];
 let globalRoleCategories = JSON.parse(JSON.stringify(DEFAULT_ROLE_CATEGORIES));
 
-const animalGroups = [
+const DEFAULT_ANIMAL_GROUPS = [
   { name: 'Dog Team', icon: '🐶' },
   { name: 'Cat Team', icon: '🐱' },
   { name: 'Panda Team', icon: '🐼' },
@@ -1029,6 +1044,7 @@ const animalGroups = [
   { name: 'Rabbit Team', icon: '🐰' },
   { name: 'Lion Team', icon: '🦁' }
 ];
+let animalGroups = DEFAULT_ANIMAL_GROUPS.map(g => ({ ...g }));
 
 // ========== TABS ==========
 function switchTab(tab) {
@@ -1224,6 +1240,13 @@ function renderSeatingCanvas() {
     numLabel.textContent = i + 1;
     chip.appendChild(numLabel);
 
+    if (d.isLeader) {
+      const crown = document.createElement('div');
+      crown.className = 'desk-chip-crown';
+      crown.textContent = '👑';
+      chip.appendChild(crown);
+    }
+
     const nameLabel = document.createElement('div');
     nameLabel.className = 'desk-chip-name';
     nameLabel.textContent = d.name || '+ Add';
@@ -1327,6 +1350,9 @@ function openDeskDetail(idx) {
   document.getElementById('deskDetailMinus').onclick = () => { changePoints(idx, -1); refreshDeskDetail(); };
   document.getElementById('deskDetailPlus').onclick = () => { changePoints(idx, 1); refreshDeskDetail(); };
   document.getElementById('deskDetailStar').onclick = () => { changePoints(idx, 3); refreshDeskDetail(); };
+  const leaderBtn = document.getElementById('deskDetailLeaderBtn');
+  leaderBtn.textContent = desk.isLeader ? '👑 Group Leader (tap to remove)' : '👑 Mark as Group Leader';
+  leaderBtn.onclick = () => toggleGroupLeader(idx);
   document.getElementById('deskDetailRuleBtn').onclick = () => { closeDeskDetail(); openRuleAwardModal(idx); };
   document.getElementById('deskDetailProfileBtn').onclick = () => { closeDeskDetail(); openProfileModal(idx); };
   document.getElementById('deskDetailModal').classList.add('show');
@@ -1342,6 +1368,19 @@ function refreshDeskDetail() {
   const desk = classes[activeClass].desks[deskDetailIdx];
   document.getElementById('deskDetailPoints').textContent = desk.points;
   document.getElementById('deskDetailBadgeRow').innerHTML = desk.name ? getBadge(desk.points) : '';
+}
+
+function toggleGroupLeader(idx) {
+  const desk = classes[activeClass].desks[idx];
+  desk.isLeader = !desk.isLeader;
+  if (desk.isLeader) {
+    logProfileEntryForDesk(idx, 'Independence and Initiative', 'Leadership', 'positive');
+  }
+  saveState();
+  renderClassGrid();
+  renderClassContent();
+  const leaderBtn = document.getElementById('deskDetailLeaderBtn');
+  if (leaderBtn) leaderBtn.textContent = desk.isLeader ? '👑 Group Leader (tap to remove)' : '👑 Mark as Group Leader';
 }
 
 function closeDeskDetail() {
@@ -1512,6 +1551,7 @@ function awardRulePoint(idx, ruleIdx) {
   const delta = rule.delta;
   const before = desk.points;
   desk.points = Math.max(0, Math.min(MAX_POINTS, desk.points + delta));
+  logProfileEntryForDesk(idx, 'Classroom Behavior', 'Following Class Rules', delta > 0 ? 'positive' : 'support');
   saveState();
   closeRuleAwardModal();
   renderClassGrid();
@@ -1638,6 +1678,13 @@ function logProfileEntry(category, trait, sentiment) {
   profile.push({ category, trait, sentiment, date: new Date().toISOString() });
   saveState();
   renderProfileHistory();
+}
+
+function logProfileEntryForDesk(deskIdx, category, trait, sentiment) {
+  const desk = classes[activeClass].desks[deskIdx];
+  const profile = getDeskProfile(desk);
+  profile.push({ category, trait, sentiment, date: new Date().toISOString() });
+  saveState();
 }
 
 function removeProfileEntry(logIdx) {
@@ -1802,7 +1849,7 @@ const STORAGE_ADVISORY_THRESHOLD = 4 * 1024 * 1024; // ~4MB — warn before hitt
 function saveState() {
   let json;
   try {
-    json = JSON.stringify({ classes, activeClass, globalRules, globalRoleCategories, helperQuestions });
+    json = JSON.stringify({ classes, activeClass, globalRules, globalRoleCategories, helperQuestions, animalGroups });
     localStorage.setItem(STORAGE_KEY, json);
   } catch (e) {
     showStorageCriticalBanner();
@@ -1864,6 +1911,9 @@ function loadState() {
       if (data.helperQuestions) {
         helperQuestions = data.helperQuestions;
       }
+      if (data.animalGroups) {
+        animalGroups = data.animalGroups;
+      }
       return true;
     }
   } catch (e) {}
@@ -1874,7 +1924,7 @@ const LAST_BACKUP_KEY = 'ocmBoard_lastBackupTime';
 const BACKUP_REMINDER_HOURS = 20;
 
 function exportBackup() {
-  const data = JSON.stringify({ classes, activeClass, globalRules, globalRoleCategories, helperQuestions }, null, 2);
+  const data = JSON.stringify({ classes, activeClass, globalRules, globalRoleCategories, helperQuestions, animalGroups }, null, 2);
   const blob = new Blob([data], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1930,6 +1980,7 @@ function importBackup(file) {
       if (data.globalRules) globalRules = data.globalRules;
       if (data.globalRoleCategories) globalRoleCategories = data.globalRoleCategories;
       if (data.helperQuestions) helperQuestions = data.helperQuestions;
+      if (data.animalGroups) animalGroups = data.animalGroups;
       saveState();
       renderClassGrid();
       renderClassContent();
@@ -2108,11 +2159,14 @@ function spinWheel() {
       document.getElementById('wheelWinner').innerHTML = '🎉 ' + winner + ' 🎉' + winnerPointButtons(winner);
       launchConfetti();
       playChime();
-      wheelNames.splice(winnerIndex, 1);
-      const wheelNamesTextarea = document.getElementById('wheelNames');
-      if (wheelNamesTextarea) wheelNamesTextarea.value = wheelNames.join('\n');
-      wheelAngle = 0;
-      drawWheel();
+      setTimeout(() => {
+        const stillHere = wheelNames.indexOf(winner) === winnerIndex ? winnerIndex : wheelNames.indexOf(winner);
+        if (stillHere !== -1) wheelNames.splice(stillHere, 1);
+        const wheelNamesTextarea = document.getElementById('wheelNames');
+        if (wheelNamesTextarea) wheelNamesTextarea.value = wheelNames.join('\n');
+        wheelAngle = 0;
+        drawWheel();
+      }, 3500);
     }
   }
   requestAnimationFrame(animate);
@@ -2195,7 +2249,7 @@ function drawBingo() {
       bingoNames.splice(winnerIndex, 1);
       const bingoNamesTextarea = document.getElementById('bingoNames');
       if (bingoNamesTextarea) bingoNamesTextarea.value = bingoNames.join('\n');
-      setTimeout(() => { renderBingoBalls(); }, 1400);
+      setTimeout(() => { renderBingoBalls(); }, 3500);
     }
   }, 120);
 }
@@ -2359,6 +2413,8 @@ function renderGroupGrid() {
   if (!grid) return;
   const groups = getClassGroups(activeClass);
   grid.innerHTML = '';
+  const applyBtn = document.getElementById('applyGroupsToSeatingBtn');
+  if (applyBtn) applyBtn.style.display = groups.some(g => g.length > 0) ? 'block' : 'none';
   groups.forEach((g, i) => {
     const animal = animalGroups[i % animalGroups.length];
     const color = GROUP_COLORS[i % GROUP_COLORS.length];
@@ -2456,6 +2512,77 @@ function awardGroupPoints(groupIdx, delta) {
   renderClassGrid();
   renderClassContent();
   showReward(delta > 0 ? '➕' : '➖', matched + ' student' + (matched === 1 ? '' : 's') + ' in that group ' + (delta > 0 ? 'gained' : 'lost') + ' ' + Math.abs(delta) + ' point' + (Math.abs(delta) === 1 ? '' : 's') + '.');
+}
+
+// ========== APPLY GROUPS TO SEATING ==========
+function generatePodPositionsForGroups(groups) {
+  const numGroups = groups.length;
+  const cols = Math.ceil(Math.sqrt(numGroups));
+  const rows = Math.ceil(numGroups / cols);
+  const centers = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (centers.length >= numGroups) break;
+      centers.push({
+        x: (100 / (cols + 1)) * (c + 1),
+        y: (100 / (rows + 1)) * (r + 1)
+      });
+    }
+  }
+
+  const nameToPosition = {};
+  groups.forEach((group, gi) => {
+    const center = centers[gi];
+    const count = group.length;
+    if (count === 0) return;
+    const radius = Math.min(15, 8 + count * 0.9);
+    group.forEach((name, mi) => {
+      if (count === 1) {
+        nameToPosition[name.trim().toLowerCase()] = { x: center.x, y: center.y };
+      } else {
+        const angle = (mi / count) * Math.PI * 2 - Math.PI / 2;
+        nameToPosition[name.trim().toLowerCase()] = {
+          x: Math.max(4, Math.min(96, center.x + radius * Math.cos(angle))),
+          y: Math.max(6, Math.min(94, center.y + radius * Math.sin(angle) * 0.85))
+        };
+      }
+    });
+  });
+  return nameToPosition;
+}
+
+function applyGroupsToSeating() {
+  const groups = getClassGroups(activeClass);
+  if (!groups || groups.every(g => g.length === 0)) {
+    alert('Shuffle into groups first, then you can apply them to the seating arrangement.');
+    return;
+  }
+  if (!confirm('This will move students\' desks so each group sits together in a cluster. Continue?')) return;
+
+  const nameToPos = generatePodPositionsForGroups(groups);
+  const desks = classes[activeClass].desks;
+  const positions = getDeskPositions(activeClass);
+  let matched = 0;
+
+  desks.forEach((d, i) => {
+    if (!d.name) return;
+    const key = d.name.trim().toLowerCase();
+    if (nameToPos[key]) {
+      positions[i] = nameToPos[key];
+      matched++;
+    }
+  });
+
+  if (matched === 0) {
+    alert('None of the group names match a seated student in ' + activeClass + '. Seat these students first, or sync the roster before shuffling.');
+    return;
+  }
+
+  classes[activeClass].layoutType = 'custom';
+  saveState();
+  renderLayoutPicker();
+  renderSeatingCanvas();
+  showReward('🪑', matched + ' student' + (matched === 1 ? '' : 's') + ' moved into their group clusters on the seating chart!');
 }
 
 // ========== ROLES ==========
@@ -2582,6 +2709,83 @@ function resetRoles() {
   globalRoleCategories = JSON.parse(JSON.stringify(DEFAULT_ROLE_CATEGORIES));
   saveState();
   renderManageRoles();
+}
+
+// ========== MANAGE GROUP NAMES & ICONS ==========
+let selectedGroupEmoji = '⭐';
+
+function openGroupIconPicker() {
+  openIconPicker((icon) => {
+    selectedGroupEmoji = icon;
+    const preview = document.getElementById('groupIconPreview');
+    if (preview) preview.textContent = icon;
+  });
+}
+
+function renderManageGroups() {
+  const container = document.getElementById('manageGroupsBody');
+  if (!container) return;
+  let html = '<div class="manage-role-row" style="font-weight:800; color:#888; font-size:11px; text-transform:uppercase;"><span style="width:28px;"></span><span style="flex:1;">Team Name</span><span style="width:20px;"></span></div>';
+  animalGroups.forEach((g, i) => {
+    html += '<div class="manage-role-row">' +
+      '<span class="manage-role-icon">' + g.icon + '</span>' +
+      '<input type="text" class="manage-group-name-input" data-idx="' + i + '" value="' + g.name.replace(/"/g, '&quot;') + '">' +
+      (animalGroups.length > 1 ? '<button class="manage-role-delete" data-idx="' + i + '">✕</button>' : '<span style="width:20px; display:inline-block;"></span>') +
+      '</div>';
+  });
+  container.innerHTML = html;
+
+  container.querySelectorAll('.manage-group-name-input').forEach(input => {
+    input.onchange = () => {
+      const idx = parseInt(input.dataset.idx, 10);
+      const trimmed = input.value.trim();
+      if (trimmed) { animalGroups[idx].name = trimmed; saveState(); }
+    };
+  });
+  container.querySelectorAll('.manage-role-delete').forEach(btn => {
+    btn.onclick = () => deleteAnimalGroup(parseInt(btn.dataset.idx, 10));
+  });
+
+  const formDiv = document.createElement('div');
+  formDiv.style.marginTop = '10px';
+  formDiv.style.borderTop = '2px solid #f0f0f0';
+  formDiv.style.paddingTop = '14px';
+  formDiv.innerHTML =
+    '<div class="rule-add-row" style="margin-bottom:8px;">' +
+    '<button type="button" class="icon-preview-btn" onclick="openGroupIconPicker()"><span id="groupIconPreview">' + selectedGroupEmoji + '</span></button>' +
+    '<input type="text" id="newGroupName" placeholder="Team name (e.g. Shark Team)">' +
+    '<button class="btn btn-primary" id="addGroupBtn">+ Add</button>' +
+    '</div>' +
+    '<button class="btn btn-warning" id="resetGroupsBtn" style="width:100%;">↺ Reset to Standard Teams</button>';
+  container.appendChild(formDiv);
+
+  document.getElementById('addGroupBtn').onclick = addAnimalGroup;
+  document.getElementById('resetGroupsBtn').onclick = resetAnimalGroups;
+}
+
+function addAnimalGroup() {
+  const nameInput = document.getElementById('newGroupName');
+  const name = nameInput.value.trim();
+  if (!name) { alert('Please enter a team name.'); return; }
+  animalGroups.push({ name, icon: selectedGroupEmoji || '⭐' });
+  nameInput.value = '';
+  selectedGroupEmoji = '⭐';
+  saveState();
+  renderManageGroups();
+}
+
+function deleteAnimalGroup(idx) {
+  if (animalGroups.length <= 1) { alert('You need at least one team.'); return; }
+  animalGroups.splice(idx, 1);
+  saveState();
+  renderManageGroups();
+}
+
+function resetAnimalGroups() {
+  if (!confirm('Reset team names back to the standard set? Any custom teams you added will be removed.')) return;
+  animalGroups = DEFAULT_ANIMAL_GROUPS.map(g => ({ ...g }));
+  saveState();
+  renderManageGroups();
 }
 
 // ========== NOTEPAD ==========
