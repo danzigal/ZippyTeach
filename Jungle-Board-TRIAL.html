@@ -813,22 +813,6 @@
       <button class="btn btn-danger" onclick="closeRuleIconPicker()" style="margin-top:14px; width:100%;">Cancel</button>
     </div>
   </div>
-</div>
-
-<!-- STORAGE WARNING BANNERS (fixed, visible from any screen) -->
-<div id="storageCriticalBanner" style="display:none; position:fixed; top:0; left:0; width:100%; z-index:10000; background:#ef476f; color:#fff; padding:12px 16px; text-align:center; font-weight:700; font-size:14px; box-shadow:0 2px 10px rgba(0,0,0,0.3);">
-  ⚠️ Storage is full — your latest changes are NOT being saved! Go to My Classes → Backup and download a backup now, then use "Archive Old Profile Notes" to free up space.
-  <button onclick="dismissStorageCriticalBanner()" style="margin-left:10px; background:rgba(255,255,255,0.25); border:none; color:#fff; border-radius:6px; padding:4px 10px; font-weight:700; cursor:pointer;">Dismiss</button>
-</div>
-<div id="storageAdvisoryBanner" style="display:none; position:fixed; top:0; left:0; width:100%; z-index:9999; background:#ffd166; color:#5c3d00; padding:10px 16px; text-align:center; font-weight:700; font-size:13px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
-  📦 Your saved data is getting large. Consider archiving old Student Profile notes soon (My Classes → Backup).
-  <button onclick="dismissStorageAdvisoryBanner()" style="margin-left:10px; background:rgba(0,0,0,0.1); border:none; color:#5c3d00; border-radius:6px; padding:4px 10px; font-weight:700; cursor:pointer;">Dismiss</button>
-</div>
-<div id="backupReminderBanner" style="display:none; position:fixed; top:0; left:0; width:100%; z-index:9998; background:#52b788; color:#fff; padding:10px 16px; text-align:center; font-weight:700; font-size:13px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
-  💾 It's been a while since your last backup — some devices clear saved data when you close this app. <button onclick="backupNowFromReminder()" style="margin-left:6px; background:#fff; border:none; color:#1b4332; border-radius:6px; padding:4px 10px; font-weight:800; cursor:pointer;">Back Up Now</button>
-  <button onclick="dismissBackupReminder()" style="margin-left:6px; background:rgba(255,255,255,0.2); border:none; color:#fff; border-radius:6px; padding:4px 10px; font-weight:700; cursor:pointer;">Remind Me Later</button>
-</div>
-
 
   <!-- TESTS PANEL -->
   <div id="panel-tests" class="panel">
@@ -880,6 +864,23 @@
       <button class="btn btn-success" style="margin-top:10px;" onclick="saveTestScores()">💾 Save Scores to Profiles</button>
     </div>
   </div>
+
+</div>
+
+<!-- STORAGE WARNING BANNERS (fixed, visible from any screen) -->
+<div id="storageCriticalBanner" style="display:none; position:fixed; top:0; left:0; width:100%; z-index:10000; background:#ef476f; color:#fff; padding:12px 16px; text-align:center; font-weight:700; font-size:14px; box-shadow:0 2px 10px rgba(0,0,0,0.3);">
+  ⚠️ Storage is full — your latest changes are NOT being saved! Go to My Classes → Backup and download a backup now, then use "Archive Old Profile Notes" to free up space.
+  <button onclick="dismissStorageCriticalBanner()" style="margin-left:10px; background:rgba(255,255,255,0.25); border:none; color:#fff; border-radius:6px; padding:4px 10px; font-weight:700; cursor:pointer;">Dismiss</button>
+</div>
+<div id="storageAdvisoryBanner" style="display:none; position:fixed; top:0; left:0; width:100%; z-index:9999; background:#ffd166; color:#5c3d00; padding:10px 16px; text-align:center; font-weight:700; font-size:13px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+  📦 Your saved data is getting large. Consider archiving old Student Profile notes soon (My Classes → Backup).
+  <button onclick="dismissStorageAdvisoryBanner()" style="margin-left:10px; background:rgba(0,0,0,0.1); border:none; color:#5c3d00; border-radius:6px; padding:4px 10px; font-weight:700; cursor:pointer;">Dismiss</button>
+</div>
+<div id="backupReminderBanner" style="display:none; position:fixed; top:0; left:0; width:100%; z-index:9998; background:#52b788; color:#fff; padding:10px 16px; text-align:center; font-weight:700; font-size:13px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+  💾 It's been a while since your last backup — some devices clear saved data when you close this app. <button onclick="backupNowFromReminder()" style="margin-left:6px; background:#fff; border:none; color:#1b4332; border-radius:6px; padding:4px 10px; font-weight:800; cursor:pointer;">Back Up Now</button>
+  <button onclick="dismissBackupReminder()" style="margin-left:6px; background:rgba(255,255,255,0.2); border:none; color:#fff; border-radius:6px; padding:4px 10px; font-weight:700; cursor:pointer;">Remind Me Later</button>
+</div>
+
 
   <!-- TEST TIMER DISPLAY -->
   <div class="reward-modal" id="testTimerModal" onclick="closeTestTimerModal()">
