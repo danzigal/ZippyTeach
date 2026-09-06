@@ -146,6 +146,16 @@
   @media (prefers-reduced-motion: reduce) {
     .bubble, .wave-back, .wave-front { animation: none !important; }
   }
+
+  /* ===== EMAIL GATE ===== */
+  .email-modal { position: fixed; inset: 0; background: rgba(27,67,50,0.6); display: none; align-items: center; justify-content: center; z-index: 999; padding: 20px; }
+  .email-modal.show { display: flex; }
+  .email-modal-box { background: #fff; border-radius: 18px; padding: 32px; max-width: 440px; width: 100%; box-shadow: 0 20px 60px rgba(27,67,50,0.35); box-sizing: border-box; text-align: left; }
+  .email-modal-box h3 { margin: 0 0 10px; color: #1b4332; font-size: 20px; }
+  .email-modal-box p { color: #33533f; font-size: 14px; line-height: 1.55; margin: 0 0 18px; }
+  .email-modal-box .btn { width: 100%; text-align: center; box-sizing: border-box; margin-bottom: 12px; }
+  .email-modal-box .btn:last-child { margin-bottom: 0; }
+  .email-modal-close { display: block; text-align: center; margin-top: 14px; color: #7fa88a; font-size: 13px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -167,7 +177,7 @@
     <a href="index.html" style="display:inline-block; color:#e5faff; font-weight:800; font-size:13px; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; text-shadow:0 2px 10px rgba(27,67,50,0.4); text-decoration:none;">← ZippyTeach</a>
     <span class="eyebrow">🌴 Built for ESL classrooms in China</span>
     <h1>Run your whole classroom<br>from <span>the jungle</span>.</h1>
-    <p class="sub">The same classroom manager teachers love — seating chart, behavior points, classroom rules, name pickers, group roles, and a noise meter — wrapped in a fresh jungle theme. Works completely offline.</p>
+    <p class="sub">The same classroom manager teachers love — seating chart, behavior points, group roles, a growing class mascot, and built-in formative assessments — wrapped in a fresh jungle theme. Fully offline, no VPN needed.</p>
     <div class="cta-row">
       <a href="#pricing" class="btn btn-primary">See pricing</a>
       <a href="#features" class="btn btn-ghost">See what's inside</a>
@@ -195,11 +205,14 @@
     <div class="kicker">Everything on one screen</div>
     <h2>Same powerful tools, jungle-themed top to bottom.</h2>
     <div class="feature-grid">
-      <div class="feature-card"><span class="icon">🪑</span><h3>Real Seating Layouts</h3><p>Choose Flexible, U-Shape, Pair Seating, or Clusters/Pods — then drag any desk to fine-tune it.</p></div>
+      <div class="feature-card" style="border-top-color:#ffd166;"><span class="icon">📡</span><h3>Fully Offline — No VPN Needed</h3><p>Runs entirely from a single file with zero internet connection required. No VPN workarounds, no dropped connections mid-lesson — just open it and teach.</p></div>
+      <div class="feature-card"><span class="icon">🫧</span><h3>Stay in Your PowerPoint</h3><p>Teaching from a slide deck? A small floating bubble lets you give points or pick a name without ever leaving presentation mode.</p></div>
+      <div class="feature-card"><span class="icon">🪑</span><h3>Seating That Mirrors Your Real Room</h3><p>Choose Flexible, Diagonal Rows, Pair Seating, or Clusters/Pods, then drag any desk to match your actual classroom — separately for every one of your 8 classes.</p></div>
       <div class="feature-card"><span class="icon">📜</span><h3>Visual Classroom Rules</h3><p>Icon-based positive and negative rules, with your own icon picker, shared across every class.</p></div>
-      <div class="feature-card"><span class="icon">📊</span><h3>Student Profiles</h3><p>Log participation, collaboration, and independence with one tap — ready to copy into reports.</p></div>
+      <div class="feature-card"><span class="icon">📊</span><h3>Student Profiles + Real Assessments</h3><p>Log participation and behavior with one tap, and generate formative Reading & Vocabulary quizzes that save scores straight to each student's profile — free in the trial.</p></div>
       <div class="feature-card"><span class="icon">🎡</span><h3>Wheel & Bingo Pickers</h3><p>Names are removed once drawn, so nobody's picked twice in the same round.</p></div>
       <div class="feature-card"><span class="icon">🐾</span><h3>Groups & Roles</h3><p>Shuffle into jungle animal teams — monkeys, lions, elephants, and more — and drag names between groups anytime. Add your own custom roles too.</p></div>
+      <div class="feature-card"><span class="icon">🥚</span><h3>A Class Mascot That Grows With Them</h3><p>Individual points reward each student, while every point the class earns together helps their own jungle mascot hatch and grow — a shared goal alongside personal ones.</p></div>
       <div class="feature-card"><span class="icon">📢</span><h3>Noise Meter</h3><p>Live volume tracking with automatic class-wide points for staying on target.</p></div>
       <div class="feature-card"><span class="icon">🎵</span><h3>Focus Music</h3><p>Built-in ambient tracks for independent work, plus room to add your own.</p></div>
       <div class="feature-card"><span class="icon">🌅</span><h3>Daily Helper Routine</h3><p>Today's date, day, and weather, plus rotating helper questions for your morning routine.</p></div>
@@ -225,7 +238,7 @@
           <li>Wheel, Bingo, Student Profiles & Voice Meter unlock in the full version</li>
           <li>Locks automatically after 3 days</li>
         </ul>
-        <a href="Jungle-Board-TRIAL.html" download class="btn btn-ghost" style="background:#f4f1e8; color:#2d6a4f; border:2px solid #c7e8ca;">Get the trial</a>
+        <a href="#" onclick="openEmailGate('Jungle-Board-TRIAL.html'); return false;" class="btn btn-ghost" style="background:#f4f1e8; color:#2d6a4f; border:2px solid #c7e8ca;">Get the trial</a>
       </div>
       <div class="ticket full">
         <div class="ticket-badge">Full version</div>
@@ -251,7 +264,7 @@
     <div class="kicker">How it works</div>
     <h2>From trial to your desktop in a few steps.</h2>
     <div class="step-row">
-      <div class="step"><h4>Download the trial</h4><p>Get the 3-day trial file and open it directly in any browser — no install needed. <a href="Jungle-Board-TRIAL.html" download style="color:#52b788; font-weight:700;">Download now →</a></p></div>
+      <div class="step"><h4>Download the trial</h4><p>Get the 3-day trial file and open it directly in any browser — no install needed. <a href="#" onclick="openEmailGate('Jungle-Board-TRIAL.html'); return false;" style="color:#52b788; font-weight:700;">Download now →</a></p></div>
       <div class="step"><h4>Try it in your classroom</h4><p>Set up your classes, roster, and rules. Everything you build stays on your computer.</p></div>
       <div class="step"><h4>Pay to unlock</h4><p style="color:#2d6a4f; font-weight:700;">Email danzigal1988@gmail.com to arrange payment.</p></div>
       <div class="step"><h4>Receive your copy</h4><p>You'll get a personal, permanently-unlocked file — your existing classes carry over.</p></div>
@@ -266,6 +279,27 @@
   <p><a href="jungle-board-guide.html" style="color:#ffd166; text-decoration:none; font-weight:700;">📖 How to Use Jungle Board — Teacher Guide</a></p>
   <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSenxj4OEt_WG4Gxoc8Oz_xBJK2wlPBxwMAuDNA7V9vohPe_Hg/viewform?usp=publish-editor" target="_blank" rel="noopener" style="color:#ffd166; text-decoration:none; font-weight:700;">💬 Share Your Feedback</a></p>
 </footer>
+
+<!-- EMAIL GATE MODAL -->
+<div class="email-modal" id="emailGateModal">
+  <div class="email-modal-box">
+    <h3>📬 Get your download + updates</h3>
+    <p>Pop your email in so I can let you know about new versions and fixes — takes 10 seconds, and your download link is right below either way.</p>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScX3gyuNOw1QrhKt1143qzs_WbIIjCODBwuuLqQ3C_Q6VZBIg/viewform?usp=publish-editor" target="_blank" rel="noopener" class="btn btn-primary">✉️ Enter your email</a>
+    <a href="#" id="emailGateDownloadLink" download class="btn btn-ghost" style="background:#f4f1e8; color:#2d6a4f; border:2px solid #c7e8ca;">⬇️ Continue to download</a>
+    <span class="email-modal-close" onclick="closeEmailGate()">No thanks, close this</span>
+  </div>
+</div>
+
+<script>
+function openEmailGate(fileUrl) {
+  document.getElementById('emailGateDownloadLink').setAttribute('href', fileUrl);
+  document.getElementById('emailGateModal').classList.add('show');
+}
+function closeEmailGate() {
+  document.getElementById('emailGateModal').classList.remove('show');
+}
+</script>
 
 <script>
 (function () {
