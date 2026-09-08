@@ -113,7 +113,7 @@
   .desk-btn-star { background: #ffd166; color: #5c3d00; }
   .seating-canvas { position: relative; width: 100%; aspect-ratio: 16/10; background: linear-gradient(180deg, #f7fdff 0%, #eaf9fd 100%); border: 2px dashed #caf0f8; border-radius: 14px; overflow: hidden; margin-bottom: 6px; touch-action: none; }
   .seating-canvas::before { content: '🖥️ FRONT OF ROOM'; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 800; color: #90b8c9; letter-spacing: 1px; pointer-events: none; }
-  .desk-chip { position: absolute; width: 76px; height: 74px; margin-left: -38px; margin-top: -37px; background: white; border: 2px solid #caf0f8; border-radius: 10px; box-shadow: 0 2px 8px rgba(2,62,138,0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: grab; user-select: none; touch-action: none; transition: box-shadow 0.15s, border-color 0.15s; }
+  .desk-chip { position: absolute; width: 76px; height: 90px; margin-left: -38px; margin-top: -45px; background: white; border: 2px solid #caf0f8; border-radius: 10px; box-shadow: 0 2px 8px rgba(2,62,138,0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: grab; user-select: none; touch-action: none; transition: box-shadow 0.15s, border-color 0.15s; }
   .desk-chip.desk-empty { background: #f0f9fb; border-style: dashed; opacity: 0.85; }
   .desk-chip.dragging { cursor: grabbing; box-shadow: 0 8px 20px rgba(2,62,138,0.3); z-index: 50; opacity: 0.9; }
   .desk-chip-num { position: absolute; top: 2px; left: 4px; font-size: 8px; font-weight: 800; color: #90b8c9; }
@@ -124,6 +124,10 @@
   .desk-chip-action-btn { width: 28px; height: 22px; border: none; border-radius: 5px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; touch-action: none; }
   .desk-chip-action-btn.rule { background: #5e60ce; }
   .desk-chip-action-btn.profile { background: #0096c7; }
+  .desk-chip-points-row { display: flex; gap: 3px; margin-top: 3px; }
+  .desk-chip-point-btn { width: 28px; height: 22px; border: none; border-radius: 5px; font-size: 14px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; touch-action: none; }
+  .desk-chip-point-btn.plus { background: #06d6a0; }
+  .desk-chip-point-btn.minus { background: #ef476f; }
   .layout-picker { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
   .layout-picker button { flex: 1; min-width: 100px; }
   .layout-picker button.active { outline: 3px solid #0077b6; outline-offset: -2px; }
@@ -306,7 +310,7 @@
   @media print {
     body * { visibility: hidden; }
     #testPreviewArea, #testPreviewArea * { visibility: visible; }
-    #testPreviewArea { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; }
+    #testPreviewArea { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; max-height: none !important; overflow: visible !important; }
   }
 </style>
 </head>
@@ -841,6 +845,13 @@
       <button class="btn btn-success" style="font-size:16px; padding:12px;" onclick="generateTestWorksheet()">✨ Generate Worksheet</button>
     </div>
 
+    <div class="card">
+      <h3 style="margin-bottom:4px; color:#333;">📤 Or Upload Your Own Test</h3>
+      <p style="color:#888; font-size:13px; margin-bottom:12px;">Already have a test you use? Upload a photo or PDF of it and you'll still get the same timed display and score-to-profile tools.</p>
+      <input type="text" id="uploadedTestName" placeholder="Test name (e.g. Unit 4 Grammar Test)" style="width:100%; box-sizing:border-box; padding:8px 10px; border:2px solid #caf0f8; border-radius:8px; margin-bottom:10px;">
+      <input type="file" id="uploadedTestFile" accept="image/*,application/pdf" onchange="handleTestUpload(this.files[0])" style="margin-bottom:4px;">
+    </div>
+
     <div class="card" id="testPreviewCard" style="display:none;">
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
         <button class="btn btn-primary" onclick="printTestWorksheet()">🖨️ Print / Download</button>
@@ -849,7 +860,8 @@
         <button class="btn btn-success" onclick="showTestScoreEntry()">📋 Enter Scores</button>
       </div>
       <p style="color:#888; font-size:12px; margin-bottom:8px;">✏️ Click into the worksheet below to edit any wording before printing.</p>
-      <div id="testPreviewArea" contenteditable="true" style="background:#fff; border:2px solid #e0f7fa; border-radius:10px; padding:20px; color:#222; line-height:1.6;"></div>
+      <div id="testSectionNav" style="display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap;"></div>
+      <div id="testPreviewArea" contenteditable="true" style="background:#fff; border:2px solid #e0f7fa; border-radius:10px; padding:20px; color:#222; line-height:1.6; max-height:520px; overflow-y:auto; scroll-behavior:smooth;"></div>
       <details style="margin-top:14px;">
         <summary style="cursor:pointer; font-weight:700; color:#0077b6;">🔑 Answer Key (teacher reference only — not printed)</summary>
         <div id="testAnswerKey" style="margin-top:10px; padding:12px; background:#fff3d6; border-radius:8px; font-size:14px; line-height:1.8;"></div>
@@ -858,7 +870,10 @@
 
     <div class="card" id="testScoreEntryCard" style="display:none;">
       <h3 style="margin-bottom:4px; color:#333;">📋 Enter Scores — <span id="testScoreClassLabel"></span></h3>
-      <p style="color:#888; font-size:13px; margin-bottom:12px;">After peer assessment, type each student's score below. Saving adds it straight to their profile.</p>
+      <p style="color:#888; font-size:13px; margin-bottom:12px;">After peer assessment, pick each student's score below. Saving adds it straight to their profile.</p>
+      <label style="font-weight:600; color:#555; display:inline-block; margin-bottom:12px;">Total points for this test:
+        <input type="number" id="testTotalPoints" min="1" max="100" value="10" onchange="renderTestScoreRows()" style="width:70px; padding:6px; border:2px solid #caf0f8; border-radius:8px; margin-left:6px;">
+      </label>
       <div id="testScoreRows"></div>
       <button class="btn btn-success" style="margin-top:10px;" onclick="saveTestScores()">💾 Save Scores to Profiles</button>
     </div>
@@ -922,7 +937,9 @@ const PURCHASE_CONTACT = 'danzigal1988@gmail.com';
 const LICENSEE_NAME = '{{BUYER_NAME}}'; // replaced per-sale by generate_licensed_copy.py
 
 // ========== STATE ==========
-const DESK_COUNT = 30;
+const DESK_COUNT = 40;
+const MIN_VISIBLE_DESKS = 10;
+const DESK_BUFFER = 5;
 const DEFAULT_RULES = [
   { emoji: '🙌', text: 'Raise your hand', delta: 1 },
   { emoji: '🤫', text: 'Listen carefully', delta: 1 },
@@ -979,56 +996,89 @@ function getClassGroups(className) {
 }
 
 // ========== SEATING LAYOUTS ==========
-function layoutFlexible() {
-  const cols = 6, rows = 5;
+function layoutFlexible(count) {
+  const cols = Math.min(8, Math.max(4, Math.ceil(Math.sqrt(count * 1.7))));
+  const rows = Math.max(1, Math.ceil(count / cols));
   const positions = [];
-  for (let i = 0; i < DESK_COUNT; i++) {
-    const col = i % cols;
+  for (let i = 0; i < count; i++) {
     const row = Math.floor(i / cols);
-    positions.push({ x: 10 + col * (80 / (cols - 1)), y: 12 + row * (76 / (rows - 1)) });
+    const isLastRow = row === rows - 1;
+    const itemsInThisRow = isLastRow ? (count - row * cols) : cols;
+    const rowOffset = isLastRow ? (cols - itemsInThisRow) / 2 : 0;
+    const effectiveCol = (i % cols) + rowOffset;
+    positions.push({
+      x: 10 + effectiveCol * (cols > 1 ? 80 / (cols - 1) : 0),
+      y: 12 + row * (rows > 1 ? 76 / (rows - 1) : 0)
+    });
   }
   return positions;
 }
 
-function layoutDiagonalRows() {
+function layoutDiagonalRows(count) {
+  const perRow = Math.min(8, Math.max(4, Math.ceil(Math.sqrt(count * 1.7))));
+  const numRows = Math.max(1, Math.ceil(count / perRow));
+  const tiltAmount = 14;
   const positions = [];
-  const perRow = 6, numRows = 5, tiltAmount = 14;
-  for (let r = 0; r < numRows; r++) {
-    const baseY = 14 + r * (76 / (numRows - 1));
-    for (let c = 0; c < perRow; c++) {
-      const x = 10 + c * (80 / (perRow - 1));
-      const tilt = (c / (perRow - 1) - 0.5) * tiltAmount;
-      positions.push({ x, y: Math.max(4, Math.min(96, baseY + tilt)) });
-    }
+  for (let i = 0; i < count; i++) {
+    const row = Math.floor(i / perRow);
+    const isLastRow = row === numRows - 1;
+    const itemsInThisRow = isLastRow ? (count - row * perRow) : perRow;
+    const rowOffset = isLastRow ? (perRow - itemsInThisRow) / 2 : 0;
+    const effectiveCol = (i % perRow) + rowOffset;
+    const baseY = 14 + row * (numRows > 1 ? 76 / (numRows - 1) : 0);
+    const x = 10 + effectiveCol * (perRow > 1 ? 80 / (perRow - 1) : 0);
+    const tilt = (perRow > 1 ? (effectiveCol / (perRow - 1) - 0.5) : 0) * tiltAmount;
+    positions.push({ x, y: Math.max(4, Math.min(96, baseY + tilt)) });
   }
   return positions;
 }
 
-function layoutPairs() {
+function layoutPairs(count) {
   const positions = [];
-  const rows = 5, pairsPerRow = 3;
-  for (let r = 0; r < rows; r++) {
-    for (let p = 0; p < pairsPerRow; p++) {
+  const pairsPerRow = 3;
+  const totalPairs = Math.floor(count / 2);
+  const hasOdd = count % 2 === 1;
+  const pairRows = Math.max(1, Math.ceil(totalPairs / pairsPerRow));
+  const totalRows = pairRows + (hasOdd ? 1 : 0);
+  const yStep = totalRows > 1 ? 80 / (totalRows - 1) : 0;
+  let pairIndex = 0;
+  for (let r = 0; r < pairRows; r++) {
+    const y = 12 + r * yStep;
+    for (let p = 0; p < pairsPerRow && pairIndex < totalPairs; p++) {
       const baseX = 20 + p * 30;
-      const y = 12 + r * 19;
       positions.push({ x: baseX - 6, y: y });
       positions.push({ x: baseX + 6, y: y });
+      pairIndex++;
     }
+  }
+  if (hasOdd) {
+    positions.push({ x: 50, y: 12 + pairRows * yStep });
   }
   return positions;
 }
 
-function layoutPods() {
-  const positions = [];
-  const podRows = 2, podCols = 3, perPod = 5;
+function layoutPods(count) {
+  const perPod = 5;
+  const numPods = Math.max(1, Math.ceil(count / perPod));
+  const podCols = Math.min(4, Math.max(1, Math.ceil(Math.sqrt(numPods * 1.6))));
+  const podRows = Math.max(1, Math.ceil(numPods / podCols));
   const centers = [];
   for (let r = 0; r < podRows; r++) {
-    for (let c = 0; c < podCols; c++) centers.push({ x: 18 + c * 32, y: 28 + r * 44 });
+    for (let c = 0; c < podCols; c++) {
+      if (centers.length >= numPods) break;
+      centers.push({
+        x: 14 + c * (podCols > 1 ? 74 / (podCols - 1) : 0),
+        y: 22 + r * (podRows > 1 ? 56 / (podRows - 1) : 0)
+      });
+    }
   }
+  const positions = [];
+  let placed = 0;
   centers.forEach(center => {
-    for (let k = 0; k < perPod; k++) {
+    for (let k = 0; k < perPod && placed < count; k++) {
       const angle = (k / perPod) * Math.PI * 2 - Math.PI / 2;
       positions.push({ x: center.x + 11 * Math.cos(angle), y: center.y + 13 * Math.sin(angle) });
+      placed++;
     }
   });
   return positions;
@@ -1041,17 +1091,39 @@ const LAYOUT_OPTIONS = [
   { type: 'pods', label: '🍀 Clusters/Pods' }
 ];
 
-function generateLayoutPositions(type) {
-  if (type === 'diagonal') return layoutDiagonalRows();
-  if (type === 'pairs') return layoutPairs();
-  if (type === 'pods') return layoutPods();
-  return layoutFlexible();
+function generateLayoutPositions(type, count) {
+  if (type === 'diagonal') return layoutDiagonalRows(count);
+  if (type === 'pairs') return layoutPairs(count);
+  if (type === 'pods') return layoutPods(count);
+  return layoutFlexible(count);
+}
+
+function getVisibleDeskIndices(className) {
+  const desks = classes[className].desks;
+  const named = [];
+  const empty = [];
+  desks.forEach((d, i) => { if (d.name) named.push(i); else empty.push(i); });
+  const targetCount = Math.min(DESK_COUNT, Math.max(MIN_VISIBLE_DESKS, named.length + DESK_BUFFER));
+  const bufferNeeded = Math.max(0, targetCount - named.length);
+  return named.concat(empty.slice(0, bufferNeeded)).sort((a, b) => a - b);
+}
+
+function regenerateDeskPositions(className, layoutType, visibleIndices) {
+  const cls = classes[className];
+  const slots = generateLayoutPositions(layoutType, visibleIndices.length);
+  const positions = new Array(DESK_COUNT);
+  visibleIndices.forEach((deskIdx, k) => { positions[deskIdx] = slots[k]; });
+  cls.deskPositions = positions;
+  cls.deskPositionsKey = layoutType + ':' + visibleIndices.join(',');
 }
 
 function getDeskPositions(className) {
   const cls = classes[className];
-  if (!cls.deskPositions || cls.deskPositions.length !== DESK_COUNT) {
-    cls.deskPositions = generateLayoutPositions(cls.layoutType || 'flexible');
+  const visibleIndices = getVisibleDeskIndices(className);
+  const layoutType = cls.layoutType || 'flexible';
+  const key = layoutType + ':' + visibleIndices.join(',');
+  if (!cls.deskPositions || cls.deskPositionsKey !== key) {
+    regenerateDeskPositions(className, layoutType, visibleIndices);
   }
   return cls.deskPositions;
 }
@@ -1062,7 +1134,8 @@ function applyLayout(type) {
     if (!confirm('Switching layouts will reset any manual desk positions you\'ve made for this class. Continue?')) return;
   }
   cls.layoutType = type;
-  cls.deskPositions = generateLayoutPositions(type);
+  const visibleIndices = getVisibleDeskIndices(activeClass);
+  regenerateDeskPositions(activeClass, type, visibleIndices);
   saveState();
   renderLayoutPicker();
   renderSeatingCanvas();
@@ -1315,7 +1388,7 @@ function renderClassContent() {
 
   let html = '<div class="card" style="border: 2px solid #06d6a0;"><h3 style="margin-bottom: 6px; color: #333;">📋 Paste Class Roster</h3>';
   html += '<p style="color:#888; font-size:13px; margin-bottom:10px;">Copy your class list and paste it below — one name per line. It fills the empty desks below automatically.</p>';
-  html += '<textarea id="bulkStudentNames" placeholder="Paste up to 30 names, one per line..." style="width:100%; min-height:100px; padding:10px; border:2px solid #caf0f8; border-radius:8px; font-size:14px; resize:vertical;"></textarea>';
+  html += '<textarea id="bulkStudentNames" placeholder="Paste up to 40 names, one per line..." style="width:100%; min-height:100px; padding:10px; border:2px solid #caf0f8; border-radius:8px; font-size:14px; resize:vertical;"></textarea>';
   html += '<button class="btn btn-success" id="bulkAddBtn" style="margin-top:8px; width:100%; font-size:16px; padding:12px;">🌊 Add These Names to the Seating Chart</button>';
   html += '</div>';
 
@@ -1353,10 +1426,12 @@ function renderSeatingCanvas() {
   const canvas = document.getElementById('seatingCanvas');
   if (!canvas) return;
   const desks = classes[activeClass].desks;
+  const visibleIndices = getVisibleDeskIndices(activeClass);
   const positions = getDeskPositions(activeClass);
   canvas.innerHTML = '';
 
-  desks.forEach((d, i) => {
+  visibleIndices.forEach((i, k) => {
+    const d = desks[i];
     const pos = positions[i] || { x: 50, y: 50 };
     const chip = document.createElement('div');
     chip.className = 'desk-chip' + (d.name ? '' : ' desk-empty');
@@ -1365,7 +1440,7 @@ function renderSeatingCanvas() {
 
     const numLabel = document.createElement('div');
     numLabel.className = 'desk-chip-num';
-    numLabel.textContent = i + 1;
+    numLabel.textContent = k + 1;
     chip.appendChild(numLabel);
 
     if (d.isLeader) {
@@ -1385,6 +1460,27 @@ function renderSeatingCanvas() {
       pointsLabel.className = 'desk-chip-points';
       pointsLabel.textContent = d.points + ' pts';
       chip.appendChild(pointsLabel);
+
+      const pointsRow = document.createElement('div');
+      pointsRow.className = 'desk-chip-points-row';
+
+      const minusBtn = document.createElement('button');
+      minusBtn.className = 'desk-chip-point-btn minus';
+      minusBtn.textContent = '−';
+      minusBtn.title = 'Remove 1 point';
+      stopChipDrag(minusBtn);
+      minusBtn.addEventListener('click', (e) => { e.stopPropagation(); changePoints(i, -1); });
+      pointsRow.appendChild(minusBtn);
+
+      const plusBtn = document.createElement('button');
+      plusBtn.className = 'desk-chip-point-btn plus';
+      plusBtn.textContent = '+';
+      plusBtn.title = 'Add 1 point';
+      stopChipDrag(plusBtn);
+      plusBtn.addEventListener('click', (e) => { e.stopPropagation(); changePoints(i, 1); });
+      pointsRow.appendChild(plusBtn);
+
+      chip.appendChild(pointsRow);
 
       const actions = document.createElement('div');
       actions.className = 'desk-chip-actions';
@@ -1974,7 +2070,7 @@ function resetRules() {
 
 // ========== NAME PICKER SYNC ==========
 // ========== SAVE / LOAD (this computer only) ==========
-const STORAGE_KEY = 'eslOceanBoard_state_v1';
+const STORAGE_KEY = 'eslOceanBoard_state_v1_' + BUILD_TYPE;
 
 const STORAGE_ADVISORY_THRESHOLD = 4 * 1024 * 1024; // ~4MB — warn before hitting typical 5MB browser caps
 
@@ -2052,7 +2148,7 @@ function loadState() {
   return false;
 }
 
-const LAST_BACKUP_KEY = 'ocmBoard_lastBackupTime';
+const LAST_BACKUP_KEY = 'ocmBoard_lastBackupTime_' + BUILD_TYPE;
 const BACKUP_REMINDER_HOURS = 20;
 
 function exportBackup() {
@@ -2660,8 +2756,9 @@ function applyGroupsToSeating() {
   if (!confirm('This will rearrange every desk, row by row, so each group sits together in order. You can still drag any desk afterward. Continue?')) return;
 
   const desks = classes[activeClass].desks;
+  const visibleIndices = getVisibleDeskIndices(activeClass);
   const positions = getDeskPositions(activeClass);
-  const slotPositions = layoutFlexible(); // reliable, evenly-spaced, non-overlapping grid of DESK_COUNT slots
+  const slotPositions = layoutFlexible(visibleIndices.length); // reliable, evenly-spaced, non-overlapping grid matching the visible desk count
 
   // Build the desk we should look up for each group member (by name).
   const deskByName = {};
@@ -2671,7 +2768,7 @@ function applyGroupsToSeating() {
 
   // Seating order: every group's members first (each group kept together and
   // in order), then any named students not in a group, then empty desks —
-  // so every one of the DESK_COUNT slots gets exactly one desk, guaranteeing
+  // so every one of the visible slots gets exactly one desk, guaranteeing
   // no two desks ever land on the same spot.
   const finalOrder = [];
   const usedDeskIndices = new Set();
@@ -2688,7 +2785,7 @@ function applyGroupsToSeating() {
     });
   });
 
-  desks.forEach((d, i) => {
+  visibleIndices.forEach(i => {
     if (!usedDeskIndices.has(i)) {
       finalOrder.push(i);
       usedDeskIndices.add(i);
@@ -2942,19 +3039,19 @@ function startFloatingBubble() {
 
 async function openBoardBubble() {
   try {
-    const pipWindow = await documentPictureInPicture.requestWindow({ width: 260, height: 300 });
+    const pipWindow = await documentPictureInPicture.requestWindow({ width: 200, height: 250 });
 
     const style = pipWindow.document.createElement('style');
     style.textContent = `
-      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; margin:0; padding:14px; background:#0077b6; color:#fff; text-align:center; box-sizing:border-box; }
-      h2 { font-size:14px; margin:0 0 10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-      select { width:100%; padding:8px; border-radius:8px; border:none; font-size:14px; margin-bottom:10px; box-sizing:border-box; }
-      .bubble-row { display:flex; gap:6px; justify-content:center; margin-bottom:10px; }
-      button { border:none; border-radius:8px; font-weight:800; cursor:pointer; padding:9px 8px; font-size:14px; }
-      .pt-btn { background:#ffd166; color:#4a2f00; flex:1; }
-      .action-btn { background:#06d6a0; color:#04402c; width:100%; margin-top:6px; }
-      .board-btn { background:#fff; color:#023e8a; width:100%; margin-top:6px; }
-      .feedback { font-size:12px; margin-top:10px; min-height:16px; opacity:0.95; }
+      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; margin:0; padding:10px; background:rgba(0,119,182,0.82); color:#fff; text-align:center; box-sizing:border-box; }
+      h2 { font-size:12px; margin:0 0 7px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      select { width:100%; padding:6px; border-radius:8px; border:none; font-size:12px; margin-bottom:7px; box-sizing:border-box; }
+      .bubble-row { display:flex; gap:5px; justify-content:center; margin-bottom:6px; }
+      button { border:none; border-radius:8px; font-weight:800; cursor:pointer; padding:7px 6px; font-size:13px; }
+      .pt-btn { background:#ffd166; color:#4a2f00; flex:1; font-size:14px; }
+      .icon-btn { background:rgba(255,255,255,0.85); color:#023e8a; flex:1; font-size:17px; padding:6px; }
+      .board-btn { background:rgba(255,255,255,0.92); color:#023e8a; width:100%; margin-top:4px; font-size:11px; padding:6px; }
+      .feedback { font-size:10px; margin-top:6px; min-height:13px; opacity:0.95; }
     `;
     pipWindow.document.head.appendChild(style);
 
@@ -2964,12 +3061,16 @@ async function openBoardBubble() {
       <div class="bubble-row">
         <button class="pt-btn" id="bubbleMinus">-1</button>
         <button class="pt-btn" id="bubblePlus">+1</button>
-        <button class="pt-btn" id="bubbleStar">+3</button>
       </div>
-      <button class="action-btn" id="bubbleRandomBtn">🎲 Pick Random Student</button>
+      <div class="bubble-row">
+        <button class="icon-btn" id="bubbleRandomBtn" title="Pick random student (no repeats this session)">🎲</button>
+        <button class="icon-btn" id="bubbleResetPicksBtn" title="Reset picked list">↺</button>
+      </div>
       <button class="board-btn" id="bubbleOpenBoardBtn">🖥️ Open Full Board</button>
       <div class="feedback" id="bubbleFeedback"></div>
     `;
+
+    let pickedNames = new Set();
 
     function bubbleRosterNames() {
       const cls = classes[activeClass];
@@ -2995,21 +3096,31 @@ async function openBoardBubble() {
       const idx = cls.desks.findIndex(d => d.name === name);
       if (idx === -1) return;
       changePoints(idx, delta);
-      feedback.textContent = (delta > 0 ? '+' + delta + ' given to ' : delta + ' from ') + name + ' — now ' + cls.desks[idx].points + ' pts';
+      feedback.textContent = (delta > 0 ? '+' + delta + ' to ' : delta + ' from ') + name;
     }
 
     pipWindow.document.getElementById('bubbleMinus').onclick = () => applyBubblePoints(-1);
     pipWindow.document.getElementById('bubblePlus').onclick = () => applyBubblePoints(1);
-    pipWindow.document.getElementById('bubbleStar').onclick = () => applyBubblePoints(3);
 
     pipWindow.document.getElementById('bubbleRandomBtn').onclick = () => {
       const select = pipWindow.document.getElementById('bubbleStudentSelect');
-      const names = bubbleRosterNames();
       const feedback = pipWindow.document.getElementById('bubbleFeedback');
-      if (names.length === 0) { feedback.textContent = 'No students seated in this class.'; return; }
-      const picked = names[Math.floor(Math.random() * names.length)];
+      const allNames = bubbleRosterNames();
+      if (allNames.length === 0) { feedback.textContent = 'No students seated in this class.'; return; }
+      let remaining = allNames.filter(n => !pickedNames.has(n));
+      if (remaining.length === 0) {
+        pickedNames.clear();
+        remaining = allNames;
+      }
+      const picked = remaining[Math.floor(Math.random() * remaining.length)];
+      pickedNames.add(picked);
       select.value = picked;
       feedback.textContent = '🎉 ' + picked + ' was picked!';
+    };
+
+    pipWindow.document.getElementById('bubbleResetPicksBtn').onclick = () => {
+      pickedNames.clear();
+      pipWindow.document.getElementById('bubbleFeedback').textContent = 'Picked list reset.';
     };
 
     pipWindow.document.getElementById('bubbleOpenBoardBtn').onclick = () => {
@@ -3024,19 +3135,19 @@ async function openBoardBubble() {
 // ========== CLASS MASCOT ==========
 const MASCOT_STAGES = [
   { name: 'Egg', min: 0 },
-  { name: 'Cracking', min: 50 },
-  { name: 'Hatchling', min: 150 },
-  { name: 'Young', min: 300 },
-  { name: 'Growing', min: 600 },
-  { name: 'Fully grown', min: 1000 }
+  { name: 'Cracking', min: 100 },
+  { name: 'Hatchling', min: 250 },
+  { name: 'Young', min: 500 },
+  { name: 'Growing', min: 900 },
+  { name: 'Fully grown', min: 1500 }
 ];
 const MASCOT_GIFTS = [
   { id: 'none', emoji: '🚫', min: 0, label: 'None' },
   { id: 'bow', emoji: '🎀', min: 0, label: 'Bow' },
-  { id: 'hat', emoji: '🎩', min: 150, label: 'Hat' },
-  { id: 'glasses', emoji: '😎', min: 300, label: 'Glasses' },
-  { id: 'crown', emoji: '👑', min: 600, label: 'Crown' },
-  { id: 'flower', emoji: '🌸', min: 1000, label: 'Flower' }
+  { id: 'hat', emoji: '🎩', min: 250, label: 'Hat' },
+  { id: 'glasses', emoji: '😎', min: 500, label: 'Glasses' },
+  { id: 'crown', emoji: '👑', min: 900, label: 'Crown' },
+  { id: 'flower', emoji: '🌸', min: 1500, label: 'Flower' }
 ];
 const MASCOT_SPECIES = [
   { id: 'turtle', emoji: '🐢', shell: '#4dd0a8', shell2: '#38b892', head: '#6ee6bd', blush: '#ffb3c6', egg: '#fff3d6', eggSpot: '#ffd166' },
@@ -3191,14 +3302,18 @@ function renderMascotPanel() {
 function selectMascotSpecies(speciesId) {
   const cls = getMascotData(activeClass);
   cls.mascotSpecies = speciesId;
-  saveState();
+  if (!saveState()) {
+    alert('This choice couldn\'t be saved — your device may be low on storage. Check the storage banner and consider backing up / clearing old data.');
+  }
   renderMascotPanel();
 }
 
 function setMascotName(name) {
   const cls = getMascotData(activeClass);
   cls.mascotName = name.trim().slice(0, 20);
-  saveState();
+  if (!saveState()) {
+    alert('This name couldn\'t be saved — your device may be low on storage. Check the storage banner and consider backing up / clearing old data.');
+  }
   renderMascotPanel();
 }
 
@@ -3207,7 +3322,9 @@ function selectMascotGift(giftId) {
   const gift = MASCOT_GIFTS.find(g => g.id === giftId);
   if (!gift || cls.mascotPoints < gift.min) return;
   cls.mascotGift = giftId;
-  saveState();
+  if (!saveState()) {
+    alert('This gift couldn\'t be saved — your device may be low on storage. Check the storage banner and consider backing up / clearing old data.');
+  }
   renderMascotPanel();
 }
 
@@ -3331,7 +3448,7 @@ function generateTestWorksheet() {
   const cloze = includeCloze ? generateClozeFromTemplate(CLOZE_TEMPLATES[selectedTestDifficulty], pool) : null;
   const reading = includeReading ? READING_PASSAGES[selectedTestDifficulty] : null;
 
-  currentTestData = { difficulty: selectedTestDifficulty, categories: checkedCats, mcQuestions, cloze, reading };
+  currentTestData = { difficulty: selectedTestDifficulty, testLabel: 'Reading & Vocabulary Quiz (' + selectedTestDifficulty + ')', categories: checkedCats, mcQuestions, cloze, reading, totalPoints: mcQuestions.length + (cloze ? cloze.answers.length : 0) + (reading ? reading.questions.length : 0) };
   renderTestPreview();
   document.getElementById('testPreviewCard').style.display = 'block';
   document.getElementById('testScoreEntryCard').style.display = 'none';
@@ -3339,13 +3456,16 @@ function generateTestWorksheet() {
 
 function renderTestPreview() {
   const t = currentTestData;
-  const totalQuestions = t.mcQuestions.length + (t.cloze ? t.cloze.answers.length : 0) + (t.reading ? t.reading.questions.length : 0);
+  const totalQuestions = t.totalPoints;
   let html = '<div style="text-align:center; margin-bottom:18px;">';
   html += '<h2 style="margin-bottom:4px;">Reading &amp; Vocabulary Quiz — ' + t.difficulty + '</h2>';
   html += '<p>Name: _______________________ &nbsp;&nbsp; Class: ' + activeClass + ' &nbsp;&nbsp; Score: _____ / ' + totalQuestions + '</p></div>';
 
+  let navHtml = '';
+
   if (t.mcQuestions.length > 0) {
-    html += '<h3>Section A: Multiple Choice</h3>';
+    html += '<h3 id="testSectionA">Section A: Multiple Choice</h3>';
+    navHtml += '<button class="btn btn-teal" type="button" onclick="scrollToTestSection(\'testSectionA\')">Section A: Multiple Choice</button>';
     t.mcQuestions.forEach((q, i) => {
       html += '<div style="margin-bottom:16px;"><p><strong>' + (i+1) + '.</strong> What is this?</p>';
       html += '<img src="' + q.image + '" style="width:64px; height:64px; display:block; margin-bottom:6px;">';
@@ -3358,13 +3478,15 @@ function renderTestPreview() {
   }
 
   if (t.cloze) {
-    html += '<h3>Section B: Fill in the Blanks</h3>';
+    html += '<h3 id="testSectionB">Section B: Fill in the Blanks</h3>';
+    navHtml += '<button class="btn btn-teal" type="button" onclick="scrollToTestSection(\'testSectionB\')">Section B: Cloze</button>';
     html += '<p style="background:#f0f0f0; padding:8px 12px; border-radius:6px;"><strong>Word Bank:</strong> ' + t.cloze.wordBank.join(', ') + '</p>';
     html += '<p style="line-height:2.4;">' + t.cloze.displayText + '</p>';
   }
 
   if (t.reading) {
-    html += '<h3>Section C: Reading Comprehension</h3>';
+    html += '<h3 id="testSectionC">Section C: Reading Comprehension</h3>';
+    navHtml += '<button class="btn btn-teal" type="button" onclick="scrollToTestSection(\'testSectionC\')">Section C: Reading</button>';
     html += '<p style="background:#f0f0f0; padding:10px 12px; border-radius:6px;">' + t.reading.text + '</p>';
     t.reading.questions.forEach((q, i) => {
       html += '<p style="margin-bottom:2px;"><strong>' + (i+1) + '.</strong> ' + q.q + '</p>';
@@ -3375,12 +3497,55 @@ function renderTestPreview() {
   }
 
   document.getElementById('testPreviewArea').innerHTML = html;
+  document.getElementById('testSectionNav').innerHTML = navHtml;
 
   let keyHtml = '';
   t.mcQuestions.forEach((q, i) => { keyHtml += (i+1) + '. ' + q.correctWord + '<br>'; });
   if (t.cloze) keyHtml += '<strong>Cloze (in order):</strong> ' + t.cloze.answers.join(', ') + '<br>';
   if (t.reading) t.reading.questions.forEach((q, i) => { keyHtml += 'Reading ' + (i+1) + ': ' + q.options[q.correct] + '<br>'; });
   document.getElementById('testAnswerKey').innerHTML = keyHtml || 'No questions generated yet.';
+}
+
+function scrollToTestSection(sectionId) {
+  const el = document.getElementById(sectionId);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function handleTestUpload(file) {
+  if (!file) return;
+  const nameInput = document.getElementById('uploadedTestName');
+  const testName = nameInput.value.trim() || file.name;
+  const isPdf = file.type === 'application/pdf';
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    currentTestData = {
+      uploaded: true,
+      difficulty: testName,
+      testLabel: testName,
+      fileType: isPdf ? 'pdf' : 'image',
+      fileData: e.target.result,
+      fileName: file.name,
+      totalPoints: 10
+    };
+    renderUploadedTestPreview();
+    document.getElementById('testPreviewCard').style.display = 'block';
+    document.getElementById('testScoreEntryCard').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderUploadedTestPreview() {
+  const t = currentTestData;
+  let html = '<div style="text-align:center; margin-bottom:14px;"><h2>' + t.difficulty + '</h2>';
+  html += '<p>Name: _______________________ &nbsp;&nbsp; Class: ' + activeClass + ' &nbsp;&nbsp; Score: _____ / ____</p></div>';
+  if (t.fileType === 'image') {
+    html += '<img src="' + t.fileData + '" style="max-width:100%; display:block; margin:0 auto;">';
+  } else {
+    html += '<div style="text-align:center; padding:30px; background:#f5f5f5; border-radius:8px;">📄 ' + t.fileName + '<br><a href="' + t.fileData + '" target="_blank" class="btn btn-primary" style="margin-top:10px; display:inline-block;">Open PDF to view or print</a></div>';
+  }
+  document.getElementById('testPreviewArea').innerHTML = html;
+  document.getElementById('testSectionNav').innerHTML = '';
+  document.getElementById('testAnswerKey').innerHTML = 'No auto-generated answer key for uploaded tests — use your own.';
 }
 
 function printTestWorksheet() {
@@ -3390,46 +3555,54 @@ function printTestWorksheet() {
 function showTestScoreEntry() {
   document.getElementById('testScoreEntryCard').style.display = 'block';
   document.getElementById('testScoreClassLabel').textContent = activeClass;
+  if (currentTestData && currentTestData.totalPoints) {
+    document.getElementById('testTotalPoints').value = currentTestData.totalPoints;
+  }
   renderTestScoreRows();
 }
 
 function renderTestScoreRows() {
   const desks = classes[activeClass].desks.filter(d => d.name);
+  const total = parseInt(document.getElementById('testTotalPoints').value) || 10;
   const rowsDiv = document.getElementById('testScoreRows');
   if (desks.length === 0) {
     rowsDiv.innerHTML = '<p style="color:#888;">No students seated in ' + activeClass + ' yet.</p>';
     return;
   }
+  let optionsHtml = '<option value="">—</option>';
+  for (let i = 0; i <= total; i++) optionsHtml += '<option value="' + i + '">' + i + '</option>';
   rowsDiv.innerHTML = desks.map(d =>
     '<div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">' +
     '<span style="width:150px; font-weight:600; color:#333;">' + d.name + '</span>' +
-    '<input type="text" class="test-score-input" data-name="' + d.name + '" placeholder="e.g. 8/10" style="padding:8px; border:2px solid #caf0f8; border-radius:8px; width:110px;">' +
+    '<select class="test-score-input" data-name="' + d.name + '" style="padding:8px; border:2px solid #caf0f8; border-radius:8px; width:90px;">' + optionsHtml + '</select>' +
+    '<span style="color:#888; font-size:13px;">/ ' + total + '</span>' +
     '</div>'
   ).join('');
 }
 
 function saveTestScores() {
   const inputs = document.querySelectorAll('.test-score-input');
-  const testName = 'Reading & Vocabulary Quiz (' + (currentTestData ? currentTestData.difficulty : '') + ')';
+  const total = parseInt(document.getElementById('testTotalPoints').value) || 0;
+  const testLabel = currentTestData ? currentTestData.testLabel : 'Test';
   let saved = 0;
   inputs.forEach(inp => {
-    const val = inp.value.trim();
-    if (!val) return;
+    const val = inp.value;
+    if (val === '') return;
     const deskIdx = classes[activeClass].desks.findIndex(d => d.name === inp.dataset.name);
     if (deskIdx === -1) return;
-    logProfileEntryForDesk(deskIdx, 'Learning Habits and Academic Engagement', testName + ': ' + val, 'positive');
+    logProfileEntryForDesk(deskIdx, 'Learning Habits and Academic Engagement', testLabel + ': ' + val + '/' + total, 'positive');
     saved++;
   });
   if (saved === 0) {
-    alert('Enter at least one score before saving.');
+    alert('Pick at least one score before saving.');
     return;
   }
   alert(saved + ' score' + (saved === 1 ? '' : 's') + ' saved to ' + activeClass + '\'s student profiles.');
 }
 
 function openTestTimerDisplay() {
-  if (!currentTestData) { alert('Generate a worksheet first.'); return; }
-  document.getElementById('testTimerTitle').textContent = 'Reading & Vocabulary Quiz — ' + currentTestData.difficulty;
+  if (!currentTestData) { alert('Generate or upload a test first.'); return; }
+  document.getElementById('testTimerTitle').textContent = currentTestData.testLabel;
   pauseTestTimer();
   const mins = parseInt(document.getElementById('testTimerMinutesInput').value) || 10;
   testTimerRemaining = mins * 60;
@@ -3900,7 +4073,7 @@ function renderMusicButtons() {
   container.appendChild(stopBtn);
 }
 
-const CUSTOM_MUSIC_KEY = 'ocmBoard_customMusic_v1';
+const CUSTOM_MUSIC_KEY = 'ocmBoard_customMusic_v1_' + BUILD_TYPE;
 
 function handleCustomMusicUpload(file) {
   if (!file) return;
@@ -4106,7 +4279,7 @@ function showLicenseeWatermark() {
 }
 
 // ========== FLASHCARDS ==========
-const FLASHCARD_STORAGE_KEY = 'ocmBoard_flashcards_v1';
+const FLASHCARD_STORAGE_KEY = 'ocmBoard_flashcards_v1_' + BUILD_TYPE;
 const DEFAULT_FLASHCARD_CATEGORIES = ['Animals', 'Numbers', 'Colors', 'Countries', 'Places', 'Weather', 'School Places', 'A New Start'];
 const CATEGORY_ICONS = { 'Animals': '🐶', 'Numbers': '🔢', 'Colors': '🎨', 'Countries': '🌍', 'Places': '🏛️', 'Weather': '☀️', 'School Places': '🏫', 'A New Start': '🎒' };
 let flashcardBank = {};
