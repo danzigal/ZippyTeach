@@ -960,6 +960,9 @@
   .pw-links{ display:flex; gap:8px; }
   .pw-links .btn{ flex:1; }
   #playUnlockPromo{ display:none; margin:0 auto 14px; }
+  .pw-getcode{ font-size:12.5px; color:var(--ink-soft); line-height:1.5; margin:14px 0 0;
+    padding-top:12px; border-top:2px solid rgba(10,58,71,.12); }
+  .pw-getcode a{ color:var(--deep); font-weight:700; }
   #ztLockScreen{ display:none; position:fixed; inset:0; z-index:9000;
     background:linear-gradient(180deg, rgba(8,58,92,.97), rgba(3,28,48,.99));
     align-items:center; justify-content:center; padding:20px; }
@@ -1948,7 +1951,7 @@
       <h3 class="pw-title">Unlock the full Ocean Board</h3>
       <p class="pw-feature" id="playUnlockFeature"></p>
       <div class="pw-chips">
-        <span>All 8 classes</span><span>Bingo</span><span>Voice meter</span>
+        <span>All 10 classes</span><span>Bingo</span><span>Voice meter</span>
         <span>Daily helper</span><span>Students of the Day</span><span>Student profiles</span>
         <span>A mascot per class</span><span>Flashcards</span><span>Tests</span><span>Music</span>
       </div>
@@ -1971,6 +1974,10 @@
         <div class="pw-links">
           <button class="btn btn-primary" onclick="closePlayUnlock()">Not now</button>
         </div>
+        <p class="pw-getcode">Don't have a code yet? Get in touch and I'll sort you out.<br>
+          <a href="mailto:danzigal1988@gmail.com?subject=Ocean%20Board%20full%20version">danzigal1988@gmail.com</a>
+          &middot; WeChat <strong>DanziGal88</strong> &middot;
+          <a href="https://wa.me/27761655758">WhatsApp</a></p>
       </div>
     </div>
   </div>
@@ -2486,7 +2493,7 @@ const FULL_CLASS_LIMIT = 10;
 function makeInitialClasses() {
   const limit = BUILD_TYPE === 'trial' ? TRIAL_CLASS_LIMIT : FULL_CLASS_LIMIT;
   const obj = {};
-  for (let i = 1; i <= limit; i++) obj['Class ' + i] = makeClass();
+  for (let i = 1; i <= Math.min(limit, 2); i++) obj['Class ' + i] = makeClass();
   return obj;
 }
 
@@ -3075,12 +3082,17 @@ function bulkFillDesks() {
 
 function addClass() {
   const name = document.getElementById('newClassName').value.trim();
-  const classLimit = BUILD_TYPE === 'trial' ? TRIAL_CLASS_LIMIT : FULL_CLASS_LIMIT;
+  const classLimit = BUILD_TYPE === 'trial' ? TRIAL_CLASS_LIMIT : ztBoardClassLimit();
   if (Object.keys(classes).length >= classLimit) {
     if (BUILD_TYPE === 'trial') {
       showUpgradeLock('Adding more than ' + TRIAL_CLASS_LIMIT + ' class');
     } else {
-      alert('You already have the max of ' + FULL_CLASS_LIMIT + ' classes. Rename or clear one first if you need a different one.');
+      if (typeof hasFullVersion === 'function' && !hasFullVersion()) {
+        // not unlocked yet - offer the full board rather than a dead end
+        openPlayUnlock('More than ' + ztBoardClassLimit() + ' classes');
+      } else {
+        alert('This board holds ' + ztBoardClassLimit() + ' classes. Rename one you are not using, or get in touch if you need a board with more.');
+      }
     }
     return;
   }
@@ -4986,6 +4998,17 @@ function getMascotData(className) {
     return cls;
   }
   if (typeof act.points !== 'number') act.points = 0;
+  /* One-time repair: on a class still raising its first mascot, any points
+     earned before the egg was chosen never reached it. Give them back. Classes
+     that have already finished a mascot are left alone, because their lifetime
+     total covers earlier mascots too. */
+  if (!cls.mascotRepaired_v1) {
+    cls.mascotRepaired_v1 = true;
+    const tank = Array.isArray(cls.mascotTank) ? cls.mascotTank : [];
+    if (tank.length === 0 && cls.mascotPoints > act.points) {
+      act.points = Math.min(cls.mascotPoints, MASCOT_GROWN_AT);
+    }
+  }
   if (typeof act.variant !== 'number') act.variant = 0;
   if (typeof act.name !== 'string') act.name = '';
   if (!act.species) act.species = 'turtle';
@@ -5041,13 +5064,15 @@ function retireActiveMascot(className) {
    this species before. */
 function hatchNewMascot(className, speciesId) {
   const cls = getMascotData(className);
+  const carried = Math.min(cls.mascotBanked || 0, MASCOT_GROWN_AT);
   cls.mascotActive = {
     species: speciesId,
     name: '',
     variant: mascotVariantFor(cls, speciesId),
-    points: 0,
+    points: carried,          // points earned while the class had no mascot
     gifts: []
   };
+  cls.mascotBanked = 0;
   cls.mascotAwaitingHatch = false;
   saveState();
 }
@@ -5111,7 +5136,11 @@ function addMascotProgress(className, amount) {
   const cls = getMascotData(className);
   cls.mascotPoints += amount;                 // lifetime total, never resets
   const act = cls.mascotActive;
-  if (!act) return amount;                    // waiting for the class to pick a new egg
+  if (!act) {
+    // no egg chosen yet: hold the points so the next mascot starts with them
+    cls.mascotBanked = (cls.mascotBanked || 0) + amount;
+    return amount;
+  }
 
   const beforeStage = getMascotStage(act.points);
   const beforeGifts = giftsForSpecies(act.species).filter(g => act.points >= g.min).length;
@@ -7595,14 +7624,21 @@ function ztHash(str) {
   return h >>> 0;
 }
 
-function ztCodeFor(name) {
+/* How many classes a code can be issued for. A code made before this existed
+   carries no number and is treated as ZT_LEGACY_CLASSES, so every code already
+   sent out keeps working exactly as it did. */
+const ZT_CLASS_TIERS = [2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30, 40];
+const ZT_LEGACY_CLASSES = 10;
+
+function ztCodeFor(name, classes) {
   const base = ztNormalise(name);
   if (base.length < 2) return null;
+  const salt = (classes === undefined || classes === null) ? '' : ('|c' + classes);
   const alphabet = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
   let out = '';
-  let h = ztHash(ZT_SECRET + '|' + base);
+  let h = ztHash(ZT_SECRET + '|' + base + salt);
   for (let i = 0; i < 4; i++) { out += alphabet[h % alphabet.length]; h = Math.floor(h / alphabet.length); }
-  let h2 = ztHash(base + '|' + ZT_SECRET + '|2');
+  let h2 = ztHash(base + salt + '|' + ZT_SECRET + '|2');
   for (let i = 0; i < 4; i++) { out += alphabet[h2 % alphabet.length]; h2 = Math.floor(h2 / alphabet.length); }
   return 'ZT-' + out.slice(0, 4) + '-' + out.slice(4, 8);
 }
@@ -7611,9 +7647,34 @@ function ztTidyCode(code) {
   return (code || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 }
 
+/* Returns how many classes this code unlocks, or 0 if it isn't a real code. */
+function ztMatchCode(name, code) {
+  const typed = ztTidyCode(code);
+  if (!typed) return 0;
+  const legacy = ztCodeFor(name);
+  if (legacy && ztTidyCode(legacy) === typed) return ZT_LEGACY_CLASSES;
+  for (let i = 0; i < ZT_CLASS_TIERS.length; i++) {
+    const n = ZT_CLASS_TIERS[i];
+    const want = ztCodeFor(name, n);
+    if (want && ztTidyCode(want) === typed) return n;
+  }
+  return 0;
+}
+
 function ztCodeValid(name, code) {
-  const want = ztCodeFor(name);
-  return !!want && ztTidyCode(want) === ztTidyCode(code);
+  return ztMatchCode(name, code) > 0;
+}
+
+/* How many classes this board is allowed.
+   In the Play Store app that is set by the purchase, so it stays at ten.
+   In a browser it comes from the code the teacher entered. */
+function ztBoardClassLimit() {
+  if (typeof isPlayApp === 'function' && isPlayApp()) {
+    return hasFullVersion() ? 10 : PLAY_FREE_CLASSES;
+  }
+  const lic = ztLoadLicence();
+  if (!lic) return PLAY_FREE_CLASSES;
+  return lic.classes || ZT_LEGACY_CLASSES;
 }
 
 function ztLoadLicence() {
@@ -7622,7 +7683,8 @@ function ztLoadLicence() {
     const raw = localStorage.getItem(ZT_LIC_KEY);
     if (!raw) return null;
     const saved = JSON.parse(raw);
-    if (saved && ztCodeValid(saved.name, saved.code)) ztLicence = saved;
+    const n = saved ? ztMatchCode(saved.name, saved.code) : 0;
+    if (n > 0) { saved.classes = n; ztLicence = saved; }
   } catch (e) {}
   return ztLicence;
 }
@@ -7642,12 +7704,12 @@ function ztApplyCode() {
     msg.textContent = 'That code doesn\u2019t match that name. Check both are exactly as they were sent to you.';
     return;
   }
-  ztLicence = { name: name, code: ztTidyCode(code) };
+  ztLicence = { name: name, code: ztTidyCode(code), classes: ztMatchCode(name, code) };
   try { localStorage.setItem(ZT_LIC_KEY, JSON.stringify(ztLicence)); } catch (e) {}
   closePlayUnlock();
   refreshPlayLocks();
   if (typeof renderClassGrid === 'function') renderClassGrid();
-  showReward('\ud83c\udf89', 'Thank you! The full Ocean Board is unlocked for ' + name + '.');
+  showReward('\ud83c\udf89', 'Thank you! ' + ztLicence.classes + ' classes are unlocked for ' + name + '.');
 }
 
 function ztShowLicenceName() {
@@ -7721,8 +7783,8 @@ const PLAY_FREE_CLASSES = 2;
 const PLAY_FREE_TABS = { wheel: true, behavior: true, tools: true };
 
 function playClassLocked(className) {
-  if (hasFullVersion()) return false;
-  return Object.keys(classes).indexOf(className) >= PLAY_FREE_CLASSES;
+  const limit = (typeof ztBoardClassLimit === 'function') ? ztBoardClassLimit() : PLAY_FREE_CLASSES;
+  return Object.keys(classes).indexOf(className) >= limit;
 }
 
 function playMascotClass() {
