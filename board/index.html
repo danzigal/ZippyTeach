@@ -975,7 +975,8 @@
     color:var(--ink); background:#fff; }
   .zt-lock-msg{ color:#a2361f; font-size:13px; min-height:17px; margin:0 0 8px; }
   .zt-forgot{ background:none; border:none; color:var(--deep); font-family:var(--face); font-weight:700;
-    font-size:13px; text-decoration:underline; cursor:pointer; margin-top:12px; }
+    font-size:13px; text-decoration:underline; cursor:pointer; margin-top:12px; display:block;
+    width:100%; padding:3px 0; }
   .pw-input{ width:100%; padding:11px 12px; margin-bottom:9px; border:2px solid var(--edge);
     border-radius:10px; font-family:var(--face); font-weight:700; font-size:15px; color:var(--ink);
     background:#fff; text-align:center; }
@@ -1987,6 +1988,7 @@
       <p class="zt-lock-msg" id="ztLockMsg"></p>
       <button class="btn btn-success" style="width:100%;" onclick="ztTryUnlockBoard()">Unlock</button>
       <button class="zt-forgot" onclick="ztForgotPin()">I've forgotten the PIN</button>
+      <button class="zt-forgot" onclick="ztRemovePin()">Turn the lock off</button>
     </div>
   </div>
 
@@ -1994,7 +1996,8 @@
   <div class="reward-modal" id="ztPinSetupModal" onclick="ztCloseLockSetup()">
     <div class="reward-box pw-box" onclick="event.stopPropagation()">
       <h3 class="pw-title">Set a lock PIN</h3>
-      <p class="pw-feature">Choose 5 numbers. You'll type these to unlock the board, so pick something you'll remember.</p>
+      <p class="pw-feature">Choose 5 numbers. From now on the board will ask for them whenever it's opened,
+        and whenever you tap Lock. Pick something you'll remember.</p>
       <input id="ztPinNew" class="pw-input" type="password" inputmode="numeric" maxlength="5"
              autocomplete="off" placeholder="New PIN" oninput="this.value=ztPinDigits(this.value);">
       <input id="ztPinAgain" class="pw-input" type="password" inputmode="numeric" maxlength="5"
@@ -7185,6 +7188,23 @@ function ztTryUnlockBoard() {
   document.getElementById('ztPinEntry').focus();
 }
 
+/* Once a PIN is set the board locks itself every time it opens, so closing it
+   at the end of the day is enough - nobody can open it the next morning without
+   the PIN. */
+function ztLockOnOpen() {
+  if (ztGetPin()) ztLockBoard();
+}
+
+/* Turning the lock off again needs the current PIN. */
+function ztRemovePin() {
+  const typed = ztPinDigits(prompt('Type your current PIN to turn the lock off:') || '');
+  if (!typed) return;
+  if (typed !== ztGetPin()) { alert('That PIN isn\u2019t right.'); return; }
+  ztSetPin('');
+  document.getElementById('ztLockScreen').style.display = 'none';
+  alert('The lock is off. The board won\u2019t ask for a PIN again until you set a new one.');
+}
+
 /* Forgotten PIN: the unlock name and code the teacher already has works as a
    master key, because there is no server that could reset it for them. */
 function ztForgotPin() {
@@ -7919,6 +7939,7 @@ if (checkTrialStatus()) {
   spawnBubbles();
   spawnSeaDecor();
   upgradeStarterArt();
+  ztLockOnOpen();
   // register the offline worker so the board can be installed on a classroom screen
   if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
