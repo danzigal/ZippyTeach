@@ -960,6 +960,22 @@
   .pw-links{ display:flex; gap:8px; }
   .pw-links .btn{ flex:1; }
   #playUnlockPromo{ display:none; margin:0 auto 14px; }
+  #ztLockScreen{ display:none; position:fixed; inset:0; z-index:9000;
+    background:linear-gradient(180deg, rgba(8,58,92,.97), rgba(3,28,48,.99));
+    align-items:center; justify-content:center; padding:20px; }
+  .zt-lock-card{ background:#fdf8ee; border:3px solid var(--edge); border-radius:22px;
+    box-shadow:0 18px 40px rgba(2,20,35,.45); padding:26px 24px 20px; width:100%; max-width:330px; text-align:center; }
+  .zt-lock-card h2{ font-family:var(--face); color:var(--ink); margin:8px 0 4px; font-size:23px; }
+  .zt-lock-card p{ color:var(--ink-soft); font-size:14px; margin:0 0 14px; }
+  .zt-lock-badge{ width:54px; height:54px; margin:0 auto; border-radius:50%; background:var(--sun);
+    border:3px solid var(--edge); display:flex; align-items:center; justify-content:center; }
+  .zt-lock-badge .ico{ width:26px; height:26px; color:var(--ink); }
+  .zt-pin{ width:100%; padding:13px; margin-bottom:8px; border:2px solid var(--edge); border-radius:12px;
+    font-family:var(--face); font-size:28px; font-weight:800; text-align:center; letter-spacing:10px;
+    color:var(--ink); background:#fff; }
+  .zt-lock-msg{ color:#a2361f; font-size:13px; min-height:17px; margin:0 0 8px; }
+  .zt-forgot{ background:none; border:none; color:var(--deep); font-family:var(--face); font-weight:700;
+    font-size:13px; text-decoration:underline; cursor:pointer; margin-top:12px; }
   .pw-input{ width:100%; padding:11px 12px; margin-bottom:9px; border:2px solid var(--edge);
     border-radius:10px; font-family:var(--face); font-weight:700; font-size:15px; color:var(--ink);
     background:#fff; text-align:center; }
@@ -1411,6 +1427,8 @@
     <button class="tab-btn" onclick="switchTab('music')"><svg class="ico"><use href="#i-music"/></svg>Music</button>
     <button class="tab-btn" onclick="switchTab('flashcards')"><svg class="ico"><use href="#i-cards"/></svg>Flashcards</button>
     <button class="tab-btn" onclick="switchTab('tests')"><svg class="ico"><use href="#i-doc"/></svg>Tests</button>
+    <button class="tab-btn" id="ztLockBtn" onclick="ztLockButtonPressed()"
+            title="Lock the board while you step away"><svg class="ico"><use href="#i-lock"/></svg>Lock</button>
   </div>
 
   <!-- MY CLASSES (home) -->
@@ -1956,6 +1974,40 @@
     </div>
   </div>
 
+  <!-- SCREEN LOCK -->
+  <div id="ztLockScreen">
+    <div class="zt-lock-card">
+      <div class="zt-lock-badge"><svg class="ico"><use href="#i-lock"/></svg></div>
+      <h2>Board locked</h2>
+      <p>Type the 5-number PIN to carry on.</p>
+      <input id="ztPinEntry" class="zt-pin" type="password" inputmode="numeric" maxlength="5"
+             autocomplete="off" placeholder="&bull;&bull;&bull;&bull;&bull;"
+             oninput="this.value=ztPinDigits(this.value); if(this.value.length===5){ztTryUnlockBoard();}"
+             onkeydown="if(event.key==='Enter'){ztTryUnlockBoard();}">
+      <p class="zt-lock-msg" id="ztLockMsg"></p>
+      <button class="btn btn-success" style="width:100%;" onclick="ztTryUnlockBoard()">Unlock</button>
+      <button class="zt-forgot" onclick="ztForgotPin()">I've forgotten the PIN</button>
+    </div>
+  </div>
+
+  <!-- SET A PIN -->
+  <div class="reward-modal" id="ztPinSetupModal" onclick="ztCloseLockSetup()">
+    <div class="reward-box pw-box" onclick="event.stopPropagation()">
+      <h3 class="pw-title">Set a lock PIN</h3>
+      <p class="pw-feature">Choose 5 numbers. You'll type these to unlock the board, so pick something you'll remember.</p>
+      <input id="ztPinNew" class="pw-input" type="password" inputmode="numeric" maxlength="5"
+             autocomplete="off" placeholder="New PIN" oninput="this.value=ztPinDigits(this.value);">
+      <input id="ztPinAgain" class="pw-input" type="password" inputmode="numeric" maxlength="5"
+             autocomplete="off" placeholder="Type it again" oninput="this.value=ztPinDigits(this.value);"
+             onkeydown="if(event.key==='Enter'){ztSaveNewPin();}">
+      <p class="pw-status" id="ztPinSetupMsg"></p>
+      <button class="btn btn-success pw-buy" onclick="ztSaveNewPin()">Save and lock</button>
+      <div class="pw-links" style="margin-top:8px;">
+        <button class="btn btn-primary" onclick="ztCloseLockSetup()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <!-- DESK DETAIL MODAL -->
   <div class="reward-modal" id="deskDetailModal" onclick="closeDeskDetail()">
     <div class="reward-box" onclick="event.stopPropagation()" style="max-width:340px;">
@@ -2426,7 +2478,7 @@ function renderLayoutPicker() {
 }
 
 const TRIAL_CLASS_LIMIT = 1;
-const FULL_CLASS_LIMIT = 8;
+const FULL_CLASS_LIMIT = 10;
 
 function makeInitialClasses() {
   const limit = BUILD_TYPE === 'trial' ? TRIAL_CLASS_LIMIT : FULL_CLASS_LIMIT;
@@ -7064,6 +7116,89 @@ function importFlashcards(file) {
           newCats + ' new category/categories.\n\nYour classes, points and seating were not touched.');
   };
   reader.readAsText(file);
+}
+
+
+// ========== SCREEN LOCK ==========
+/* Teachers asked for a way to stop students or colleagues poking at the board
+   when they step out. Tap the padlock, the board is covered until the PIN is
+   typed back in. The PIN lives on this device only. */
+const ZT_PIN_KEY = 'ztOceanPin_v1';
+
+function ztGetPin() {
+  try { return localStorage.getItem(ZT_PIN_KEY) || ''; } catch (e) { return ''; }
+}
+
+function ztSetPin(pin) {
+  try { localStorage.setItem(ZT_PIN_KEY, pin); } catch (e) {}
+}
+
+function ztPinDigits(value) {
+  return (value || '').replace(/[^0-9]/g, '').slice(0, 5);
+}
+
+function ztOpenLockSetup() {
+  document.getElementById('ztPinSetupModal').classList.add('show');
+  document.getElementById('ztPinNew').value = '';
+  document.getElementById('ztPinAgain').value = '';
+  document.getElementById('ztPinSetupMsg').textContent = '';
+  setTimeout(() => document.getElementById('ztPinNew').focus(), 60);
+}
+
+function ztCloseLockSetup() {
+  document.getElementById('ztPinSetupModal').classList.remove('show');
+}
+
+function ztSaveNewPin() {
+  const a = ztPinDigits(document.getElementById('ztPinNew').value);
+  const b = ztPinDigits(document.getElementById('ztPinAgain').value);
+  const msg = document.getElementById('ztPinSetupMsg');
+  if (a.length !== 5) { msg.textContent = 'The PIN needs to be 5 numbers.'; return; }
+  if (a !== b) { msg.textContent = 'The two PINs don\u2019t match. Please type them again.'; return; }
+  ztSetPin(a);
+  ztCloseLockSetup();
+  ztLockBoard();
+}
+
+/* The padlock: sets a PIN the first time, locks every time after that. */
+function ztLockButtonPressed() {
+  if (!ztGetPin()) { ztOpenLockSetup(); return; }
+  ztLockBoard();
+}
+
+function ztLockBoard() {
+  const screen = document.getElementById('ztLockScreen');
+  screen.style.display = 'flex';
+  document.getElementById('ztPinEntry').value = '';
+  document.getElementById('ztLockMsg').textContent = '';
+  setTimeout(() => document.getElementById('ztPinEntry').focus(), 80);
+}
+
+function ztTryUnlockBoard() {
+  const typed = ztPinDigits(document.getElementById('ztPinEntry').value);
+  if (typed && typed === ztGetPin()) {
+    document.getElementById('ztLockScreen').style.display = 'none';
+    return;
+  }
+  document.getElementById('ztLockMsg').textContent = 'That PIN isn\u2019t right. Try again.';
+  document.getElementById('ztPinEntry').value = '';
+  document.getElementById('ztPinEntry').focus();
+}
+
+/* Forgotten PIN: the unlock name and code the teacher already has works as a
+   master key, because there is no server that could reset it for them. */
+function ztForgotPin() {
+  const name = prompt('Forgotten the PIN?\n\nType the name your board is licensed to:');
+  if (name === null) return;
+  const code = prompt('Now type your unlock code (ZT-XXXX-XXXX):');
+  if (code === null) return;
+  if (typeof ztCodeValid === 'function' && ztCodeValid(name, code)) {
+    ztSetPin('');
+    document.getElementById('ztLockScreen').style.display = 'none';
+    alert('Unlocked. The PIN has been cleared \u2014 tap the padlock to set a new one.');
+  } else {
+    alert('That name and code don\u2019t match. Check the email they were sent in.');
+  }
 }
 
 function saveFlashcards() {

@@ -1,7 +1,7 @@
 /* ZippyTeach Ocean Board - offline support.
    Bump CACHE_NAME whenever you upload a new index.html, otherwise installed
    copies keep serving the old board from their cache. */
-const CACHE_NAME = 'ocean-board-v2';
+const CACHE_NAME = 'ocean-board-v3';
 
 const FILES = [
   './',
