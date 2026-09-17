@@ -984,6 +984,8 @@
     border-radius:10px; font-family:var(--face); font-weight:700; font-size:15px; color:var(--ink);
     background:#fff; text-align:center; }
   #ztLicFooter{ text-align:center; font-size:11px; color:rgba(255,255,255,.55); padding:4px 0 10px; }
+  #ztLicFooter.zt-lic-link{ cursor:pointer; text-decoration:underline; }
+  #ztLicFooter.zt-lic-link:hover{ color:rgba(255,255,255,.85); }
   .pw-class-lock{ display:flex; align-items:center; justify-content:center; gap:5px; margin-top:7px;
     font-family:var(--face); font-weight:700; font-size:12.5px; color:var(--deep); opacity:.85; }
   .pw-class-lock .ico{ width:14px; height:14px; }
@@ -1965,7 +1967,7 @@
         </div>
       </div>
       <div id="pwCodeBox" style="display:none;">
-        <p class="pw-once" style="font-weight:600;">Enter the name and code you were sent.</p>
+        <p class="pw-once" id="pwCodeIntro" style="font-weight:600;">Enter the name and code you were sent.</p>
         <input id="ztLicName" class="pw-input" type="text" placeholder="Your name or school" autocomplete="off">
         <input id="ztLicCode" class="pw-input" type="text" placeholder="ZT-XXXX-XXXX" autocomplete="off"
                onkeydown="if(event.key==='Enter'){ztApplyCode();}">
@@ -3087,12 +3089,8 @@ function addClass() {
     if (BUILD_TYPE === 'trial') {
       showUpgradeLock('Adding more than ' + TRIAL_CLASS_LIMIT + ' class');
     } else {
-      if (typeof hasFullVersion === 'function' && !hasFullVersion()) {
-        // not unlocked yet - offer the full board rather than a dead end
-        openPlayUnlock('More than ' + ztBoardClassLimit() + ' classes');
-      } else {
-        alert('This board holds ' + ztBoardClassLimit() + ' classes. Rename one you are not using, or get in touch if you need a board with more.');
-      }
+      // always offer a way forward: a bigger code, or a way to buy one
+      openPlayUnlock('More than ' + ztBoardClassLimit() + ' classes');
     }
     return;
   }
@@ -7716,7 +7714,12 @@ function ztShowLicenceName() {
   const el = document.getElementById('ztLicFooter');
   if (!el) return;
   const lic = ztLoadLicence();
-  el.textContent = lic ? 'Licensed to ' + lic.name : '';
+  // showing the class count makes it obvious which code is in use
+  if (!lic) { el.textContent = ''; el.onclick = null; el.classList.remove('zt-lic-link'); return; }
+  el.textContent = 'Licensed to ' + lic.name + '  \u00b7  ' +
+    (lic.classes || ZT_LEGACY_CLASSES) + ' classes  \u00b7  enter a new code';
+  el.classList.add('zt-lic-link');
+  el.onclick = () => openPlayUnlock();
 }
 
 // ========== SMALL SCREENS ==========
@@ -7873,7 +7876,15 @@ function openPlayUnlock(featureName) {
   document.getElementById('pwCodeBox').style.display = app ? 'none' : 'block';
   if (!app) {
     const lic = ztLoadLicence();
-    if (lic) document.getElementById('ztLicName').value = lic.name;
+    const intro = document.getElementById('pwCodeIntro');
+    if (lic) {
+      document.getElementById('ztLicName').value = lic.name;
+      document.getElementById('ztLicCode').value = '';
+      intro.textContent = 'This board is unlocked for ' + lic.name + ' with ' +
+        (lic.classes || ZT_LEGACY_CLASSES) + ' classes. Bought more? Enter your new code below.';
+    } else {
+      intro.textContent = 'Enter the name and code you were sent.';
+    }
     document.getElementById('ztLicMsg').textContent = '';
   }
   document.getElementById('playUnlockFeature').textContent =
