@@ -963,6 +963,14 @@
   .pw-getcode{ font-size:12.5px; color:var(--ink-soft); line-height:1.5; margin:14px 0 0;
     padding-top:12px; border-top:2px solid rgba(10,58,71,.12); }
   .pw-getcode a{ color:var(--deep); font-weight:700; }
+  #ztUpdateBar{ position:fixed; left:12px; right:12px; bottom:12px; z-index:8000;
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center;
+    background:var(--sun); color:var(--ink); border:3px solid var(--edge); border-radius:14px;
+    padding:11px 16px; font-family:var(--face); font-weight:700; font-size:14px;
+    box-shadow:0 8px 22px rgba(3,18,24,.35); }
+  #ztUpdateBar button{ font-family:var(--face); font-weight:800; font-size:14px; cursor:pointer;
+    border:2px solid var(--edge); border-radius:10px; padding:7px 14px; background:var(--kelp, #25ab7e); color:#fff; }
+  #ztUpdateBar button.later{ background:rgba(255,255,255,.65); color:var(--ink); }
   #ztLockScreen{ display:none; position:fixed; inset:0; z-index:9000;
     background:linear-gradient(180deg, rgba(8,58,92,.97), rgba(3,28,48,.99));
     align-items:center; justify-content:center; padding:20px; }
@@ -3271,7 +3279,8 @@ function awardRulePoint(idx, ruleIdx) {
   const before = desk.points;
   desk.points = Math.max(0, Math.min(MAX_POINTS, desk.points + delta));
   addMascotProgress(activeClass, desk.points - before);
-  logProfileEntryForDesk(idx, 'Classroom Behavior', 'Following Class Rules', delta > 0 ? 'positive' : 'support');
+  logProfileEntryForDesk(idx, 'Classroom Behavior', 'Following Class Rules',
+                         delta > 0 ? 'positive' : 'support', rule.text);
   saveState();
   closeRuleAwardModal();
   renderClassGrid();
@@ -3406,10 +3415,15 @@ function logProfileEntry(category, trait, sentiment) {
   renderProfileHistory();
 }
 
-function logProfileEntryForDesk(deskIdx, category, trait, sentiment) {
+function logProfileEntryForDesk(deskIdx, category, trait, sentiment, note) {
+  // store under the current trait names, or the entry never shows in the summary
+  const moved = TRAIT_MIGRATION[trait];
+  if (moved) { category = moved[0]; trait = moved[1]; }
   const desk = classes[activeClass].desks[deskIdx];
   const profile = getDeskProfile(desk);
-  profile.push({ category, trait, sentiment, date: new Date().toISOString() });
+  const entry = { category, trait, sentiment, date: new Date().toISOString() };
+  if (note) entry.note = note;
+  profile.push(entry);
   saveState();
 }
 
@@ -3443,6 +3457,18 @@ function renderProfileHistory() {
     });
     html += '</div>';
   });
+  // anything that isn't one of the trait categories - test scores, mostly
+  const extras = profile.filter(e => !TRAIT_CATEGORIES.some(c =>
+    c.category === e.category && c.traits.indexOf(e.trait) !== -1));
+  if (extras.length > 0) {
+    hasAny = true;
+    html += '<div style="margin-bottom:8px;"><strong style="color:#023e8a;">\ud83d\udcdd Tests and scores</strong><br>';
+    extras.slice().reverse().forEach(e => {
+      html += '<span style="display:inline-block; margin:2px 10px 2px 0; font-size:13px; color:#555;">' +
+        (e.note || e.trait) + '</span>';
+    });
+    html += '</div>';
+  }
   if (!hasAny) {
     html += '<p style="color:#888; font-size:13px;">No observations logged yet.</p>';
   }
@@ -3453,7 +3479,8 @@ function renderProfileHistory() {
     reversedWithIdx.forEach(({ e, i }) => {
       const d = new Date(e.date);
       const dateStr = d.toLocaleDateString();
-      html += '<div class="profile-log-entry"><span>' + (e.sentiment === 'positive' ? '👍' : '🌱') + ' <strong>' + e.trait +
+      const label = e.note ? e.note : e.trait;
+      html += '<div class="profile-log-entry"><span>' + (e.sentiment === 'positive' ? '👍' : '🌱') + ' <strong>' + label +
         '</strong> — ' + dateStr + '</span><button class="profile-log-remove" onclick="removeProfileEntry(' + i + ')">✕</button></div>';
     });
     html += '</div>';
@@ -3486,7 +3513,7 @@ function copyProfileSummary() {
     text += 'Full Log:\n';
     profile.forEach(e => {
       const d = new Date(e.date);
-      text += '- ' + d.toLocaleDateString() + ': ' + (e.sentiment === 'positive' ? 'Thriving' : 'Growing') + ' — ' + e.trait + '\n';
+      text += '- ' + d.toLocaleDateString() + ': ' + (e.sentiment === 'positive' ? 'Thriving' : 'Growing') + ' — ' + (e.note || e.trait) + '\n';
     });
   }
 
@@ -7149,6 +7176,19 @@ function importFlashcards(file) {
 }
 
 
+// ========== A NEWER BOARD IS READY ==========
+let ztUpdateBarShown = false;
+function ztShowUpdateBar() {
+  if (ztUpdateBarShown) return;
+  ztUpdateBarShown = true;
+  const bar = document.createElement('div');
+  bar.id = 'ztUpdateBar';
+  bar.innerHTML = '<span>\u2728 A newer version of the board is ready.</span>' +
+    '<button onclick="location.reload()">Use it now</button>' +
+    '<button class="later" onclick="document.getElementById(\'ztUpdateBar\').remove()">Later</button>';
+  document.body.appendChild(bar);
+}
+
 // ========== SCREEN LOCK ==========
 /* Teachers asked for a way to stop students or colleagues poking at the board
    when they step out. Tap the padlock, the board is covered until the PIN is
@@ -8015,7 +8055,20 @@ if (checkTrialStatus()) {
   ztLockOnOpen();
   // register the offline worker so the board can be installed on a classroom screen
   if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+    // on a first visit the board is simply arriving, which is not an update
+    const ztHadBoard = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.register('sw.js').then((reg) => {
+      /* When a newer board is fetched in the background, say so instead of
+         leaving the teacher on the old one without knowing. */
+      reg.addEventListener('updatefound', () => {
+        const fresh = reg.installing;
+        if (!fresh) return;
+        fresh.addEventListener('statechange', () => {
+          if (ztHadBoard && fresh.state === 'activated') ztShowUpdateBar();
+        });
+      });
+    }).catch(() => {});
+    if (ztHadBoard) navigator.serviceWorker.addEventListener('controllerchange', ztShowUpdateBar);
   }
   setTimeout(checkBackupReminder, 2000);
   initPlayPaywall();
