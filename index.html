@@ -8464,7 +8464,12 @@ if (checkTrialStatus()) {
   if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
     // on a first visit the board is simply arriving, which is not an update
     const ztHadBoard = !!navigator.serviceWorker.controller;
-    navigator.serviceWorker.register('sw.js').then((reg) => {
+    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then((reg) => {
+      // the app can stay open all day on a classroom board, so look for a newer
+      // version whenever it comes back to the front
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') reg.update().catch(() => {});
+      });
       /* When a newer board is fetched in the background, say so instead of
          leaving the teacher on the old one without knowing. */
       reg.addEventListener('updatefound', () => {

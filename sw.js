@@ -1,7 +1,7 @@
 /* ZippyTeach Ocean Board - offline support.
    Bump CACHE_NAME whenever you upload a new index.html, otherwise installed
    copies keep serving the old board from their cache. */
-const CACHE_NAME = 'ocean-board-v12';
+const CACHE_NAME = 'ocean-board-v13';
 
 const FILES = [
   './',
@@ -38,8 +38,43 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+/* The board page itself is fetched fresh whenever there is internet, so a new
+   upload reaches teachers the next time they open it. If the internet is slow
+   or down (common in classrooms), the saved copy is used after a few seconds.
+   Pictures and other files still come straight from the saved copy. */
+const PAGE_WAIT_MS = 3500;
+
+function isBoardPage(req) {
+  if (req.mode === 'navigate') return true;
+  const path = new URL(req.url).pathname;
+  return path.endsWith('/') || path.endsWith('/index.html');
+}
+
+function pageNetworkFirst(event) {
+  const req = event.request;
+  const fromNetwork = fetch(req, { cache: 'no-cache' }).then((res) => {
+    if (res && res.ok) {
+      const copy = res.clone();
+      caches.open(CACHE_NAME).then((c) => c.put(req, copy));
+    }
+    return res;
+  });
+  const fallback = () => caches.match(req).then((hit) => hit || caches.match('./index.html'));
+  const timeout = new Promise((resolve) => setTimeout(resolve, PAGE_WAIT_MS));
+  return Promise.race([fromNetwork.catch(() => null), timeout]).then((res) => {
+    if (res && res.ok) return res;
+    // slow or offline: show the saved board now; the fresh copy still lands in the cache
+    return fallback().then((hit) => hit || fromNetwork);
+  });
+}
+
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  if (new URL(event.request.url).origin !== self.location.origin) return;
+  if (isBoardPage(event.request)) {
+    event.respondWith(pageNetworkFirst(event));
+    return;
+  }
   event.respondWith(
     caches.match(event.request).then((hit) => {
       if (hit) {
