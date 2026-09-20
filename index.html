@@ -1036,6 +1036,8 @@
   .pf-field textarea{ resize:vertical; min-height:64px; }
   .pf-muted{ opacity:.45; }
   .pf-actions{ display:flex; align-items:center; gap:12px; }
+  .pf-trait-toggle{ background:none; border:none; padding:2px 0 10px; color:#16697f; font-weight:700; font-size:14px; cursor:pointer; font-family:var(--face); }
+  .pf-trait-toggle em{ font-style:normal; font-weight:400; color:#888; }
   .pf-msg{ font-size:13px; color:var(--kelp-lo, #137a57); font-weight:700; }
 
   /* ---------- class jobs & notes tabs ---------- */
@@ -1112,6 +1114,60 @@
   .bk-new{ color:#06a97e; }
   .bk-old{ color:#c0392b; }
   .bk-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:14px; flex-wrap:wrap; }
+
+  /* ---------- Teach / Set up ---------- */
+  .mode-switch{ display:inline-flex; background:rgba(3,30,45,.45); border-radius:30px; padding:4px; gap:4px; margin-left:auto; }
+  .mode-switch button{ border:none; border-radius:24px; padding:9px 20px; font-weight:800; font-size:15px; cursor:pointer;
+    background:transparent; color:#e0fbfc; font-family:var(--face); }
+  .mode-switch button.on{ background:#fff4dc; color:#023e8a; box-shadow:0 2px 0 rgba(0,0,0,.25); }
+  /* the ocean decorations stay on the class list; inside a class they soften while teaching */
+  body.in-class.teach #seaDecor{ opacity:.3; }
+  body.in-class.teach .bubble{ display:none; }
+  body.in-class #app > h1, body.in-class #app > p{ display:none; }
+  body.teach .setup-only,
+  body.teach .roster-card, body.teach #layoutPicker, body.teach .seat-hint-wide,
+  body.teach .rule-remove-btn, body.teach .rules-card .rule-add-row, body.teach #resetRulesBtn,
+  body.teach .rules-card > p, body.teach .desk-chip.desk-empty, body.teach .seat-hint-phone{ display:none !important; }
+  body.teach .seating-canvas .desk-chip-grip{ cursor:pointer; }
+  body.teach .seating-canvas .desk-chip-num{ display:none; }
+  /* a little shorter while teaching, so all the rows fit on a classroom screen */
+  body.teach .seating-canvas{ aspect-ratio:16/8.6 !important; }
+  /* desks grow in Teach mode; --desk-scale is worked out so they never touch */
+  .seating-canvas{ --desk-scale:1; }
+  body.teach .seating-canvas .desk-chip{
+    width:calc(100px * var(--desk-scale)); height:calc(88px * var(--desk-scale));
+    margin-left:calc(-50px * var(--desk-scale)); margin-top:calc(-44px * var(--desk-scale));
+  }
+  body.teach .seating-canvas .desk-chip-name{ font-size:calc(11px * var(--desk-scale) * 1.15); max-width:calc(92px * var(--desk-scale)); }
+  body.teach .seating-canvas .desk-chip-points{ font-size:calc(10px * var(--desk-scale) * 1.1); }
+  body.teach .seating-canvas .desk-chip-action-btn{ width:calc(28px * var(--desk-scale)); height:calc(26px * var(--desk-scale)); font-size:calc(14px * var(--desk-scale)); }
+  body.teach .seating-canvas .desk-chip-actions{ gap:calc(4px * var(--desk-scale)); margin-top:calc(5px * var(--desk-scale)); }
+  @media (min-width:1500px){
+    body.teach .behavior-split{ grid-template-columns:minmax(0,1fr) 260px !important; }
+    body.teach .rules-card .rules-grid{ grid-template-columns:repeat(2,1fr) !important; gap:8px !important; }
+  }
+  @media (max-width:700px){
+    .mode-switch{ margin-left:0; }
+    body.teach .seating-canvas .desk-chip{ width:auto; height:auto; margin:0; }
+  }
+
+  /* ---------- Games & Tools ---------- */
+  .games-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(170px, 1fr)); gap:14px; }
+  @media (max-width:700px){ .games-grid{ grid-template-columns:1fr 1fr; gap:10px; } .game-tile{ min-height:104px; font-size:15px; } .game-tile-ico{ width:34px; height:34px; } }
+  .game-tile{ position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+    min-height:130px; padding:16px 10px; border-radius:16px; border:2.5px solid var(--edge, #0a3a47);
+    background:linear-gradient(180deg,#fffaf0,#f4ecdd); color:var(--deep, #023e8a); font-family:var(--face);
+    font-weight:800; font-size:17px; cursor:pointer; box-shadow:0 5px 0 rgba(3,18,24,.28); }
+  .game-tile:hover{ transform:translateY(-2px); }
+  .game-tile:active{ transform:translateY(3px); box-shadow:0 1px 0 rgba(3,18,24,.28); }
+  .game-tile-ico{ width:44px; height:44px; color:#16697f; }
+  .game-tile .pw-lock-badge{ position:absolute; top:8px; right:10px; }
+  .games-back-bar{ display:flex; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
+  .games-back-btn{ display:inline-flex; align-items:center; gap:8px; padding:9px 16px; border-radius:24px; border:2px solid var(--edge, #0a3a47);
+    background:#fff4dc; color:#023e8a; font-weight:800; font-size:15px; cursor:pointer; font-family:var(--face); }
+  #gamesBackTitle{ color:#fff; font-weight:800; font-size:18px; text-shadow:0 2px 6px rgba(2,62,138,.6); font-family:var(--face); }
+  /* each tool opens on its own now, so the old Timer / Dice / Groups row is not needed */
+  #workspace-tools > .sub-tab-bar{ display:none; }
 </style>
 </head>
 <body>
@@ -1526,8 +1582,6 @@
 
   <div class="tab-bar">
     <button class="tab-btn active" onclick="switchTab('classes')"><svg class="ico"><use href="#i-home"/></svg>My Classes</button>
-    <button class="tab-btn" onclick="switchTab('music')"><svg class="ico"><use href="#i-music"/></svg>Music</button>
-    <button class="tab-btn" onclick="switchTab('flashcards')"><svg class="ico"><use href="#i-cards"/></svg>Flashcards</button>
     <button class="tab-btn" onclick="switchTab('tests')"><svg class="ico"><use href="#i-doc"/></svg>Tests</button>
     <button class="tab-btn" id="ztLockBtn" onclick="ztLockButtonPressed()"
             title="Lock the board while you step away"><svg class="ico"><use href="#i-lock"/></svg>Lock</button>
@@ -1561,19 +1615,35 @@
       <button class="btn btn-primary" onclick="backToClasses()"><svg class="ico"><use href="#i-back"/></svg>Back to Classes</button>
       <h2 id="workspaceClassName" style="color:#ffffff; text-shadow: 0 2px 8px rgba(2,62,138,0.6); margin:0; font-size:22px; display:inline-flex; align-items:center; gap:9px; white-space:nowrap; flex:0 0 auto;">Class</h2>
       <button class="btn btn-warning" onclick="drawStudentsOfDay()"><svg class="ico"><use href="#i-star"/></svg>Students of the Day</button>
+      <div class="mode-switch" role="group" aria-label="Board mode">
+        <button type="button" id="modeTeachBtn" onclick="setBoardMode('teach')">Teach</button>
+        <button type="button" id="modeSetupBtn" onclick="setBoardMode('setup')">Set up</button>
+      </div>
     </div>
     <div class="sub-tab-bar">
       <button class="sub-tab-btn active" onclick="switchWorkspaceTab('behavior')"><svg class="ico"><use href="#i-target"/></svg>Behavior</button>
       <button class="sub-tab-btn" onclick="switchWorkspaceTab('jobs')"><svg class="ico"><use href="#i-badge"/></svg>Class Jobs</button>
       <button class="sub-tab-btn" onclick="switchWorkspaceTab('notes')"><svg class="ico"><use href="#i-note"/></svg>Notes</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('wheel')"><svg class="ico"><use href="#i-wheel"/></svg>Wheel</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('bingo')"><svg class="ico"><use href="#i-ball"/></svg>Bingo</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('tools')"><svg class="ico"><use href="#i-clock"/></svg>Timer &amp; Tools</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('voice')"><svg class="ico"><use href="#i-voice"/></svg>Voice Meter</button>
+      <button class="sub-tab-btn" id="gamesTabBtn" onclick="switchWorkspaceTab('games')"><svg class="ico"><use href="#i-dice"/></svg>Games &amp; Tools</button>
       <button class="sub-tab-btn" onclick="switchWorkspaceTab('helper')"><svg class="ico"><use href="#i-sunrise"/></svg>Daily Helper</button>
       <button class="sub-tab-btn" onclick="switchWorkspaceTab('profiles')"><svg class="ico"><use href="#i-chart"/></svg>Profiles</button>
       <button class="sub-tab-btn" onclick="switchWorkspaceTab('mascot')"><svg class="ico"><use href="#i-egg"/></svg>Mascot</button>
     </div>
+
+    <div id="gamesBackBar" class="games-back-bar" style="display:none;">
+      <button type="button" class="games-back-btn" onclick="switchWorkspaceTab('games')"><svg class="ico"><use href="#i-back"/></svg>All games &amp; tools</button>
+      <span id="gamesBackTitle"></span>
+    </div>
+
+    <div id="workspace-games" class="sub-panel">
+      <div class="card">
+        <h3 style="margin-bottom: 4px; color: #333;"><svg class="ico ico-h"><use href="#i-dice"/></svg>Games &amp; Tools</h3>
+        <p style="color:#888; font-size:13px; margin-bottom:14px;">Tap one to open it. Use &ldquo;All games &amp; tools&rdquo; to come back here.</p>
+        <div id="gamesGrid" class="games-grid"></div>
+      </div>
+    </div>
+    <div id="workspace-music" class="sub-panel"></div>
+    <div id="workspace-flashcards" class="sub-panel"></div>
 
     <div id="workspace-behavior" class="sub-panel active">
       <div id="classContent"></div>
@@ -1760,12 +1830,12 @@
       <div class="card">
           <h3 style="margin-bottom: 8px; color: #333;"><svg class="ico ico-h"><use href="#i-badge"/></svg>Class Jobs</h3>
           <p style="color: #888; font-size: 13px; margin-bottom: 12px;">Give every student a classroom job. The class list fills in by itself; tap Assign to share out the jobs at random.</p>
-          <textarea class="role-input" id="roleNames"></textarea>
-          <button class="btn btn-teal" onclick="syncNamesFromClass('roleNames')" style="width: 100%; margin-bottom: 10px;"><svg class="ico"><use href="#i-waves"/></svg>Refresh Class List</button>
+          <textarea class="role-input setup-only" id="roleNames"></textarea>
+          <button class="btn btn-teal setup-only" onclick="syncNamesFromClass('roleNames')" style="width: 100%; margin-bottom: 10px;"><svg class="ico"><use href="#i-waves"/></svg>Refresh Class List</button>
           <button class="btn btn-success" onclick="assignRoles()" style="width: 100%; font-size: 17px; padding: 13px; margin-bottom: 12px;"><svg class="ico"><use href="#i-shuffle"/></svg>Assign Jobs!</button>
           <div class="role-grid" id="roleGrid"></div>
         </div>
-        <div class="card">
+        <div class="card setup-only">
           <details id="manageRolesDetails" ontoggle="if(this.open) renderManageRoles()">
             <summary style="cursor:pointer; color:#0077b6; font-weight:700; font-size:14px;"><svg class="ico"><use href="#i-pencil"/></svg> Manage Jobs (add, edit, or remove your own)</summary>
             <div id="manageRolesBody" style="margin-top:14px;"></div>
@@ -1782,7 +1852,7 @@
 
       <div id="notesStudentView" class="card">
         <h3 style="margin-bottom: 4px; color: #333;"><svg class="ico ico-h"><use href="#i-users"/></svg>Student Notes &mdash; <span id="notesStudentClassLabel"></span></h3>
-        <p style="color:#888; font-size:13px; margin-bottom:12px;">Pick a student, choose from the dropdowns, then add a note underneath. Each note is saved to that student only.</p>
+        <p style="color:#888; font-size:13px; margin-bottom:12px;">Pick a student and write a note. Add a subject or a trait if you like. Each note is saved to that student only.</p>
         <div class="notes-layout">
           <div class="notes-roster-col">
             <select id="notesStudentSelect" class="notes-student-select" onchange="notesPickStudent(this.value === '' ? null : Number(this.value))"></select>
@@ -2702,17 +2772,11 @@ function switchTab(tab) {
   (event.target.closest('.sub-tab-btn') || event.target).classList.add('active');
   document.getElementById('panel-classes').classList.remove('active');
   document.getElementById('panel-classroom').classList.remove('active');
-  document.getElementById('panel-music').classList.remove('active');
-  document.getElementById('panel-flashcards').classList.remove('active');
   document.getElementById('panel-tests').classList.remove('active');
+  document.body.classList.remove('in-class');
   if (tab === 'classes') {
     document.getElementById('panel-classes').classList.add('active');
     renderClassGrid();
-  } else if (tab === 'music') {
-    document.getElementById('panel-music').classList.add('active');
-  } else if (tab === 'flashcards') {
-    document.getElementById('panel-flashcards').classList.add('active');
-    renderCategoryList();
   } else if (tab === 'tests') {
     document.getElementById('panel-tests').classList.add('active');
     renderTestGenerator();
@@ -2725,10 +2789,13 @@ function openClassWorkspace(className) {  activeClass = className;
   if (typeof loadClassNotepad === 'function') setTimeout(loadClassNotepad, 0);
   document.querySelectorAll('.tab-bar .tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-classes').classList.remove('active');
-  document.getElementById('panel-music').classList.remove('active');
-  document.getElementById('panel-flashcards').classList.remove('active');
+  document.getElementById('panel-tests').classList.remove('active');
   document.getElementById('panel-classroom').classList.add('active');
+  document.getElementById('gamesBackBar').style.display = 'none';
+  document.body.classList.add('in-class');
   setWorkspaceClassName(className);
+  // a class with no names yet needs setting up; otherwise it opens ready to teach
+  setBoardMode(classes[className].desks.some(d => d.name) ? 'teach' : 'setup', true);
 
   document.querySelectorAll('#panel-classroom > .sub-tab-bar .sub-tab-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
   document.querySelectorAll('#panel-classroom > .sub-panel').forEach(p => p.classList.remove('active'));
@@ -2744,6 +2811,7 @@ function openClassWorkspace(className) {  activeClass = className;
 }
 
 function backToClasses() {
+  document.body.classList.remove('in-class');
   document.getElementById('panel-classroom').classList.remove('active');
   document.getElementById('panel-classes').classList.add('active');
   document.querySelectorAll('.tab-bar .tab-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
@@ -2779,9 +2847,21 @@ function switchWorkspaceTab(tab) {
   if (!playTabAllowed(tab) && !playGate(PLAY_FEATURE_NAMES[tab])) return;
   document.querySelectorAll('#panel-classroom > .sub-tab-bar .sub-tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('#panel-classroom > .sub-panel').forEach(p => p.classList.remove('active'));
-  (event.target.closest('.sub-tab-btn') || event.target).classList.add('active');
+  const tabBtn = document.querySelector("#panel-classroom > .sub-tab-bar .sub-tab-btn[onclick*=\"'" + tab + "'\"]");
+  if (tabBtn) tabBtn.classList.add('active');
   document.getElementById('workspace-' + tab).classList.add('active');
-  if (tab === 'wheel') {
+  document.getElementById('gamesBackBar').style.display = 'none';
+  workspaceTabOpened(tab);
+}
+
+function workspaceTabOpened(tab) {
+  if (tab === 'games') {
+    renderGamesGrid();
+  } else if (tab === 'music') {
+    // nothing to prepare
+  } else if (tab === 'flashcards') {
+    renderCategoryList();
+  } else if (tab === 'wheel') {
     const sel = document.getElementById('wheelClassSelect');
     if (sel && !sel.value) sel.value = activeClass;
     syncPickerFromClass(sel ? sel.value : activeClass);
@@ -2808,11 +2888,105 @@ function switchWorkspaceTab(tab) {
 }
 
 function switchToolsTab(tab) {
-  document.querySelectorAll('#workspace-tools .sub-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#workspace-tools .sub-tab-btn').forEach(b =>
+    b.classList.toggle('active', (b.getAttribute('onclick') || '').indexOf("'" + tab + "'") !== -1));
   document.querySelectorAll('#workspace-tools .sub-panel').forEach(p => p.classList.remove('active'));
-  (event.target.closest('.sub-tab-btn') || event.target).classList.add('active');
   document.getElementById('tools-panel-' + tab).classList.add('active');
   if (tab === 'groups') renderGroupGrid();
+}
+
+// ========== TEACH / SET UP ==========
+/* Teach is what the class sees: the desks, points and rules, nothing that is
+   only needed for getting ready. Set up brings back the roster box, the desk
+   layouts, rule editing and job editing. A class opens in Teach once it has
+   names, and in Set up while it is still empty. */
+let boardMode = 'setup';
+
+function setBoardMode(mode, quiet) {
+  boardMode = mode === 'teach' ? 'teach' : 'setup';
+  document.body.classList.toggle('teach', boardMode === 'teach');
+  const t = document.getElementById('modeTeachBtn'), u = document.getElementById('modeSetupBtn');
+  if (t) { t.classList.toggle('on', boardMode === 'teach'); t.setAttribute('aria-pressed', boardMode === 'teach'); }
+  if (u) { u.classList.toggle('on', boardMode === 'setup'); u.setAttribute('aria-pressed', boardMode === 'setup'); }
+  fitDeskSize();
+}
+
+/* In Teach mode the desks grow to fill the room, as far as they can without
+   touching each other. Works for any layout, including hand-placed desks. */
+function fitDeskSize() {
+  const canvas = document.getElementById('seatingCanvas');
+  if (!canvas) return;
+  let scale = 1;
+  if (boardMode === 'teach' && !isPhoneSeating()) {
+    const chips = [...canvas.querySelectorAll('.desk-chip:not(.desk-empty)')];
+    const W = canvas.clientWidth, H = canvas.clientHeight;
+    const pts = chips.map(c => [parseFloat(c.style.left) / 100 * W, parseFloat(c.style.top) / 100 * H]);
+    scale = 1.45;
+    for (let i = 0; i < pts.length; i++) {
+      for (let j = i + 1; j < pts.length; j++) {
+        const dx = Math.abs(pts[i][0] - pts[j][0]), dy = Math.abs(pts[i][1] - pts[j][1]);
+        const fits = Math.max(dx / 100, dy / 88) * 0.94;   // base desk is 100 x 88
+        if (fits < scale) scale = fits;
+      }
+    }
+    scale = Math.max(1, Math.min(1.45, scale));
+  }
+  canvas.style.setProperty('--desk-scale', scale.toFixed(3));
+}
+window.addEventListener('resize', () => { clearTimeout(window.__fitT); window.__fitT = setTimeout(fitDeskSize, 150); });
+
+// ========== GAMES & TOOLS ==========
+/* Teachers found ten tabs across the top too busy, so the games and classroom
+   tools live together behind one tab, as big tiles that are easy to tap on a
+   classroom board. Each tile opens the same screen as before. */
+const GAME_TOOLS = [
+  { id: 'wheel',      label: 'Wheel of Names', icon: 'i-wheel', panel: 'wheel', gate: 'wheel' },
+  { id: 'timer',      label: 'Timer',          icon: 'i-clock', panel: 'tools', tool: 'timer',  gate: 'tools' },
+  { id: 'voice',      label: 'Voice Meter',    icon: 'i-voice', panel: 'voice', gate: 'voice' },
+  { id: 'groups',     label: 'Groups',         icon: 'i-users', panel: 'tools', tool: 'groups', gate: 'tools' },
+  { id: 'dice',       label: 'Dice',           icon: 'i-dice',  panel: 'tools', tool: 'dice',   gate: 'tools' },
+  { id: 'bingo',      label: 'Bingo',          icon: 'i-ball',  panel: 'bingo', gate: 'bingo' },
+  { id: 'flashcards', label: 'Flashcards',     icon: 'i-cards', panel: 'flashcards', gate: 'flashcards' },
+  { id: 'music',      label: 'Music',          icon: 'i-music', panel: 'music', gate: 'music' },
+  { id: 'bubble',     label: 'Floating Bubble',icon: 'i-bubble',panel: 'tools', tool: 'bubble', gate: 'tools' }
+];
+
+function renderGamesGrid() {
+  const grid = document.getElementById('gamesGrid');
+  if (!grid) return;
+  const full = hasFullVersion();
+  grid.innerHTML = GAME_TOOLS.map(t => {
+    const locked = !full && !playTabAllowed(t.gate);
+    return '<button type="button" class="game-tile' + (locked ? ' pw-locked' : '') + '" onclick="openGameTool(\'' + t.id + '\')">' +
+      '<svg class="ico game-tile-ico"><use href="#' + t.icon + '"/></svg>' +
+      '<span>' + t.label + '</span>' +
+      (locked ? '<span class="pw-lock-badge"><svg class="ico"><use href="#i-lock"/></svg></span>' : '') +
+    '</button>';
+  }).join('');
+}
+
+function openGameTool(id) {
+  const t = GAME_TOOLS.find(x => x.id === id);
+  if (!t) return;
+  if (!playTabAllowed(t.gate) && !playGate(PLAY_FEATURE_NAMES[t.gate])) return;
+  document.querySelectorAll('#panel-classroom > .sub-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('workspace-' + t.panel).classList.add('active');
+  if (t.tool) switchToolsTab(t.tool);
+  document.getElementById('gamesBackTitle').textContent = t.label;
+  document.getElementById('gamesBackBar').style.display = '';
+  workspaceTabOpened(t.panel);
+}
+
+/* Music and Flashcards used to be tabs across the top of the board; they now
+   open from Games & Tools, so their screens move inside the class workspace. */
+function moveMusicAndFlashcards() {
+  [['panel-music', 'workspace-music'], ['panel-flashcards', 'workspace-flashcards']].forEach(([from, to]) => {
+    const el = document.getElementById(from), holder = document.getElementById(to);
+    if (el && holder && el.parentNode !== holder) {
+      el.classList.remove('panel');
+      holder.appendChild(el);
+    }
+  });
 }
 
 function renderClassSelectors() {
@@ -2978,6 +3152,7 @@ function renderSeatingCanvas() {
     attachDeskDrag(chip, canvas, i);
     canvas.appendChild(chip);
   });
+  fitDeskSize();
 }
 
 function stopChipDrag(el) {
@@ -3033,7 +3208,7 @@ function attachDeskDrag(chip, canvas, idx) {
     startY = e.clientY;
     moved = false;
     // on a phone the desks sit in a tiled grid, so they can be tapped but not dragged
-    if (!isPhoneSeating()) chip.classList.add('dragging');
+    if (!isPhoneSeating() && boardMode !== 'teach') chip.classList.add('dragging');
   });
   grip.addEventListener('pointermove', (e) => {
     if (pointerId === undefined || e.pointerId !== pointerId) return;
@@ -3524,31 +3699,34 @@ function renderProfileLogGrid() {
      homeroom teachers wanted to say which subject an observation came from.
      So it is now two dropdowns, an optional subject, and a note box. */
   const container = document.getElementById(PF_HOSTS[pfHost].log);
-  let traitOpts = '<option value="">General note (no trait)</option>';
+  let traitOpts = '<option value="">No trait</option>';
   TRAIT_CATEGORIES.forEach((cat, ci) => {
     traitOpts += '<optgroup label="' + cat.category + '">';
     cat.traits.forEach((t, ti) => { traitOpts += '<option value="' + ci + '|' + ti + '">' + t + '</option>'; });
     traitOpts += '</optgroup>';
   });
   const subjects = pfKnownSubjects();
+  /* Kept simple on purpose: most teachers just want to write a note. The trait
+     dropdowns are there for those who track them, one tap away. */
   container.innerHTML =
     '<div class="pf-form">' +
-      '<div class="pf-row">' +
-        '<label class="pf-field"><span>What did you notice?</span><select id="pfTrait">' + traitOpts + '</select></label>' +
+      '<label class="pf-field"><span>Subject <em>(optional)</em></span>' +
+        '<input id="pfSubject" type="text" list="pfSubjectList" maxlength="30" placeholder="e.g. Maths, English, PE" value="' + pfEscape(pfLastSubject) + '">' +
+        '<datalist id="pfSubjectList">' + subjects.map(s => '<option value="' + pfEscape(s) + '">').join('') + '</datalist>' +
+      '</label>' +
+      '<label class="pf-field"><span>Note</span>' +
+        '<textarea id="pfNote" rows="3" maxlength="400" placeholder="What happened? e.g. Helped a classmate finish the reading task."></textarea>' +
+      '</label>' +
+      '<button type="button" class="pf-trait-toggle" id="pfTraitToggle" onclick="pfShowTraits(true)">+ Add a trait <em>(optional)</em></button>' +
+      '<div class="pf-row pf-traits" id="pfTraits" style="display:none;">' +
+        '<label class="pf-field"><span>Trait</span><select id="pfTrait">' + traitOpts + '</select></label>' +
         '<label class="pf-field"><span>How are they doing?</span><select id="pfHow">' +
           '<option value="positive">👍 Thriving</option>' +
           '<option value="support">🌱 Still growing</option>' +
         '</select></label>' +
       '</div>' +
-      '<label class="pf-field"><span>Subject <em>(optional)</em></span>' +
-        '<input id="pfSubject" type="text" list="pfSubjectList" maxlength="30" placeholder="e.g. Maths, English, PE" value="' + pfEscape(pfLastSubject) + '">' +
-        '<datalist id="pfSubjectList">' + subjects.map(s => '<option value="' + pfEscape(s) + '">').join('') + '</datalist>' +
-      '</label>' +
-      '<label class="pf-field"><span>Note <em>(optional)</em></span>' +
-        '<textarea id="pfNote" rows="3" maxlength="400" placeholder="What happened? e.g. Helped a classmate finish the reading task."></textarea>' +
-      '</label>' +
       '<div class="pf-actions">' +
-        '<button type="button" class="btn btn-success" onclick="pfSaveEntry()">Add to profile</button>' +
+        '<button type="button" class="btn btn-success" onclick="pfSaveEntry()">Save note</button>' +
         '<span class="pf-msg" id="pfMsg"></span>' +
       '</div>' +
     '</div>';
@@ -3557,6 +3735,11 @@ function renderProfileLogGrid() {
 }
 
 let pfLastSubject = '';
+
+function pfShowTraits(on) {
+  document.getElementById('pfTraits').style.display = on ? '' : 'none';
+  document.getElementById('pfTraitToggle').style.display = on ? 'none' : '';
+}
 
 function pfEscape(s) {
   return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
@@ -3583,7 +3766,7 @@ function pfSaveEntry() {
   const subject = document.getElementById('pfSubject').value.trim();
   const note = document.getElementById('pfNote').value.trim();
   const msg = document.getElementById('pfMsg');
-  if (!traitVal && !note) { msg.textContent = 'Choose a trait or write a note first.'; return; }
+  if (!traitVal && !note) { msg.textContent = 'Write a note (or pick a trait) first.'; return; }
   let category = 'Teacher note', trait = 'Note', sentiment = 'note';
   if (traitVal) {
     const [ci, ti] = traitVal.split('|').map(Number);
@@ -3601,7 +3784,7 @@ function pfSaveEntry() {
   renderProfileHistory();
   renderProfileLogGrid();
   if (pfHost === 'notes') renderNotesRoster();
-  document.getElementById('pfMsg').textContent = '✓ Added';
+  document.getElementById('pfMsg').textContent = '✓ Saved';
   setTimeout(() => { const m = document.getElementById('pfMsg'); if (m) m.textContent = ''; }, 1600);
 }
 
@@ -8309,7 +8492,7 @@ const PLAY_FEATURE_NAMES = {
   music: 'Music', flashcards: 'Flashcards', tests: 'Tests',
   wheel: 'The Wheel', bingo: 'Bingo', tools: 'Timer & Tools', voice: 'The Voice Meter',
   helper: 'The Daily Helper', profiles: 'Student Profiles', mascot: 'A mascot for every class',
-  jobs: 'Class Jobs', notes: 'Notes'
+  jobs: 'Class Jobs', notes: 'Notes', games: 'Games & Tools'
 };
 let playUnlocked = false;
 let playStore = null;
@@ -8349,7 +8532,7 @@ function playGate(featureName) {
    the behaviour board, the wheel, and a mascot on the first class, so a teacher
    can run a real lesson before deciding whether to pay. */
 const PLAY_FREE_CLASSES = 2;
-const PLAY_FREE_TABS = { wheel: true, behavior: true, tools: true, jobs: true, notes: true };
+const PLAY_FREE_TABS = { wheel: true, behavior: true, tools: true, jobs: true, notes: true, games: true };
 
 function playClassLocked(className) {
   const limit = (typeof ztBoardClassLimit === 'function') ? ztBoardClassLimit() : PLAY_FREE_CLASSES;
@@ -8415,6 +8598,7 @@ function refreshPlayLocks() {
   }
   const promo = document.getElementById('playUnlockPromo');
   if (promo) promo.style.display = locked ? 'inline-flex' : 'none';
+  if (document.getElementById('workspace-games') && document.getElementById('workspace-games').classList.contains('active')) renderGamesGrid();
   ztShowLicenceName();
 }
 
@@ -8565,6 +8749,7 @@ function initPlayPaywall() {
 }
 
 // ========== INIT ==========
+moveMusicAndFlashcards();
 if (checkTrialStatus()) {
   loadState();
   migrateDeskCounts();
