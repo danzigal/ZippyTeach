@@ -1097,6 +1097,21 @@
     .behavior-split{ grid-template-columns:minmax(0,1fr) 400px; }
     .rules-card .rules-grid{ grid-template-columns:repeat(3, 1fr) !important; }
   }
+
+  /* ---------- load backup: choose classes ---------- */
+  .bk-box{ max-width:520px; width:calc(100% - 32px); text-align:left !important; }
+  .bk-help{ color:#666; font-size:14px; margin:0 0 12px; }
+  .bk-list{ display:flex; flex-direction:column; gap:8px; max-height:46vh; overflow-y:auto; margin-bottom:10px; }
+  .bk-row{ display:flex; gap:12px; align-items:flex-start; padding:10px 12px; border:2px solid #e6d8b8; border-radius:10px; background:#fff; cursor:pointer; font-size:15px; color:#023e8a; }
+  .bk-row input{ width:22px; height:22px; margin-top:2px; flex:0 0 auto; }
+  .bk-row em{ font-style:normal; color:#16697f; font-size:13px; }
+  .bk-row small{ color:#888; font-size:12.5px; }
+  .bk-extra{ background:#f6f1e4; }
+  .bk-quick{ display:flex; gap:8px; margin-bottom:8px; }
+  .bk-quick button{ padding:7px 14px; border-radius:20px; border:2px solid #e6d8b8; background:#fff; font-weight:700; font-size:14px; color:#16697f; cursor:pointer; }
+  .bk-new{ color:#06a97e; }
+  .bk-old{ color:#c0392b; }
+  .bk-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:14px; flex-wrap:wrap; }
 </style>
 </head>
 <body>
@@ -3844,7 +3859,13 @@ const STORAGE_KEY = 'eslOceanBoard_state_v1';
 
 const STORAGE_ADVISORY_THRESHOLD = 4 * 1024 * 1024; // ~4MB — warn before hitting typical 5MB browser caps
 
+/* Each class remembers when it was last changed, so Load Backup can tell a
+   newer copy of a class from an older one. */
+let saveStateQuiet = false;
 function saveState() {
+  if (!saveStateQuiet && typeof activeClass !== 'undefined' && classes && classes[activeClass]) {
+    classes[activeClass].updatedAt = Date.now();
+  }
   let json;
   try {
     json = JSON.stringify({ classes, activeClass, globalRules, globalRoleCategories, helperQuestions, animalGroups });
@@ -3969,29 +3990,123 @@ function hideBackupReminder() {
   document.getElementById('backupReminderBanner').style.display = 'none';
 }
 
+/* Teachers who teach in more than one room keep a board on each classroom
+   computer and bring backups together on their laptop. Replacing everything on
+   every load wiped the classes from the other room, so a backup now brings in
+   only the classes the teacher ticks; every other class is left as it is. */
+let pendingBackup = null;
+
 function importBackup(file) {
   const reader = new FileReader();
   reader.onload = (e) => {
+    let data;
     try {
-      const data = JSON.parse(e.target.result);
-      if (!data || !data.classes) throw new Error('bad file');
-      classes = data.classes;
-      migrateDeskCounts();
-      activeClass = data.activeClass && classes[data.activeClass] ? data.activeClass : Object.keys(classes)[0];
-      if (data.globalRules) globalRules = data.globalRules;
-      if (data.globalRoleCategories) globalRoleCategories = data.globalRoleCategories;
-      if (data.helperQuestions) helperQuestions = data.helperQuestions;
-      if (data.animalGroups) animalGroups = data.animalGroups;
-      if (data.flashcardBank) { flashcardBank = data.flashcardBank; saveFlashcards(); }
-      saveState();
-      renderClassGrid();
-      renderClassContent();
-      alert('Backup loaded successfully!');
+      data = JSON.parse(e.target.result);
+      if (!data || !data.classes || typeof data.classes !== 'object') throw new Error('bad file');
     } catch (err) {
       alert('That file doesn\'t look like a valid backup.');
+      return;
     }
+    pendingBackup = data;
+    openBackupPicker(file.name);
   };
   reader.readAsText(file);
+}
+
+function backupClassSummary(cls) {
+  const desks = (cls && cls.desks) || [];
+  const named = desks.filter(d => d && d.name).length;
+  const pts = desks.reduce((sum, d) => sum + ((d && d.points) || 0), 0);
+  return named + ' student' + (named === 1 ? '' : 's') + ' · ' + pts + ' pts';
+}
+
+function openBackupPicker(fileName) {
+  const data = pendingBackup;
+  const names = Object.keys(data.classes);
+  const deviceEmpty = !hasAnyStudentData();
+  let rows = names.map((n, i) => {
+    const incoming = data.classes[n];
+    const hasStudents = ((incoming && incoming.desks) || []).some(d => d && d.name);
+    const here = classes[n];
+    const hereHasStudents = here && here.desks.some(d => d.name);
+    const inT = (incoming && incoming.updatedAt) || 0;
+    const hereT = (here && here.updatedAt) || 0;
+    let note, tick;
+    if (!here) { note = 'new on this device'; tick = hasStudents; }
+    else if (!hereHasStudents) { note = 'fills the empty ' + pfEscape(n); tick = hasStudents; }
+    else if (inT && (!hereT || inT > hereT)) {
+      note = '<b class="bk-new">Newer</b> than this device’s ' + pfEscape(n) + ' (' + backupClassSummary(here) + ')'; tick = true;
+    } else if (inT && hereT && inT <= hereT) {
+      note = '<b class="bk-old">Older</b> than this device’s ' + pfEscape(n) + ' (' + backupClassSummary(here) + '). Leave unticked to keep yours.'; tick = false;
+    } else {
+      note = 'Would replace this device’s ' + pfEscape(n) + ' (' + backupClassSummary(here) + '). Only tick it if this copy is newer.'; tick = false;
+    }
+    if (inT) note += '<br>Last changed ' + new Date(inT).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    return '<label class="bk-row"><input type="checkbox" data-cls="' + i + '"' + (tick ? ' checked' : '') + '>' +
+      '<span><strong>' + pfEscape(n) + '</strong> <em>' + backupClassSummary(incoming) + '</em><br><small>' + note + '</small></span></label>';
+  }).join('');
+  const box = document.createElement('div');
+  box.className = 'reward-modal show';
+  box.id = 'backupPickerModal';
+  box.innerHTML =
+    '<div class="reward-box bk-box" onclick="event.stopPropagation()">' +
+      '<h3 style="margin:0 0 6px; color:#333;">Which classes do you want to bring in?</h3>' +
+      '<p class="bk-help">Only the ticked classes are replaced with the ones in this backup. Every other class on this device stays exactly as it is.</p>' +
+      (names.length > 1 ? '<div class="bk-quick">' +
+        '<button type="button" onclick="backupTickAll(true)">Tick all</button>' +
+        '<button type="button" onclick="backupTickAll(false)">Untick all</button>' +
+      '</div>' : '') +
+      '<div class="bk-list">' + rows + '</div>' +
+      '<label class="bk-row bk-extra"><input type="checkbox" id="bkShared"' + (deviceEmpty ? ' checked' : '') + '>' +
+        '<span>Also bring in the shared settings<br><small>classroom rules, class jobs, helper questions and flashcards (these replace the ones on this device)</small></span></label>' +
+      '<div class="bk-actions">' +
+        '<button class="btn btn-danger" onclick="closeBackupPicker()">Cancel</button>' +
+        '<button class="btn btn-success" onclick="applyBackupPicker()">Bring in ticked classes</button>' +
+      '</div>' +
+    '</div>';
+  box.onclick = closeBackupPicker;
+  document.body.appendChild(box);
+}
+
+function backupTickAll(on) {
+  document.querySelectorAll('#backupPickerModal input[data-cls]').forEach(cb => { cb.checked = on; });
+}
+
+function closeBackupPicker() {
+  const m = document.getElementById('backupPickerModal');
+  if (m) m.remove();
+  pendingBackup = null;
+}
+
+function applyBackupPicker() {
+  const data = pendingBackup;
+  if (!data) return;
+  const names = Object.keys(data.classes);
+  const picked = [];
+  document.querySelectorAll('#backupPickerModal input[data-cls]').forEach(cb => {
+    if (cb.checked) picked.push(names[Number(cb.dataset.cls)]);
+  });
+  const shared = document.getElementById('bkShared').checked;
+  if (!picked.length && !shared) { alert('Tick at least one class to bring in.'); return; }
+  picked.forEach(n => { classes[n] = data.classes[n]; });
+  migrateDeskCounts();
+  if (shared) {
+    if (data.globalRules) globalRules = data.globalRules;
+    if (data.globalRoleCategories) globalRoleCategories = data.globalRoleCategories;
+    if (data.helperQuestions) helperQuestions = data.helperQuestions;
+    if (data.animalGroups) animalGroups = data.animalGroups;
+    if (data.flashcardBank) { flashcardBank = data.flashcardBank; saveFlashcards(); }
+  }
+  if (!classes[activeClass]) activeClass = Object.keys(classes)[0];
+  saveStateQuiet = true;      // bringing a class in is not "changing" it
+  saveState();
+  saveStateQuiet = false;
+  closeBackupPicker();
+  renderClassGrid();
+  if (document.getElementById('panel-classroom').classList.contains('active')) renderClassContent();
+  alert(picked.length
+    ? 'Brought in: ' + picked.join(', ') + '. Your other classes were not changed.'
+    : 'Shared settings brought in. Your classes were not changed.');
 }
 
 function resetAllData() {
