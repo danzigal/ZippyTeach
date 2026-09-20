@@ -1076,14 +1076,18 @@
      below it, so the whole class and the rules fit on one screen. */
   @media (min-width: 1280px){
     #app{ max-width:min(1680px, 96vw); }
+    .role-grid{ grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); }
+    .notes-layout{ grid-template-columns:280px minmax(0,1fr); }
+  }
+  /* the rules only move beside the chart when the chart still has room for a
+     full row of 8 desks without them touching */
+  @media (min-width: 1500px){
     .behavior-split{ display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:18px; align-items:start; }
     .behavior-split > .card{ margin-bottom:0; }
     .behavior-split .rules-card{ position:sticky; top:12px; max-height:calc(100vh - 24px); overflow-y:auto; }
     .rules-card .rules-grid{ grid-template-columns:repeat(2, 1fr) !important; }
     .rules-card .rule-add-row{ flex-wrap:wrap; }
     .rules-card .rule-add-row input{ flex:1 1 150px; min-width:0; }
-    .role-grid{ grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); }
-    .notes-layout{ grid-template-columns:280px minmax(0,1fr); }
   }
   @media (min-width: 1280px) and (max-width: 1540px){
     #panel-classroom > .sub-tab-bar{ gap:6px; }
