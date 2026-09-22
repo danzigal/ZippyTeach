@@ -1168,6 +1168,27 @@
   #gamesBackTitle{ color:#fff; font-weight:800; font-size:18px; text-shadow:0 2px 6px rgba(2,62,138,.6); font-family:var(--face); }
   /* each tool opens on its own now, so the old Timer / Dice / Groups row is not needed */
   #workspace-tools > .sub-tab-bar{ display:none; }
+
+  /* ---------- How to use ---------- */
+  .help-card{ max-width:860px; margin-left:auto; margin-right:auto; }
+  .help-title{ margin:0 0 6px; color:var(--deep, #023e8a); font-family:var(--face); font-size:24px; display:flex; align-items:center; gap:8px; }
+  .help-lead{ color:#666; font-size:15px; margin:0 0 14px; }
+  .help-steps{ margin:0 0 18px; padding-left:0; list-style:none; counter-reset:hs; display:flex; flex-direction:column; gap:10px; }
+  .help-steps li{ counter-increment:hs; position:relative; padding:12px 14px 12px 56px; background:#fff; border:2px solid #e6d8b8; border-radius:12px; font-size:15px; line-height:1.5; color:#234; }
+  .help-steps li::before{ content:counter(hs); position:absolute; left:14px; top:12px; width:30px; height:30px; border-radius:50%;
+    background:#16697f; color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center; font-family:var(--face); }
+  .help-topic{ border:2px solid #e6d8b8; border-radius:12px; background:rgba(255,255,255,.75); margin-bottom:8px; }
+  .help-topic summary{ cursor:pointer; padding:13px 16px; font-weight:800; font-size:16px; color:var(--deep, #023e8a); font-family:var(--face); list-style-position:inside; }
+  .help-topic[open] summary{ border-bottom:1px solid #eee2c8; }
+  .help-topic p, .help-topic ul{ margin:10px 16px; font-size:14.5px; line-height:1.55; color:#345; }
+  .help-topic ul{ padding-left:18px; }
+  .help-topic li{ margin-bottom:5px; }
+  .help-contact{ margin:16px 0 0; font-size:14px; color:#666; text-align:center; }
+  .help-contact a{ color:#16697f; font-weight:700; }
+  .help-welcome{ align-items:center; gap:12px; flex-wrap:wrap; background:#fff4dc; border:2px solid #f0c078; border-radius:14px;
+    padding:12px 14px; margin-bottom:14px; font-size:15px; color:#3a2a00; position:relative; }
+  .help-welcome span{ flex:1 1 260px; }
+  .help-welcome-x{ background:none; border:none; font-size:18px; cursor:pointer; color:#8a6a2a; padding:4px 8px; }
 </style>
 </head>
 <body>
@@ -1195,6 +1216,7 @@
   <symbol id="i-dice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-users" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9.5" r="2.4"/><path d="M3 19c0-3 2.2-5 5-5s5 2 5 5"/><path d="M14.5 19c0-2.3 1.2-3.8 3-3.8S20.5 16.7 20.5 19"/></symbol>
   <symbol id="i-badge" viewBox="0 0 24 24"><circle cx="12" cy="9.5" r="5.5"/><polyline points="8.5 14.5 7.5 21 12 18.5 16.5 21 15.5 14.5"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.5a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.7"/><circle cx="12" cy="16.9" r=".9" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-note" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></symbol>
   <symbol id="i-bubble" viewBox="0 0 24 24"><circle cx="10" cy="13" r="6.5"/><circle cx="18.5" cy="6.5" r="2.6"/></symbol>
   <symbol id="i-back" viewBox="0 0 24 24"><line x1="20" y1="12" x2="5" y2="12"/><polyline points="11 6 5 12 11 18"/></symbol>
@@ -1585,10 +1607,16 @@
     <button class="tab-btn" onclick="switchTab('tests')"><svg class="ico"><use href="#i-doc"/></svg>Tests</button>
     <button class="tab-btn" id="ztLockBtn" onclick="ztLockButtonPressed()"
             title="Lock the board while you step away"><svg class="ico"><use href="#i-lock"/></svg>Lock</button>
+    <button class="tab-btn" id="helpTabBtn" onclick="switchTab('help')"><svg class="ico"><use href="#i-help"/></svg>How to use</button>
   </div>
 
   <!-- MY CLASSES (home) -->
   <div id="panel-classes" class="panel active">
+    <div id="helpWelcome" class="help-welcome" style="display:none;">
+      <span>👋 New to the Ocean Board? The quick guide shows you how to set up your classes in a few minutes.</span>
+      <button type="button" class="btn btn-primary" onclick="switchTab('help')">How to use</button>
+      <button type="button" class="help-welcome-x" onclick="dismissHelpWelcome()" aria-label="Hide this message">✕</button>
+    </div>
     <div class="class-grid" id="classGrid"></div>
     <div style="text-align:center;"><button class="btn btn-warning" id="playUnlockPromo" onclick="openPlayUnlock()"><svg class="ico"><use href="#i-lock"/></svg>Unlock the full Ocean Board</button></div>
     <div style="display: flex; gap: 8px; margin-bottom: 12px;">
@@ -1607,6 +1635,94 @@
       <p style="color:#e0fbfc; font-size:12px; margin-top:8px; text-shadow: 0 1px 4px rgba(2,62,138,0.5);">"Archive Old Profile Notes" exports and clears out older Student Profile observations (across all classes) to keep storage healthy over a long school year — it never touches points, seating, or rules.</p>
     </details>
     <p style="text-align:center; color:#e0fbfc; font-size:13px; text-shadow: 0 1px 4px rgba(2,62,138,0.5);">Tap a class above to open its seating chart, rules, wheel, bingo, timer, and voice meter.</p>
+  </div>
+
+
+  <!-- HOW TO USE -->
+  <div id="panel-help" class="panel">
+    <div class="card help-card">
+      <h2 class="help-title"><svg class="ico ico-h"><use href="#i-help"/></svg>How to use the Ocean Board</h2>
+      <p class="help-lead">Three steps to get going. Everything else is below. Tap a topic to open it.</p>
+      <ol class="help-steps">
+        <li><b>Make your classes.</b> On <b>My Classes</b>, type a class name and tap <b>+ Add Class</b>. Tap a class to open it. The ✏️ next to its name renames it.</li>
+        <li><b>Add your students.</b> In the class, tap <b>Set up</b>, then <b>Paste Class Roster</b>. Paste your class list, one name per line, and tap <b>Add These Names to the Seating Chart</b>.</li>
+        <li><b>Teach.</b> Tap <b>Teach</b>. Give points with <b>+</b> and <b>&minus;</b> on each desk, or tap <b>🏆</b> to award a classroom rule. Tap a student&rsquo;s name for more options.</li>
+      </ol>
+
+      <details class="help-topic"><summary>Teach and Set up</summary>
+        <p><b>Teach</b> is what you use during a lesson: big desks, points and your rules, nothing else. A class with students always opens in Teach.</p>
+        <p><b>Set up</b> is for getting ready: adding names, choosing a seating layout, moving desks, and adding or removing rules and jobs. Switch with the <b>Teach / Set up</b> button at the top right of the class.</p>
+      </details>
+
+      <details class="help-topic"><summary>Points, rules and rewards</summary>
+        <ul>
+          <li><b>+</b> and <b>&minus;</b> on a desk give or take one point.</li>
+          <li><b>🏆</b> on a desk awards one of your classroom rules, with its points, and notes it on the student&rsquo;s profile.</li>
+          <li><b>+1 / &minus;1 to Whole Class</b> changes everyone at once.</li>
+          <li><b>Students of the Day</b> picks today&rsquo;s stars from the class.</li>
+          <li>Your <b>Mascot</b> grows as the class earns points together.</li>
+          <li>Rules are shared by all your classes. Add or remove them in <b>Set up</b>.</li>
+        </ul>
+      </details>
+
+      <details class="help-topic"><summary>Seating chart</summary>
+        <p>In <b>Set up</b>, choose a layout (Flexible, Diagonal Rows, Pair Seating or Clusters/Pods), then drag any desk to match your room. Tap a desk to change the name or open the student&rsquo;s profile. On a phone, the desks are shown in a simple grid.</p>
+      </details>
+
+      <details class="help-topic"><summary>Class Jobs</summary>
+        <p>Open <b>Class Jobs</b> and tap <b>Assign Jobs!</b>. Every student gets a job at random. To add, change or remove jobs, switch to <b>Set up</b> and open <b>Manage Jobs</b>.</p>
+      </details>
+
+      <details class="help-topic"><summary>Notes</summary>
+        <ul>
+          <li><b>Student notes:</b> pick a student, write a note, then tap <b>Save note</b>. A subject is optional, and <b>+ Add a trait</b> lets you record a trait too. Each note is saved to that student only.</li>
+          <li><b>Class notes:</b> notes for the whole class, with a separate page for each subject. Tap <b>+ Subject</b> to add one.</li>
+          <li><b>Full profile &amp; report</b> shows everything about a student and copies a summary for reports.</li>
+        </ul>
+      </details>
+
+      <details class="help-topic"><summary>Games &amp; Tools</summary>
+        <p>Open <b>Games &amp; Tools</b> and tap a tile: Wheel of Names, Timer, Voice Meter, Groups, Dice, Bingo, Flashcards, Music or Floating Bubble. Tap <b>All games &amp; tools</b> to go back.</p>
+        <p>The <b>Floating Bubble</b> stays on top of PowerPoint, so you can give points without leaving your slides (Chrome and Edge on a computer).</p>
+      </details>
+
+      <details class="help-topic"><summary>Daily Helper and Profiles</summary>
+        <p><b>Daily Helper</b> is a short morning routine: pick a helper, and they lead the class through questions like the weather and feelings. <b>Profiles</b> shows a quick summary for every student in the class.</p>
+      </details>
+
+      <details class="help-topic"><summary>Tests</summary>
+        <p>The <b>Tests</b> tab makes a printable quiz from your Flashcards, at the difficulty you choose. You can also upload a test you already use.</p>
+      </details>
+
+      <details class="help-topic"><summary>Lock</summary>
+        <p>Tap <b>Lock</b> before you step away. The first time, you choose a PIN. After that, the board stays locked until the PIN is entered, so nobody changes points while you&rsquo;re out.</p>
+      </details>
+
+      <details class="help-topic"><summary>Backups: keep your classes safe</summary>
+        <p>Your classes are saved on this computer only. Clearing the browser or resetting the computer can erase them, so download a backup every week or two.</p>
+        <ul>
+          <li><b>Make a backup:</b> My Classes &rarr; Backup / restore &rarr; <b>Download Backup</b>.</li>
+          <li><b>Load a backup:</b> My Classes &rarr; Backup / restore &rarr; <b>Load Backup</b>, then tick the classes you want to bring in. Only the ticked classes change. The board shows which copy is <b>newer</b> or <b>older</b>.</li>
+          <li><b>Teaching in several rooms?</b> Load your backup once on each classroom computer. Tap <b>Untick all</b>, then tick just the class taught in that room.</li>
+        </ul>
+      </details>
+
+      <details class="help-topic"><summary>Install it as an app</summary>
+        <ul>
+          <li><b>Chrome on a computer:</b> click the install icon at the right of the address bar, or &#8942; &rarr; Cast, save and share &rarr; Install page as app.</li>
+          <li><b>Edge:</b> &#8943; &rarr; Apps &rarr; Install this site as an app.</li>
+          <li><b>Android:</b> Chrome &#8942; &rarr; Add to Home screen &rarr; Install.</li>
+          <li><b>iPhone / iPad:</b> Safari &rarr; Share &rarr; Add to Home Screen.</li>
+        </ul>
+        <p>Once installed, it works without internet. New versions arrive by themselves when you open it with internet. If you see &ldquo;A newer version of the board is ready&rdquo;, tap <b>Use it now</b>.</p>
+      </details>
+
+      <details class="help-topic"><summary>Unlocking the full version</summary>
+        <p>Tap any padlock and type your name and code exactly as they were sent to you. You only do this once on each computer. If you forget your Lock PIN, your unlock code can reset it.</p>
+      </details>
+
+      <p class="help-contact">Still stuck? Email <a href="mailto:danzigal1988@gmail.com?subject=Ocean%20Board%20help">danzigal1988@gmail.com</a></p>
+    </div>
   </div>
 
   <!-- CLASS WORKSPACE -->
@@ -2767,14 +2883,19 @@ let animalGroups = DEFAULT_ANIMAL_GROUPS.map(g => ({ ...g }));
 
 // ========== TABS ==========
 function switchTab(tab) {
-  if (tab !== 'classes' && !playGate(PLAY_FEATURE_NAMES[tab])) return;
+  if (tab !== 'classes' && tab !== 'help' && !playGate(PLAY_FEATURE_NAMES[tab])) return;
   document.querySelectorAll('.tab-bar .tab-btn').forEach(b => b.classList.remove('active'));
   (event.target.closest('.sub-tab-btn') || event.target).classList.add('active');
   document.getElementById('panel-classes').classList.remove('active');
   document.getElementById('panel-classroom').classList.remove('active');
   document.getElementById('panel-tests').classList.remove('active');
+  document.getElementById('panel-help').classList.remove('active');
   document.body.classList.remove('in-class');
-  if (tab === 'classes') {
+  if (tab === 'help') {
+    document.getElementById('panel-help').classList.add('active');
+    dismissHelpWelcome();
+    window.scrollTo(0, 0);
+  } else if (tab === 'classes') {
     document.getElementById('panel-classes').classList.add('active');
     renderClassGrid();
   } else if (tab === 'tests') {
@@ -2790,6 +2911,7 @@ function openClassWorkspace(className) {  activeClass = className;
   document.querySelectorAll('.tab-bar .tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-classes').classList.remove('active');
   document.getElementById('panel-tests').classList.remove('active');
+  document.getElementById('panel-help').classList.remove('active');
   document.getElementById('panel-classroom').classList.add('active');
   document.getElementById('gamesBackBar').style.display = 'none';
   document.body.classList.add('in-class');
@@ -8554,7 +8676,7 @@ function playTabAllowed(tab) {
 function playLockedButtons() {
   const list = [];
   document.querySelectorAll('.tab-bar .tab-btn').forEach(b => {
-    if (!/'classes'/.test(b.getAttribute('onclick') || '')) list.push(b);
+    if (!/'classes'|'help'/.test(b.getAttribute('onclick') || '')) list.push(b);
   });
   document.querySelectorAll('#panel-classroom > .sub-tab-bar .sub-tab-btn').forEach(b => {
     const m = /switchWorkspaceTab\('([a-z]+)'\)/.exec(b.getAttribute('onclick') || '');
@@ -8748,8 +8870,25 @@ function initPlayPaywall() {
   }, 400);
 }
 
+// ========== HOW TO USE ==========
+/* The guide is always under "How to use". New teachers also get a small
+   welcome message on My Classes until they open the guide or close it. */
+const HELP_SEEN_KEY = 'ztOceanHelpSeen_v1';
+function showHelpWelcomeIfNew() {
+  let seen = false;
+  try { seen = localStorage.getItem(HELP_SEEN_KEY) === '1'; } catch (e) {}
+  const el = document.getElementById('helpWelcome');
+  if (el && !seen) el.style.display = 'flex';
+}
+function dismissHelpWelcome() {
+  const el = document.getElementById('helpWelcome');
+  if (el) el.style.display = 'none';
+  try { localStorage.setItem(HELP_SEEN_KEY, '1'); } catch (e) {}
+}
+
 // ========== INIT ==========
 moveMusicAndFlashcards();
+showHelpWelcomeIfNew();
 if (checkTrialStatus()) {
   loadState();
   migrateDeskCounts();
