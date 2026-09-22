@@ -1645,7 +1645,7 @@
       <p class="help-lead">Three steps to get going. Everything else is below. Tap a topic to open it.</p>
       <ol class="help-steps">
         <li><b>Make your classes.</b> On <b>My Classes</b>, type a class name and tap <b>+ Add Class</b>. Tap a class to open it. The ✏️ next to its name renames it.</li>
-        <li><b>Add your students.</b> In the class, tap <b>Set up</b>, then <b>Paste Class Roster</b>. Paste your class list, one name per line, and tap <b>Add These Names to the Seating Chart</b>.</li>
+        <li><b>Add your students.</b> In the class, tap <b>Set up</b>, then <b>Paste Class Roster</b>. Paste your class list, one name per line, and tap <b>Add These Names to the Seating Chart</b>. Use <b>first names or nicknames only</b>.</li>
         <li><b>Teach.</b> Tap <b>Teach</b>. Give points with <b>+</b> and <b>&minus;</b> on each desk, or tap <b>🏆</b> to award a classroom rule. Tap a student&rsquo;s name for more options.</li>
       </ol>
 
@@ -1717,11 +1717,21 @@
         <p>Once installed, it works without internet. New versions arrive by themselves when you open it with internet. If you see &ldquo;A newer version of the board is ready&rdquo;, tap <b>Use it now</b>.</p>
       </details>
 
+      <details class="help-topic"><summary>Privacy: what the board keeps</summary>
+        <p>The Ocean Board is your own classroom notebook, not an official school record. Use it for day-to-day points and quick notes, then move anything official into your school&rsquo;s reporting system.</p>
+        <ul>
+          <li>Use <b>first names or nicknames only</b>. No surnames, ID numbers, birthdays or contact details.</li>
+          <li>Keep notes short and factual. Leave out sensitive matters like health, family or safeguarding concerns; those belong in your school&rsquo;s official system.</li>
+          <li>Everything stays on this device. Nothing is sent to ZippyTeach or anyone else.</li>
+          <li>Backup files contain your class names and notes, so keep them somewhere private.</li>
+        </ul>
+      </details>
+
       <details class="help-topic"><summary>Unlocking the full version</summary>
         <p>Tap any padlock and type your name and code exactly as they were sent to you. You only do this once on each computer. If you forget your Lock PIN, your unlock code can reset it.</p>
       </details>
 
-      <p class="help-contact">Still stuck? Email <a href="mailto:danzigal1988@gmail.com?subject=Ocean%20Board%20help">danzigal1988@gmail.com</a></p>
+      <p class="help-contact">Still stuck? Email <a href="mailto:danzigal1988@gmail.com?subject=Ocean%20Board%20help">danzigal1988@gmail.com</a> &middot; <a href="../privacy.html" target="_blank" rel="noopener">Privacy policy</a></p>
     </div>
   </div>
 
@@ -1968,7 +1978,7 @@
 
       <div id="notesStudentView" class="card">
         <h3 style="margin-bottom: 4px; color: #333;"><svg class="ico ico-h"><use href="#i-users"/></svg>Student Notes &mdash; <span id="notesStudentClassLabel"></span></h3>
-        <p style="color:#888; font-size:13px; margin-bottom:12px;">Pick a student and write a note. Add a subject or a trait if you like. Each note is saved to that student only.</p>
+        <p style="color:#888; font-size:13px; margin-bottom:12px;">Pick a student and write a note. Add a subject or a trait if you like. Each note is saved to that student only. Keep notes short and factual. Anything official belongs in your school&rsquo;s own system.</p>
         <div class="notes-layout">
           <div class="notes-roster-col">
             <select id="notesStudentSelect" class="notes-student-select" onchange="notesPickStudent(this.value === '' ? null : Number(this.value))"></select>
@@ -3160,8 +3170,8 @@ function renderClassContent() {
   // once the class has names, the paste box folds away so the seating chart is near the top
   let html = '<details class="card roster-card"' + (filled === 0 ? ' open' : '') + ' style="border: 2px solid #06d6a0;">' +
     '<summary class="roster-summary"><h3 style="margin: 0; color: #333; display:inline;">📋 ' + (filled === 0 ? 'Paste Class Roster' : 'Add more names (paste a class list)') + '</h3></summary>';
-  html += '<p style="color:#888; font-size:13px; margin-bottom:10px;">Copy your class list and paste it below — one name per line. It fills the empty desks below automatically.</p>';
-  html += '<textarea id="bulkStudentNames" placeholder="Paste up to ' + DESK_COUNT + ' names, one per line..." style="width:100%; min-height:100px; padding:10px; border:2px solid #caf0f8; border-radius:8px; font-size:14px; resize:vertical;"></textarea>';
+  html += '<p style="color:#888; font-size:13px; margin-bottom:10px;">Copy your class list and paste it below — one name per line. It fills the empty desks below automatically. <b>Please use first names or nicknames only.</b></p>';
+  html += '<textarea id="bulkStudentNames" placeholder="Paste up to ' + DESK_COUNT + ' first names or nicknames, one per line..." style="width:100%; min-height:100px; padding:10px; border:2px solid #caf0f8; border-radius:8px; font-size:14px; resize:vertical;"></textarea>';
   html += '<button class="btn btn-success" id="bulkAddBtn" style="margin-top:8px; width:100%; font-size:16px; padding:12px;">🌊 Add These Names to the Seating Chart</button>';
   html += '</details>';
 
