@@ -1189,6 +1189,18 @@
     padding:12px 14px; margin-bottom:14px; font-size:15px; color:#3a2a00; position:relative; }
   .help-welcome span{ flex:1 1 260px; }
   .help-welcome-x{ background:none; border:none; font-size:18px; cursor:pointer; color:#8a6a2a; padding:4px 8px; }
+
+  /* ---------- unlock screen: ways to pay ---------- */
+  .pw-buyways{ margin-top:16px; text-align:left; }
+  .pw-buyways-title{ font-weight:800; font-size:14px; color:var(--deep, #023e8a); margin:0 0 8px; text-align:center; }
+  .pw-way{ border:2px solid #e6d8b8; border-radius:12px; background:#fff; padding:10px 12px; margin-bottom:8px; }
+  .pw-way-head{ display:flex; justify-content:space-between; gap:8px; align-items:baseline; flex-wrap:wrap; }
+  .pw-way-head b{ color:var(--deep, #023e8a); font-size:15px; }
+  .pw-way-head span{ color:#16697f; font-weight:800; font-size:13px; }
+  .pw-way p{ margin:4px 0 0; font-size:13px; color:#456; line-height:1.45; }
+  .pw-way-btns{ display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+  .pw-way-btns .btn{ padding:7px 14px; font-size:13px; text-decoration:none; }
+  .pw-way-foot{ font-size:12.5px; color:#666; text-align:center; margin:6px 0 0; }
 </style>
 </head>
 <body>
@@ -2292,10 +2304,29 @@
         <div class="pw-links">
           <button class="btn btn-primary" onclick="closePlayUnlock()">Not now</button>
         </div>
-        <p class="pw-getcode">Don't have a code yet? Get in touch and I'll sort you out.<br>
-          <a href="mailto:danzigal1988@gmail.com?subject=Ocean%20Board%20full%20version">danzigal1988@gmail.com</a>
-          &middot; WeChat <strong>DanziGal88</strong> &middot;
-          <a href="https://wa.me/27761655758">WhatsApp</a></p>
+        <div class="pw-buyways">
+          <p class="pw-buyways-title">Don&rsquo;t have a code yet? Choose where you are:</p>
+          <div class="pw-way">
+            <div class="pw-way-head"><b>South Africa</b><span>R180 &middot; 10 classes</span></div>
+            <p>Pay by card or EFT with Payfast. Message me and I&rsquo;ll send your payment link.</p>
+            <div class="pw-way-btns">
+              <a class="btn btn-teal" href="mailto:danzigal1988@gmail.com?subject=Ocean%20Board%20%E2%80%93%20Payfast%20(South%20Africa)&amp;body=Name%20for%20my%20code%3A%20%0ANumber%20of%20classes%3A%2010%0A">Email</a>
+              <a class="btn btn-teal" href="https://wa.me/27761655758?text=Hi!%20I%27d%20like%20to%20buy%20the%20Ocean%20Board%20(Payfast%2C%20South%20Africa).">WhatsApp</a>
+            </div>
+          </div>
+          <div class="pw-way">
+            <div class="pw-way-head"><b>China</b><span>&yen;75 &middot; 10 classes</span></div>
+            <p>Pay with WeChat Pay. Add me on WeChat: <strong>DanziGal88</strong></p>
+          </div>
+          <div class="pw-way">
+            <div class="pw-way-head"><b>Everywhere else</b><span>US$10 &middot; 10 classes</span></div>
+            <p>Pay by card or bank transfer through a secure Payoneer payment link. Email me and I&rsquo;ll send it.</p>
+            <div class="pw-way-btns">
+              <a class="btn btn-teal" href="mailto:danzigal1988@gmail.com?subject=Ocean%20Board%20%E2%80%93%20Payoneer%20payment%20link&amp;body=Name%20for%20my%20code%3A%20%0ANumber%20of%20classes%3A%2010%0ACountry%3A%20%0A">Ask for a payment link</a>
+            </div>
+          </div>
+          <p class="pw-way-foot">Your unlock code is sent as soon as payment arrives. Need more than 10 classes? Just ask.</p>
+        </div>
       </div>
     </div>
   </div>
