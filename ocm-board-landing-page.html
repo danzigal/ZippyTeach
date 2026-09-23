@@ -49,7 +49,7 @@
   .card h2{ margin:0 0 6px; color:var(--deep); font-size:clamp(24px, 3.4vw, 30px); }
   .lead{ color:var(--soft); margin:0 0 18px; font-size:16px; }
 
-  .video{ width:100%; border-radius:14px; border:2px solid var(--sand-lo); background:#0b3350; display:block; aspect-ratio:16/9; }
+  .video{ width:100%; height:auto; border-radius:14px; border:2px solid var(--sand-lo); background:#0b3350; display:block; aspect-ratio:1440/874; }
 
   .why{ display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:14px; }
   .why div{ background:#fff; border:2px solid var(--sand-lo); border-radius:14px; padding:14px 16px; }
@@ -122,7 +122,7 @@
     <h1>A calmer, happier classroom,<br>one tap at a time</h1>
     <p>The Ocean Board is a classroom management board for ESL and primary teachers: seating chart, points, picture rules, class jobs, notes, games and tools in one place. Made by a teacher, for the big screen at the front of your room.</p>
     <div class="hero-btns">
-      <a class="btn btn-go" href="board/">▶ Try the board free</a>
+      <a class="btn btn-go" href="board/" data-goatcounter-click="try-free-top" data-goatcounter-title="Try the board free (top)">▶ Try the board free</a>
       <a class="btn btn-sand" href="#pricing">See pricing</a>
     </div>
     <p class="hero-note">No sign-up. Open it, add a class and start teaching. Works in Chrome and Edge.</p>
@@ -131,8 +131,8 @@
   <section>
     <div class="card">
       <h2>See it in a real lesson</h2>
-      <p class="lead">Points, the Wheel and the Voice Meter, on a classroom smartboard.</p>
-      <video class="video" controls preload="none" poster="ocm-board-demo-poster.jpg">
+      <p class="lead">A 90-second tour: Teach mode, points and rules, Class Jobs, student notes and the Daily Helper.</p>
+      <video class="video" controls muted playsinline preload="metadata" poster="ocm-board-demo-poster.jpg">
         <source src="ocm-board-demo.mp4" type="video/mp4">
       </video>
     </div>
@@ -183,7 +183,7 @@
             <li>Wheel of Names, Timer, Groups, Dice and Floating Bubble</li>
             <li>A mascot for your first class</li>
           </ul>
-          <a class="btn btn-sand btn-small" href="board/">Open the free board</a>
+          <a class="btn btn-sand btn-small" href="board/" data-goatcounter-click="try-free-pricing" data-goatcounter-title="Open the free board (pricing)">Open the free board</a>
         </div>
         <div class="plan full">
           <h3>Full version</h3>
@@ -266,5 +266,10 @@
   </footer>
 
 </div>
+
+<!-- Visitor count for this page only. No cookies, no personal information.
+     The board app itself has no tracking. -->
+<script data-goatcounter="https://zippyteach.goatcounter.com/count"
+        async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
