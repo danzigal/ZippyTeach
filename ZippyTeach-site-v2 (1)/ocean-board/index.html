@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ocean Board – classroom management for ESL teachers | ZippyTeach</title>
+<meta name="description" content="A classroom management board for ESL and primary teachers: seating chart, points, picture rules, class jobs, notes, games and tools. Works offline on smartboards, laptops, tablets and phones. Try it free.">
+<meta name="theme-color" content="#023e8a">
+<link rel="icon" href="../board/icons/icon-192-plain.png">
+<style>
+  :root{
+    --deep:#023e8a; --sea:#0a6ea8; --teal:#16697f; --kelp:#06a97e;
+    --sand:#fdf6e8; --sand-lo:#e6d8b8; --ink:#12264a; --soft:#4a5d73;
+    --sun:#f0a020; --edge:#0a3a47;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    color:var(--ink); background:linear-gradient(180deg,#a6e6f5 0,#55c9e8 400px,#0299c7 900px,#045fa8 1800px,#052e6e 3000px,#052e6e 100%) #052e6e; min-height:100vh; line-height:1.55; }
+  html{ background:#052e6e; }
+  a{ color:var(--teal); }
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 20px; }
+
+  /* top bar */
+  .top{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 0; flex-wrap:wrap; }
+  .brand{ display:flex; align-items:center; gap:10px; color:#fff; text-decoration:none; font-weight:800; font-size:18px; text-shadow:0 2px 6px rgba(2,62,138,.5); }
+  .brand img{ width:40px; height:40px; border-radius:10px; }
+  .nav{ display:flex; gap:16px; flex-wrap:wrap; }
+  .nav a{ color:#fff; text-decoration:none; font-weight:700; font-size:15px; text-shadow:0 1px 4px rgba(2,62,138,.5); }
+
+  /* buttons */
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 26px; border-radius:14px; font-weight:800; font-size:17px;
+    text-decoration:none; border:2.5px solid var(--edge); box-shadow:0 5px 0 rgba(3,18,24,.3); cursor:pointer; transition:transform .1s, box-shadow .1s; }
+  .btn:active{ transform:translateY(3px); box-shadow:0 2px 0 rgba(3,18,24,.3); }
+  .btn-go{ background:linear-gradient(180deg,#3fe0b0,#06a97e); color:#fff; }
+  .btn-sand{ background:var(--sand); color:var(--deep); }
+  .btn-small{ padding:9px 16px; font-size:14px; border-radius:11px; }
+
+  /* hero */
+  .hero{ text-align:center; color:#fff; padding:36px 0 30px; }
+  .hero h1{ font-size:clamp(32px, 6vw, 54px); line-height:1.1; margin:0 0 14px; text-shadow:0 3px 10px rgba(2,62,138,.55); }
+  .hero p{ font-size:clamp(17px, 2.4vw, 21px); max-width:720px; margin:0 auto 24px; text-shadow:0 1px 6px rgba(2,62,138,.6); }
+  .hero-btns{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .hero-note{ margin-top:14px; font-size:14px; opacity:.95; }
+
+  /* cards */
+  section{ margin:26px 0; }
+  .card{ background:var(--sand); border:3px solid var(--edge); border-radius:22px; padding:28px; box-shadow:0 10px 0 rgba(3,18,24,.18); }
+  .card h2{ margin:0 0 6px; color:var(--deep); font-size:clamp(24px, 3.4vw, 30px); }
+  .lead{ color:var(--soft); margin:0 0 18px; font-size:16px; }
+
+  .video{ width:100%; border-radius:14px; border:2px solid var(--sand-lo); background:#0b3350; display:block; aspect-ratio:16/9; }
+
+  .why{ display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:14px; }
+  .why div{ background:#fff; border:2px solid var(--sand-lo); border-radius:14px; padding:14px 16px; }
+  .why b{ display:block; color:var(--deep); font-size:16px; margin-bottom:4px; }
+  .why span{ color:var(--soft); font-size:14.5px; }
+
+  .feats{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:14px; }
+  .feat{ background:#fff; border:2px solid var(--sand-lo); border-radius:14px; padding:16px; }
+  .feat .ic{ font-size:28px; line-height:1; }
+  .feat h3{ margin:8px 0 4px; font-size:17px; color:var(--deep); }
+  .feat p{ margin:0; font-size:14.5px; color:var(--soft); }
+
+  /* plans */
+  .plans{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px; }
+  .plan{ background:#fff; border:2.5px solid var(--sand-lo); border-radius:18px; padding:22px; display:flex; flex-direction:column; }
+  .plan.full{ border-color:var(--sun); box-shadow:0 0 0 4px rgba(240,160,32,.18); }
+  .plan h3{ margin:0; font-size:22px; color:var(--deep); }
+  .price{ font-size:28px; font-weight:800; color:var(--teal); margin:6px 0 2px; }
+  .price small{ font-size:15px; color:var(--soft); font-weight:600; }
+  .plan ul{ padding-left:20px; margin:12px 0 18px; flex:1; }
+  .plan li{ margin-bottom:6px; font-size:15px; }
+  .plan .btn{ align-self:flex-start; }
+
+  /* ways to pay */
+  .steps{ counter-reset:st; list-style:none; padding:0; margin:0 0 20px; display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; }
+  .steps li{ counter-increment:st; background:#fff; border:2px solid var(--sand-lo); border-radius:14px; padding:14px 14px 14px 58px; position:relative; font-size:15px; }
+  .steps li::before{ content:counter(st); position:absolute; left:14px; top:14px; width:32px; height:32px; border-radius:50%; background:var(--teal); color:#fff;
+    font-weight:800; display:flex; align-items:center; justify-content:center; }
+  .pay{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px; }
+  .way{ background:#fff; border:2px solid var(--sand-lo); border-radius:14px; padding:16px; }
+  .way-head{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; flex-wrap:wrap; }
+  .way-head b{ font-size:17px; color:var(--deep); }
+  .way-head span{ color:var(--teal); font-weight:800; }
+  .way p{ margin:6px 0 10px; font-size:14.5px; color:var(--soft); }
+  .way-btns{ display:flex; gap:8px; flex-wrap:wrap; }
+
+  .install{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:12px; }
+  .install div{ background:#fff; border:2px solid var(--sand-lo); border-radius:14px; padding:14px 16px; font-size:14.5px; }
+  .install b{ display:block; color:var(--deep); margin-bottom:4px; font-size:15.5px; }
+
+  .faq details{ background:#fff; border:2px solid var(--sand-lo); border-radius:12px; margin-bottom:8px; }
+  .faq summary{ cursor:pointer; padding:13px 16px; font-weight:800; color:var(--deep); }
+  .faq p{ margin:0 16px 14px; color:var(--soft); font-size:15px; }
+
+  .packs-promo{ display:grid; grid-template-columns:220px 1fr; gap:24px; align-items:center; }
+  .packs-promo img{ width:100%; border-radius:16px; border:2px solid var(--sand-lo); display:block; }
+  @media (max-width:600px){ .packs-promo{ grid-template-columns:1fr; } .packs-promo img{ max-width:260px; } }
+  footer{ text-align:center; color:#e0f4fb; padding:26px 0 40px; font-size:14px; }
+  footer a{ color:#fff; font-weight:700; }
+
+  @media (max-width:600px){
+    .card{ padding:20px 16px; border-radius:18px; }
+    .nav{ display:none; }
+    .btn{ width:100%; }
+    .plan .btn{ width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="../"><img src="../board/icons/icon-192-plain.png" alt="">Ocean Board</a>
+    <nav class="nav"><a href="../">ZippyTeach</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#buy">How to buy</a>
+      <a href="#install">Install</a>
+      <a href="../lessons/">Lesson packs</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <h1>A calmer, happier classroom,<br>one tap at a time</h1>
+    <p>The Ocean Board is a classroom management board for ESL and primary teachers: seating chart, points, picture rules, class jobs, notes, games and tools in one place. Made by a teacher, for the big screen at the front of your room.</p>
+    <div class="hero-btns">
+      <a class="btn btn-go" href="../board/">▶ Try the board free</a>
+      <a class="btn btn-sand" href="#pricing">See pricing</a>
+    </div>
+    <p class="hero-note">No sign-up. Open it, add a class and start teaching. Works in Chrome and Edge.</p>
+  </div>
+
+  <section>
+    <div class="card">
+      <h2>See it in a real lesson</h2>
+      <p class="lead">Points, the Wheel and the Voice Meter, on a classroom smartboard.</p>
+      <video class="video" controls preload="none" poster="ocm-board-demo-poster.jpg">
+        <source src="ocm-board-demo.mp4" type="video/mp4">
+      </video>
+    </div>
+  </section>
+
+  <section>
+    <div class="card">
+      <h2>Why teachers like it</h2>
+      <div class="why">
+        <div><b>Works offline</b><span>Once it&rsquo;s open, it keeps working when the school internet drops. No VPN needed in China.</span></div>
+        <div><b>Made for the big screen</b><span>Big desks and buttons in Teach mode, easy to tap on a Seewo or any smartboard.</span></div>
+        <div><b>Any device</b><span>Smartboards, laptops, tablets and phones. Install it like an app.</span></div>
+        <div><b>Private by design</b><span>No accounts. Your classes stay on your device and are never sent anywhere.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lessons">
+    <div class="card packs-promo">
+      <img src="../lessons/my-friends/img/cover.jpg" alt="My Friends lesson pack cover">
+      <div>
+        <h2>New: ESL lesson packs</h2>
+        <p class="lead">Complete lessons made for the same big screen: interactive slides, touchscreen games that work offline, a printable and a teacher guide. First up: <b>My Friends</b> — low English, Pre-A1–A1.</p>
+        <div class="hero-btns" style="justify-content:flex-start"><a class="btn btn-go" href="../lessons/my-friends/">See My Friends</a><a class="btn btn-sand" href="../lessons/my-friends/demo.html">▶ Try the demo</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="card">
+      <h2>Everything you need, in one board</h2>
+      <p class="lead">Teach mode keeps the screen clean for the lesson. Set up mode is there when you need to get ready.</p>
+      <div class="feats">
+        <div class="feat"><div class="ic">🪑</div><h3>Seating chart &amp; points</h3><p>Paste your class list and the desks fill themselves. Give points with one tap, or to the whole class at once.</p></div>
+        <div class="feat"><div class="ic">📜</div><h3>Picture rules</h3><p>Friendly picture rules that young and ESL learners understand. Award a rule straight from a student&rsquo;s desk.</p></div>
+        <div class="feat"><div class="ic">🎖️</div><h3>Class Jobs</h3><p>Share out classroom jobs at random in one tap. Add your own jobs any time.</p></div>
+        <div class="feat"><div class="ic">📝</div><h3>Notes</h3><p>Quick notes for each student, plus class notes with a page for each subject. Copy a summary for reports.</p></div>
+        <div class="feat"><div class="ic">🎲</div><h3>Games &amp; Tools</h3><p>Wheel of Names, Timer, Voice Meter, Groups, Dice, Bingo, Flashcards, Music, and a Floating Bubble that stays on top of your slides.</p></div>
+        <div class="feat"><div class="ic">🌅</div><h3>Daily Helper</h3><p>A short daily routine: the weather, feelings and the date, led by today&rsquo;s helper.</p></div>
+        <div class="feat"><div class="ic">🐙</div><h3>Class mascot</h3><p>Each class raises its own sea creature that grows as the class earns points together.</p></div>
+        <div class="feat"><div class="ic">🧾</div><h3>Tests</h3><p>Make a printable vocabulary quiz from your flashcards, at the level you choose.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="card">
+      <h2>Try it free. Unlock when you&rsquo;re ready.</h2>
+      <p class="lead">One payment, yours to keep. No subscription.</p>
+      <div class="plans">
+        <div class="plan">
+          <h3>Free</h3>
+          <div class="price">Free <small>for as long as you like</small></div>
+          <ul>
+            <li>2 classes</li>
+            <li>Seating chart, points and picture rules</li>
+            <li>Teach and Set up modes</li>
+            <li>Class Jobs and class notes</li>
+            <li>Wheel of Names, Timer, Groups, Dice and Floating Bubble</li>
+            <li>A mascot for your first class</li>
+          </ul>
+          <a class="btn btn-sand btn-small" href="../board/">Open the free board</a>
+        </div>
+        <div class="plan full">
+          <h3>Full version</h3>
+          <div class="price">R180 <small>&middot; &yen;75 &middot; US$10</small></div>
+          <ul>
+            <li>Up to 10 classes (more on request)</li>
+            <li>Everything in Free, plus:</li>
+            <li>Student notes and profiles, with report summaries</li>
+            <li>Voice Meter, Bingo, Flashcards and Music</li>
+            <li>Daily Helper and Students of the Day</li>
+            <li>Tests, and a mascot for every class</li>
+          </ul>
+          <a class="btn btn-go btn-small" href="#buy">How to buy</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="buy">
+    <div class="card">
+      <h2>How to buy</h2>
+      <ol class="steps">
+        <li><b>Try the board free</b> and set up a class, so you know it suits you.</li>
+        <li><b>Pay</b> the way that suits where you live (below).</li>
+        <li><b>Get your code.</b> In the board, tap any padlock and type your name and code. Done!</li>
+      </ol>
+      <div class="pay">
+        <div class="way">
+          <div class="way-head"><b>South Africa</b><span>R180</span></div>
+          <p>Pay by card or EFT with Payfast. Message me and I&rsquo;ll send your payment link.</p>
+          <div class="way-btns">
+            <a class="btn btn-sand btn-small" href="mailto:danzigal1988@gmail.com?subject=Ocean%20Board%20%E2%80%93%20Payfast%20(South%20Africa)&amp;body=Name%20for%20my%20code%3A%20%0ANumber%20of%20classes%3A%2010%0A">Email</a>
+            <a class="btn btn-sand btn-small" href="https://wa.me/27761655758?text=Hi!%20I%27d%20like%20to%20buy%20the%20Ocean%20Board%20(Payfast%2C%20South%20Africa).">WhatsApp</a>
+          </div>
+        </div>
+        <div class="way">
+          <div class="way-head"><b>China</b><span>&yen;75</span></div>
+          <p>Pay with WeChat Pay. Add me on WeChat: <strong>DanziGal88</strong></p>
+        </div>
+        <div class="way">
+          <div class="way-head"><b>Everywhere else</b><span>US$10</span></div>
+          <p>Pay by card or bank transfer through a secure Payoneer payment link. Email me and I&rsquo;ll send it.</p>
+          <div class="way-btns">
+            <a class="btn btn-sand btn-small" href="mailto:danzigal1988@gmail.com?subject=Ocean%20Board%20%E2%80%93%20Payoneer%20payment%20link&amp;body=Name%20for%20my%20code%3A%20%0ANumber%20of%20classes%3A%2010%0ACountry%3A%20%0A">Ask for a payment link</a>
+          </div>
+        </div>
+      </div>
+      <p class="lead" style="margin:14px 0 0;">Your unlock code is sent as soon as payment arrives. Buying for your whole school, or need more than 10 classes? Just ask.</p>
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="card">
+      <h2>Install it like an app</h2>
+      <p class="lead">Open <a href="../board/">the board</a> first, then:</p>
+      <div class="install">
+        <div><b>Chrome (computer)</b>Click the install icon at the right of the address bar, or &#8942; &rarr; Cast, save and share &rarr; Install page as app.</div>
+        <div><b>Edge / Seewo boards</b>&#8943; &rarr; Apps &rarr; Install this site as an app.</div>
+        <div><b>Android</b>Chrome &#8942; &rarr; Add to Home screen &rarr; Install. An Android app is also coming to Google Play.</div>
+        <div><b>iPhone / iPad</b>In Safari, tap Share &rarr; Add to Home Screen.</div>
+      </div>
+      <p class="lead" style="margin:14px 0 0;">New versions arrive by themselves whenever you open the board with internet.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="card faq">
+      <h2>Questions</h2>
+      <details><summary>Do I need an account or internet?</summary><p>No account. You need internet the first time you open the board. After that, it works offline and updates itself when you&rsquo;re back online.</p></details>
+      <details><summary>Where are my classes saved?</summary><p>Only on your own device. Use Download Backup in the board every week or two to keep a copy, and to move classes to another computer.</p></details>
+      <details><summary>What student information should I put in?</summary><p>First names or nicknames only. The board is your own classroom notebook, not an official school record. Keep official reports in your school&rsquo;s system. <a href="../privacy.html">Privacy policy</a></p></details>
+      <details><summary>Can I use it on more than one computer?</summary><p>Yes. Enter your name and code once on each computer. With the backup, you can bring just the classes you need onto each classroom computer.</p></details>
+      <details><summary>Is there a guide?</summary><p>Yes. Tap <b>How to use</b> at the top of the board for a short guide to every feature.</p></details>
+    </div>
+  </section>
+
+  <footer>
+    <p>Made with care by a teacher &middot; <b>ZippyTeach</b></p>
+    <p><a href="mailto:danzigal1988@gmail.com?subject=Ocean%20Board">danzigal1988@gmail.com</a> &middot; WeChat DanziGal88 &middot; <a href="https://wa.me/27761655758">WhatsApp</a> &middot; <a href="../privacy.html">Privacy</a></p>
+  </footer>
+
+</div>
+</body>
+</html>

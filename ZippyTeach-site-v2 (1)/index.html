@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZippyTeach — classroom tools and lessons for ESL teachers</title>
+<meta name="description" content="Classroom tools and ready-to-teach lessons made by an ESL teacher: the Ocean Board and Jungle Board classroom management boards, and My Friends lesson packs. Works offline on smartboards.">
+<meta name="theme-color" content="#0a6ea8">
+<link rel="icon" href="board/icons/icon-192-plain.png">
+<style>
+  :root{
+    --ink:#12264a; --soft:#4a5d73; --sand:#fdf6e8; --sand-lo:#e6d8b8; --edge:#0a3a47;
+    --deep:#023e8a; --sea:#0a6ea8; --kelp:#06a97e; --jungle:#2E7D32; --purple:#5B4A9E; --sun:#f0a020;
+  }
+  *{box-sizing:border-box} html{scroll-behavior:smooth;background:var(--sand)}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+    color:var(--ink);background:var(--sand);line-height:1.55}
+  a{color:var(--sea)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px;color:var(--deep);text-decoration:none;font-weight:800;font-size:19px}
+  .brand img{width:42px;height:42px;border-radius:11px}
+  .nav{display:flex;gap:18px;flex-wrap:wrap}
+  .nav a{color:var(--deep);text-decoration:none;font-weight:700;font-size:15px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 26px;border-radius:14px;font-weight:800;font-size:17px;
+    text-decoration:none;border:2.5px solid var(--edge);box-shadow:0 5px 0 rgba(3,18,24,.3);cursor:pointer;transition:transform .1s,box-shadow .1s}
+  .btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(3,18,24,.3)}
+  .btn:focus-visible,a:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+  .btn-go{background:linear-gradient(180deg,#3fe0b0,#06a97e);color:#fff}
+  .btn-sand{background:#fff;color:var(--deep)}
+  .btn-small{padding:10px 18px;font-size:15px;border-radius:12px}
+  .hero{text-align:center;padding:34px 0 26px}
+  .hero h1{font-size:clamp(32px,5.6vw,52px);line-height:1.08;margin:0 0 14px;color:var(--deep);text-wrap:balance}
+  .hero p{font-size:clamp(17px,2.3vw,21px);max-width:700px;margin:0 auto 22px;color:var(--soft)}
+  .hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .hero-note{margin-top:14px;font-size:14.5px;color:var(--soft)}
+  section{margin:30px 0}
+  h2.sec{color:var(--deep);font-size:clamp(23px,3.2vw,29px);margin:0 0 4px;text-align:center}
+  p.sub{color:var(--soft);text-align:center;margin:0 0 20px}
+  .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
+  .prod{background:#fff;border:3px solid var(--sand-lo);border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+  .prod::before{content:"";position:absolute;inset:0 0 auto;height:8px;background:var(--c)}
+  .prod .ic{font-size:34px;line-height:1;margin-top:6px}
+  .prod h3{margin:0;font-size:22px;color:var(--c)}
+  .prod .tag{font-size:12.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--soft)}
+  .prod p{margin:0;color:var(--soft);font-size:15.5px}
+  .prod ul{margin:0;padding-left:20px;color:var(--soft);font-size:15px}
+  .prod li{margin:3px 0}
+  .prod .price{font-weight:800;color:var(--ink);font-size:16.5px;margin-top:auto;padding-top:8px}
+  .prod .btns{display:flex;gap:10px;flex-wrap:wrap}
+  .ocean{--c:var(--sea)} .jungle{--c:var(--jungle)} .packs{--c:var(--purple)}
+  .packs .btn-go{background:var(--purple);border-color:#2f2560}
+  .jungle .btn-go{background:linear-gradient(180deg,#6cc36f,#2E7D32)}
+  .why{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px}
+  .why div{background:#fff;border:2px solid var(--sand-lo);border-radius:16px;padding:16px 18px}
+  .why b{display:block;color:var(--deep);font-size:16px;margin-bottom:4px}
+  .why span{color:var(--soft);font-size:14.5px}
+  .about{background:#fff;border:3px solid var(--sand-lo);border-radius:22px;padding:26px;display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+  .about img{width:110px;height:110px;border-radius:26px;border:3px solid var(--sand-lo)}
+  .about h2{margin:0 0 6px;color:var(--deep);font-size:23px}
+  .about p{margin:0;color:var(--soft)}
+  footer{text-align:center;color:var(--soft);padding:26px 0 40px;font-size:14px}
+  footer a{color:var(--deep);font-weight:700}
+  @media (max-width:600px){.prod{padding:20px 16px}.btn{width:100%}.about{grid-template-columns:1fr;text-align:center;justify-items:center}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="./"><img src="board/icons/icon-192-plain.png" alt="">ZippyTeach</a>
+    <nav class="nav">
+      <a href="#boards">Boards</a>
+      <a href="lessons/">Lesson packs</a>
+      <a href="#why">Why teachers like it</a>
+      <a href="mailto:danzigal1988@gmail.com?subject=ZippyTeach">Contact</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <h1>Classroom tools and lessons,<br>made by a teacher</h1>
+    <p>ZippyTeach makes the things I needed in my own ESL classroom: a classroom management board for the big screen at the front, and ready-to-teach lesson packs with games children can play with their fingers. Everything works offline.</p>
+    <div class="hero-btns">
+      <a class="btn btn-go" href="board/">▶ Try the board free</a>
+      <a class="btn btn-sand" href="lessons/">See the lesson packs</a>
+    </div>
+    <p class="hero-note">No sign-up, no accounts. Works in Chrome and Edge, on Seewo and other smartboards.</p>
+  </div>
+
+  <section id="boards">
+    <h2 class="sec">What’s in ZippyTeach</h2>
+    <p class="sub">Two classroom boards and a growing set of lesson packs.</p>
+    <div class="products">
+
+      <div class="prod ocean">
+        <div class="ic">🐙</div>
+        <span class="tag">Classroom board</span>
+        <h3>Ocean Board</h3>
+        <p>Seating chart, points, picture rules, class jobs, notes, games and tools in one place, with a sea creature mascot each class raises together.</p>
+        <ul><li>Free for 2 classes, for as long as you like</li><li>Works offline once it’s open</li><li>Install it like an app</li></ul>
+        <div class="price">Free · Full version R180 · ¥75 · US$10</div>
+        <div class="btns"><a class="btn btn-go btn-small" href="board/">▶ Try it free</a><a class="btn btn-sand btn-small" href="ocean-board/">Pricing &amp; guide</a></div>
+      </div>
+
+      <div class="prod jungle">
+        <div class="ic">🐒</div>
+        <span class="tag">Classroom board · trial</span>
+        <h3>Jungle Board</h3>
+        <p>The same board in a jungle theme, for classes that want a livelier look. Currently a free trial while teachers test it and send feedback.</p>
+        <ul><li>Same tools as the Ocean Board</li><li>Jungle mascots and art</li><li>Feedback welcome</li></ul>
+        <div class="price">Free trial</div>
+        <div class="btns"><a class="btn btn-go btn-small" href="jungle-board-landing-page.html">See Jungle Board</a><a class="btn btn-sand btn-small" href="jungle-board-guide.html">Teacher guide</a></div>
+      </div>
+
+      <div class="prod packs">
+        <div class="ic">📚</div>
+        <span class="tag">Lesson packs</span>
+        <h3>My Friends</h3>
+        <p>A complete lesson on describing a friend for low-level learners: 21 interactive slides, 7 touchscreen games, a mini-book printable and a teacher guide.</p>
+        <ul><li>Low English · Pre-A1–A1</li><li>Games work with no internet</li><li>Try two games free first</li></ul>
+        <div class="price">US$4 · ¥25 · R70</div>
+        <div class="btns"><a class="btn btn-go btn-small" href="lessons/my-friends/">See the pack</a><a class="btn btn-sand btn-small" href="lessons/my-friends/demo.html">▶ Try the demo</a></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="why">
+    <h2 class="sec">Why teachers like it</h2>
+    <p class="sub">Built in a real classroom, with 30 children and a wobbly internet connection.</p>
+    <div class="why">
+      <div><b>Works offline</b><span>Once it’s open, it keeps working when the school internet drops. No VPN needed in China.</span></div>
+      <div><b>Made for the big screen</b><span>Big buttons and cards, easy to tap on a Seewo or any smartboard.</span></div>
+      <div><b>No accounts</b><span>Nothing to sign up for. Your classes stay on your own device.</span></div>
+      <div><b>One payment</b><span>Buy it once and keep it. No subscriptions.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="about">
+      <img src="board/icons/icon-192-plain.png" alt="">
+      <div>
+        <h2>Made by a teacher, not a software company</h2>
+        <p>I’m an ESL teacher with eight classes of about thirty children. Everything here started as something I needed on a Monday morning and built that weekend. If something would help in your classroom, tell me — a lot of what’s here came from teachers asking. Say hello on WeChat <b>DanziGal88</b> or by email.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Made with care by a teacher · <b>ZippyTeach</b></p>
+    <p><a href="mailto:danzigal1988@gmail.com?subject=ZippyTeach">danzigal1988@gmail.com</a> · WeChat DanziGal88 · <a href="https://wa.me/27761655758">WhatsApp</a> · <a href="privacy.html">Privacy</a></p>
+  </footer>
+</div>
+</body>
+</html>
