@@ -3,204 +3,153 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Friends ESL Lesson Pack | ZippyTeach</title>
-<meta name="description" content="A complete ESL lesson for low-level learners (Pre-A1–A1): describe a friend with He/She, His/Her and often + s. 20 interactive slides, 7 offline touchscreen games, a mini-book printable and a teacher guide.">
-<meta name="theme-color" content="#5B4A9E">
-<link rel="icon" href="../../board/icons/icon-192-plain.png">
+<title>ZippyTeach — classroom tools and lessons for ESL teachers</title>
+<meta name="description" content="Classroom tools and ready-to-teach lessons made by an ESL teacher: the Ocean Board and Jungle Board classroom management boards, and My Friends lesson packs. Works offline on smartboards.">
+<meta name="theme-color" content="#0a6ea8">
+<link rel="icon" href="board/icons/icon-192-plain.png">
 <style>
-:root{--ground:#EEEAF8;--panel:#fff;--ink:#1F1F2E;--soft:#5F6170;--purple:#5B4A9E;--deep:#463882;--pink:#D6336C;--blue:#2F6FB5;--green:#2E9E5B;--sun:#FFD66B;--line:#D5CFEA}
-*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--ground)}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--ground);line-height:1.55}
-a{color:var(--purple)}
-.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:10px;color:var(--purple);text-decoration:none;font-weight:800;font-size:18px}
-.brand img{width:40px;height:40px;border-radius:10px}
-.nav{display:flex;gap:18px;flex-wrap:wrap}.nav a{color:var(--deep);text-decoration:none;font-weight:700;font-size:15px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 26px;border-radius:14px;font-weight:800;font-size:17px;text-decoration:none;border:2.5px solid var(--deep);box-shadow:0 5px 0 rgba(40,25,90,.25);cursor:pointer;transition:transform .1s,box-shadow .1s}
-.btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(40,25,90,.25)}
-.btn:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
-.btn-go{background:var(--purple);color:#fff}.btn-sun{background:var(--sun);color:var(--deep)}.btn-plain{background:#fff;color:var(--deep)}
-.btn-small{padding:9px 16px;font-size:14px;border-radius:11px}
-section{margin:26px 0}
-.card{background:var(--panel);border:3px solid var(--line);border-radius:22px;padding:28px}
-.card h2{margin:0 0 6px;color:var(--purple);font-size:clamp(24px,3.4vw,30px);text-wrap:balance}
-.lead{color:var(--soft);margin:0 0 18px;font-size:16px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.chip{font-size:14px;font-weight:700;padding:3px 12px;border-radius:999px;background:var(--ground)}
-.k1{background:#E8F0FB;color:var(--blue)}.k2{background:#FDE8EF;color:var(--pink)}.k3{background:#E6F5EC;color:var(--green)}.k4{background:#FFF2CC;color:#8A5A00}.g{background:var(--purple);color:#fff}
-footer{text-align:center;color:var(--soft);padding:26px 0 40px;font-size:14px}
-@media (max-width:600px){.card{padding:20px 16px;border-radius:18px}.btn{width:100%}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
-.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:32px;align-items:center;padding:18px 0 6px}
-.hero img{width:100%;border-radius:24px;display:block;box-shadow:0 12px 30px rgba(60,40,120,.2)}
-.eyebrow{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--pink)}
-.hero h1{font-size:clamp(38px,6vw,60px);line-height:1.05;margin:6px 0 12px;color:var(--purple)}
-.hero p{font-size:18px;color:var(--soft);margin:0 0 16px}
-.hero .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
-.priceline{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.priceline b{font-size:30px;color:var(--deep)}.priceline span{color:var(--soft);font-weight:600}
-.inside{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.inside div{background:var(--ground);border-radius:14px;padding:16px}
-.inside .ic{font-size:28px;line-height:1}
-.inside h3{margin:8px 0 4px;font-size:17px;color:var(--deep)}
-.inside p{margin:0;font-size:14.5px;color:var(--soft)}
-.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.gallery figure{margin:0}
-.gallery img{width:100%;border-radius:16px;border:2px solid var(--line);display:block}
-.gallery figcaption{font-size:14px;color:var(--soft);margin-top:6px}
-.focus{display:grid;grid-template-columns:8.5em 1fr;gap:10px 14px;align-items:center}
-.focus>b{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft)}
-.plan{width:100%;border-collapse:collapse;font-size:15px}
-.plan td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-.plan td:first-child{font-weight:800;color:var(--pink);white-space:nowrap;font-variant-numeric:tabular-nums}
-.plan td:nth-child(2){font-weight:700;white-space:nowrap}
-.tablewrap{overflow-x:auto}
-.demo{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;background:var(--purple);color:#fff;border-color:var(--purple)}
-.demo h2{color:#fff}.demo .lead{color:#E6E1F7}
-.demo .crowd{display:flex;align-items:flex-end;gap:4px;height:130px}
-.demo .crowd svg{height:100%;width:auto}
-.steps{counter-reset:st;list-style:none;padding:0;margin:0 0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.steps li{counter-increment:st;background:var(--ground);border-radius:14px;padding:14px 14px 14px 58px;position:relative;font-size:15px}
-.steps li::before{content:counter(st);position:absolute;left:14px;top:14px;width:32px;height:32px;border-radius:50%;background:var(--purple);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
-.pay{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
-.way{border:2px solid var(--line);border-radius:14px;padding:16px}
-.way-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
-.way-head b{font-size:17px;color:var(--deep)}.way-head span{color:var(--pink);font-weight:800}
-.way p{margin:6px 0 10px;font-size:14.5px;color:var(--soft)}
-.way-btns{display:flex;gap:8px;flex-wrap:wrap}
-.faq details{border:2px solid var(--line);border-radius:12px;margin-bottom:8px}
-.faq summary{cursor:pointer;padding:13px 16px;font-weight:800;color:var(--deep)}
-.faq p{margin:0 16px 14px;color:var(--soft);font-size:15px}
-@media (max-width:760px){.hero,.demo{grid-template-columns:1fr}.gallery{grid-template-columns:1fr}.focus{grid-template-columns:1fr}.demo .crowd{height:100px}}
+  :root{
+    --ink:#12264a; --soft:#4a5d73; --sand:#fdf6e8; --sand-lo:#e6d8b8; --edge:#0a3a47;
+    --deep:#023e8a; --sea:#0a6ea8; --kelp:#06a97e; --jungle:#2E7D32; --purple:#5B4A9E; --sun:#f0a020;
+  }
+  *{box-sizing:border-box} html{scroll-behavior:smooth;background:var(--sand)}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+    color:var(--ink);background:var(--sand);line-height:1.55}
+  a{color:var(--sea)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px;color:var(--deep);text-decoration:none;font-weight:800;font-size:19px}
+  .brand img{width:42px;height:42px;border-radius:11px}
+  .nav{display:flex;gap:18px;flex-wrap:wrap}
+  .nav a{color:var(--deep);text-decoration:none;font-weight:700;font-size:15px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 26px;border-radius:14px;font-weight:800;font-size:17px;
+    text-decoration:none;border:2.5px solid var(--edge);box-shadow:0 5px 0 rgba(3,18,24,.3);cursor:pointer;transition:transform .1s,box-shadow .1s}
+  .btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(3,18,24,.3)}
+  .btn:focus-visible,a:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+  .btn-go{background:linear-gradient(180deg,#3fe0b0,#06a97e);color:#fff}
+  .btn-sand{background:#fff;color:var(--deep)}
+  .btn-small{padding:10px 18px;font-size:15px;border-radius:12px}
+  .hero{text-align:center;padding:34px 0 26px}
+  .hero h1{font-size:clamp(32px,5.6vw,52px);line-height:1.08;margin:0 0 14px;color:var(--deep);text-wrap:balance}
+  .hero p{font-size:clamp(17px,2.3vw,21px);max-width:700px;margin:0 auto 22px;color:var(--soft)}
+  .hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .hero-note{margin-top:14px;font-size:14.5px;color:var(--soft)}
+  section{margin:30px 0}
+  h2.sec{color:var(--deep);font-size:clamp(23px,3.2vw,29px);margin:0 0 4px;text-align:center}
+  p.sub{color:var(--soft);text-align:center;margin:0 0 20px}
+  .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
+  .prod{background:#fff;border:3px solid var(--sand-lo);border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+  .prod::before{content:"";position:absolute;inset:0 0 auto;height:8px;background:var(--c)}
+  .prod .ic{font-size:34px;line-height:1;margin-top:6px}
+  .prod h3{margin:0;font-size:22px;color:var(--c)}
+  .prod .tag{font-size:12.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--soft)}
+  .prod p{margin:0;color:var(--soft);font-size:15.5px}
+  .prod ul{margin:0;padding-left:20px;color:var(--soft);font-size:15px}
+  .prod li{margin:3px 0}
+  .prod .price{font-weight:800;color:var(--ink);font-size:16.5px;margin-top:auto;padding-top:8px}
+  .prod .btns{display:flex;gap:10px;flex-wrap:wrap}
+  .ocean{--c:var(--sea)} .jungle{--c:var(--jungle)} .packs{--c:var(--purple)}
+  .packs .btn-go{background:var(--purple);border-color:#2f2560}
+  .jungle .btn-go{background:linear-gradient(180deg,#6cc36f,#2E7D32)}
+  .why{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px}
+  .why div{background:#fff;border:2px solid var(--sand-lo);border-radius:16px;padding:16px 18px}
+  .why b{display:block;color:var(--deep);font-size:16px;margin-bottom:4px}
+  .why span{color:var(--soft);font-size:14.5px}
+  .about{background:#fff;border:3px solid var(--sand-lo);border-radius:22px;padding:26px;display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+  .about img{width:110px;height:110px;border-radius:26px;border:3px solid var(--sand-lo)}
+  .about h2{margin:0 0 6px;color:var(--deep);font-size:23px}
+  .about p{margin:0;color:var(--soft)}
+  footer{text-align:center;color:var(--soft);padding:26px 0 40px;font-size:14px}
+  footer a{color:var(--deep);font-weight:700}
+  @media (max-width:600px){.prod{padding:20px 16px}.btn{width:100%}.about{grid-template-columns:1fr;text-align:center;justify-items:center}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
+
   <header class="top">
-    <a class="brand" href="../../"><img src="../../board/icons/icon-192-plain.png" alt="">ZippyTeach</a>
-    <nav class="nav"><a href="../../">ZippyTeach</a><a href="../../ocean-board/">Ocean Board</a><a href="../">Lesson packs</a><a href="#inside">What’s inside</a><a href="#buy">Buy</a></nav>
+    <a class="brand" href="./"><img src="board/icons/icon-192-plain.png" alt="">ZippyTeach</a>
+    <nav class="nav">
+      <a href="#boards">Boards</a>
+      <a href="lessons/">Lesson packs</a>
+      <a href="#why">Why teachers like it</a>
+      <a href="mailto:danzigal1988@gmail.com?subject=ZippyTeach">Contact</a>
+    </nav>
   </header>
 
   <div class="hero">
-    <img src="img/cover.jpg" alt="My Friends lesson pack: six cartoon friends, 20 interactive slides, 7 touchscreen games, mini book and teacher guide">
-    <div>
-      <div class="eyebrow">ESL lesson pack · Low English · Pre-A1–A1</div>
-      <h1>My Friends</h1>
-      <p>A complete lesson on describing a friend. Children meet six cartoon friends, play touchscreen games with He/She and His/Her, then make and read their own mini book about their best friend.</p>
-      <div class="priceline"><b>US$4</b><span>· ¥25 · R70 · one payment, yours to keep</span></div>
-      <div class="btns"><a class="btn btn-go" href="demo.html">▶ Try the free demo</a><a class="btn btn-plain" href="#buy">How to buy</a></div>
-      <p style="font-size:14px;margin:14px 0 0">For Pre-A1–A1 learners · Pairs with the PEP “My friends” unit · Works offline on Seewo and smartboards</p>
+    <h1>Classroom tools and lessons,<br>made by a teacher</h1>
+    <p>ZippyTeach makes the things I needed in my own ESL classroom: a classroom management board for the big screen at the front, and ready-to-teach lesson packs with games children can play with their fingers. Everything works offline.</p>
+    <div class="hero-btns">
+      <a class="btn btn-go" href="board/">▶ Try the board free</a>
+      <a class="btn btn-sand" href="lessons/">See the lesson packs</a>
     </div>
+    <p class="hero-note">No sign-up, no accounts. Works in Chrome and Edge, on Seewo and other smartboards.</p>
   </div>
 
-  <section id="inside">
-    <div class="card">
-      <h2>What’s inside</h2>
-      <p class="lead">Everything for one 40-minute lesson, plus games you can come back to all unit.</p>
-      <div class="inside">
-        <div><div class="ic">🖥️</div><h3>21 interactive slides</h3><p>A “Meet my friends” cast slide, tap-to-reveal clues, drag-and-drop His/Her and sentence building, and speaker notes with timings.</p></div>
-        <div><div class="ic">🎮</div><h3>7 touchscreen games</h3><p>Meet my friends, Mystery friend, His or Her?, Sentence builder, Stand up spinner, a team board game and a timer.</p></div>
-        <div><div class="ic">📖</div><h3>Mini-book printable</h3><p>One A4 sheet folds into an 8-page book, with word banks for support. Includes a finished example.</p></div>
-        <div><div class="ic">🧭</div><h3>Teacher guide</h3><p>Two pages: lesson plan, language focus, set-up steps, and ways to make it easier or harder.</p></div>
+  <section id="boards">
+    <h2 class="sec">What’s in ZippyTeach</h2>
+    <p class="sub">Two classroom boards and a growing set of lesson packs.</p>
+    <div class="products">
+
+      <div class="prod ocean">
+        <div class="ic">🐙</div>
+        <span class="tag">Classroom board</span>
+        <h3>Ocean Board</h3>
+        <p>Seating chart, points, picture rules, class jobs, notes, games and tools in one place, with a sea creature mascot each class raises together.</p>
+        <ul><li>Free for 2 classes, for as long as you like</li><li>Works offline once it’s open</li><li>Install it like an app</li></ul>
+        <div class="price">Free · Full version R180 · ¥75 · US$10</div>
+        <div class="btns"><a class="btn btn-go btn-small" href="board/">▶ Try it free</a><a class="btn btn-sand btn-small" href="ocean-board/">Pricing &amp; guide</a></div>
       </div>
-    </div>
-  </section>
 
-  <section>
-    <div class="card">
-      <h2>Take a look</h2>
-      <div class="gallery">
-        <figure><img src="img/games.jpg" alt="Screenshots of the touchscreen games" loading="lazy"><figcaption>The games: big buttons, real finger dragging, sounds and confetti.</figcaption></figure>
-        <figure><img src="img/slides.jpg" alt="Six of the lesson slides" loading="lazy"><figcaption>The slides: warm-up, words, model dialogue, drag activities, book making.</figcaption></figure>
-        <figure><img src="img/book.jpg" alt="The mini-book printable, finished example" loading="lazy"><figcaption>The mini book: cover, six pages and a back page.</figcaption></figure>
-        <figure><img src="img/guide.jpg" alt="The teacher guide" loading="lazy"><figcaption>The teacher guide: the 40-minute plan at a glance.</figcaption></figure>
+      <div class="prod jungle">
+        <div class="ic">🐒</div>
+        <span class="tag">Classroom board · trial</span>
+        <h3>Jungle Board</h3>
+        <p>The same board in a jungle theme, for classes that want a livelier look. Currently a free trial while teachers test it and send feedback.</p>
+        <ul><li>Same tools as the Ocean Board</li><li>Jungle mascots and art</li><li>Feedback welcome</li></ul>
+        <div class="price">Free trial</div>
+        <div class="btns"><a class="btn btn-go btn-small" href="jungle-board-landing-page.html">See Jungle Board</a><a class="btn btn-sand btn-small" href="jungle-board-guide.html">Teacher guide</a></div>
       </div>
-    </div>
-  </section>
 
-  <section>
-    <div class="card demo">
-      <div class="crowd"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 600"><g fill="none" stroke="#1a1a1a" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="103.0" y="305.20000000000005" width="20" height="266.79999999999995" rx="6" fill="#2F5FA8"/><rect x="137.0" y="305.20000000000005" width="20" height="266.79999999999995" rx="6" fill="#2F5FA8"/><path d="M97.0 572 h34 c6 0 8 16 -2 16 h-30 c-8 0 -8 -16 0 -16 z" fill="#3B3B3B"/><path d="M131.0 572 h34 c6 0 8 16 -2 16 h-30 c-8 0 -8 -16 0 -16 z" fill="#3B3B3B"/><rect x="97.0" y="154" width="66" height="155.20000000000002" rx="16" fill="#3FA34D"/><path d="M101.0 162 L85.0 308.22400000000005" stroke="#3FA34D" stroke-width="20" stroke-linecap="round" fill="none"/><circle cx="85.0" cy="312.22400000000005" r="12.4" fill="#F7D9BC"/><path d="M159.0 162 L175.0 308.22400000000005" stroke="#3FA34D" stroke-width="20" stroke-linecap="round" fill="none"/><circle cx="175.0" cy="312.22400000000005" r="12.4" fill="#F7D9BC"/><path d="M116 154 L130 170 L144 154" fill="#fff"/><rect x="120" y="136" width="20" height="20" fill="#F7D9BC" stroke="none"/><circle cx="82" cy="90" r="10" fill="#F7D9BC"/><circle cx="178" cy="90" r="10" fill="#F7D9BC"/><ellipse cx="130" cy="86" rx="50" ry="56" fill="#F7D9BC"/><path d="M78 88 C78 36 106 20 130 22 C160 20 182 36 182 88 C174 62 164 56 154 54 C136 68 102 66 98 54 C86 60 82 70 78 88 Z" fill="#8B5E34"/><g stroke-width="3"><circle cx="110" cy="90" r="10" fill="#fff"/></g><circle cx="110" cy="91" r="5.5" fill="#7A4A21" stroke="none"/><circle cx="110" cy="91" r="2.3" fill="#1a1a1a" stroke="none"/><circle cx="112" cy="88" r="1.6" fill="#fff" stroke="none"/><g stroke-width="3"><circle cx="150" cy="90" r="10" fill="#fff"/></g><circle cx="150" cy="91" r="5.5" fill="#7A4A21" stroke="none"/><circle cx="150" cy="91" r="2.3" fill="#1a1a1a" stroke="none"/><circle cx="152" cy="88" r="1.6" fill="#fff" stroke="none"/><path d="M96 70 q12 -7 24 -2" stroke-width="3.5"/><path d="M140 68 q12 -5 24 2" stroke-width="3.5"/><path d="M114 114 q16 16 32 0" stroke-width="4"/><ellipse cx="98" cy="108" rx="10" ry="6" fill="#FFB3C6" stroke="none" opacity=".8"/><ellipse cx="162" cy="108" rx="10" ry="6" fill="#FFB3C6" stroke="none" opacity=".8"/></g></svg><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 600"><g fill="none" stroke="#1a1a1a" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M74 246 C66 346 82 386 96 396 L164 396 C178 386 194 346 186 246 Z" fill="#2B2B2B"/><rect x="101.36" y="414.7" width="16" height="157.3" rx="6" fill="#F7D9BC"/><rect x="142.64" y="414.7" width="16" height="157.3" rx="6" fill="#F7D9BC"/><path d="M93.36 572 h34 c6 0 8 16 -2 16 h-30 c-8 0 -8 -16 0 -16 z" fill="#3B3B3B"/><path d="M134.64 572 h34 c6 0 8 16 -2 16 h-30 c-8 0 -8 -16 0 -16 z" fill="#3B3B3B"/><path d="M87.0 318 Q87.0 304 101.0 304 H159.0 Q173.0 304 173.0 318 L203.0 484.7 H57.0 Z" fill="#F06292"/><path d="M91.0 312 L75.0 416.914" stroke="#F7D9BC" stroke-width="20" stroke-linecap="round" fill="none"/><path d="M91.0 312 L83.0 351.42388" stroke="#F06292" stroke-width="24" stroke-linecap="round" fill="none"/><circle cx="75.0" cy="420.914" r="12.4" fill="#F7D9BC"/><path d="M169.0 314 L203.0 264 L209.0 224" stroke="#F7D9BC" stroke-width="20" stroke-linecap="round" fill="none"/><path d="M169.0 314 L191.0 286" stroke="#F06292" stroke-width="24" stroke-linecap="round" fill="none"/><circle cx="211.0" cy="216" r="14.0" fill="#F7D9BC"/><rect x="120" y="286" width="20" height="20" fill="#F7D9BC" stroke="none"/><circle cx="82" cy="240" r="10" fill="#F7D9BC"/><circle cx="178" cy="240" r="10" fill="#F7D9BC"/><ellipse cx="130" cy="236" rx="50" ry="56" fill="#F7D9BC"/><path d="M78 238 C78 186 106 170 130 172 C160 170 182 186 182 238 C174 212 164 206 154 204 C136 218 102 216 98 204 C86 210 82 220 78 238 Z" fill="#2B2B2B"/><path d="M78 238 C74 276 76 316 84 336 L94 256 Z" fill="#2B2B2B"/><path d="M182 238 C186 276 184 316 176 336 L166 256 Z" fill="#2B2B2B"/><g stroke-width="3"><circle cx="110" cy="240" r="10" fill="#fff"/></g><circle cx="110" cy="241" r="5.5" fill="#2B2B2B" stroke="none"/><circle cx="110" cy="241" r="2.3" fill="#1a1a1a" stroke="none"/><circle cx="112" cy="238" r="1.6" fill="#fff" stroke="none"/><g stroke-width="3"><circle cx="150" cy="240" r="10" fill="#fff"/></g><circle cx="150" cy="241" r="5.5" fill="#2B2B2B" stroke="none"/><circle cx="150" cy="241" r="2.3" fill="#1a1a1a" stroke="none"/><circle cx="152" cy="238" r="1.6" fill="#fff" stroke="none"/><path d="M96 220 q12 -7 24 -2" stroke-width="3.5"/><path d="M140 218 q12 -5 24 2" stroke-width="3.5"/><path d="M114 264 q16 16 32 0" stroke-width="4"/><ellipse cx="98" cy="258" rx="10" ry="6" fill="#FFB3C6" stroke="none" opacity=".8"/><ellipse cx="162" cy="258" rx="10" ry="6" fill="#FFB3C6" stroke="none" opacity=".8"/></g></svg><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 600"><g fill="none" stroke="#1a1a1a" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="93.12" y="414.7" width="20" height="157.3" rx="6" fill="#E9B98E"/><rect x="146.88" y="414.7" width="20" height="157.3" rx="6" fill="#E9B98E"/><path d="M76.0 408.7 H184.0 L190.0 474.7 H134 L130 436.7 L126 474.7 H70.0 Z" fill="#2B2B2B"/><path d="M85.12 572 h38 c6 0 8 16 -2 16 h-34 c-8 0 -8 -16 0 -16 z" fill="#3B3B3B"/><path d="M138.88 572 h38 c6 0 8 16 -2 16 h-34 c-8 0 -8 -16 0 -16 z" fill="#3B3B3B"/><rect x="74.0" y="304" width="112" height="114.7" rx="16" fill="#E4572E"/><path d="M78.0 312 L62.0 416.914" stroke="#E9B98E" stroke-width="24" stroke-linecap="round" fill="none"/><path d="M78.0 312 L70.0 351.42388" stroke="#E4572E" stroke-width="28" stroke-linecap="round" fill="none"/><circle cx="62.0" cy="420.914" r="14.879999999999999" fill="#E9B98E"/><path d="M182.0 312 L198.0 416.914" stroke="#E9B98E" stroke-width="24" stroke-linecap="round" fill="none"/><path d="M182.0 312 L190.0 351.42388" stroke="#E4572E" stroke-width="28" stroke-linecap="round" fill="none"/><circle cx="198.0" cy="420.914" r="14.879999999999999" fill="#E9B98E"/><rect x="120" y="286" width="20" height="20" fill="#E9B98E" stroke="none"/><circle cx="82" cy="240" r="10" fill="#E9B98E"/><circle cx="178" cy="240" r="10" fill="#E9B98E"/><ellipse cx="130" cy="236" rx="50" ry="56" fill="#E9B98E"/><path d="M80 230 L82 192 L100 178 L110 162 L128 174 L140 158 L152 176 L172 170 L178 196 L180 230 C160 202 100 202 80 230 Z" fill="#2B2B2B"/><g stroke-width="3"><circle cx="110" cy="240" r="10" fill="#fff"/></g><circle cx="110" cy="241" r="5.5" fill="#7A4A21" stroke="none"/><circle cx="110" cy="241" r="2.3" fill="#1a1a1a" stroke="none"/><circle cx="112" cy="238" r="1.6" fill="#fff" stroke="none"/><g stroke-width="3"><circle cx="150" cy="240" r="10" fill="#fff"/></g><circle cx="150" cy="241" r="5.5" fill="#7A4A21" stroke="none"/><circle cx="150" cy="241" r="2.3" fill="#1a1a1a" stroke="none"/><circle cx="152" cy="238" r="1.6" fill="#fff" stroke="none"/><path d="M96 220 q12 -7 24 -2" stroke-width="3.5"/><path d="M140 218 q12 -5 24 2" stroke-width="3.5"/><path d="M110 262 Q130 296 150 262 Z" fill="#fff"/><path d="M122 276 q8 6 16 0" stroke="#E57373" stroke-width="4"/></g></svg><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 600"><g fill="none" stroke="#1a1a1a" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M174 64 C220 56 224 126 200 164 C210 116 194 86 170 80 Z" fill="#F2C94C"/><rect x="105.0" y="305.20000000000005" width="16" height="266.79999999999995" rx="6" fill="#F7D9BC"/><rect x="139.0" y="305.20000000000005" width="16" height="266.79999999999995" rx="6" fill="#F7D9BC"/><path d="M97.0 572 h34 c6 0 8 16 -2 16 h-30 c-8 0 -8 -16 0 -16 z" fill="#3B3B3B"/><path d="M131.0 572 h34 c6 0 8 16 -2 16 h-30 c-8 0 -8 -16 0 -16 z" fill="#3B3B3B"/><path d="M97.0 168 Q97.0 154 111.0 154 H149.0 Q163.0 154 163.0 168 L193.0 375.20000000000005 H67.0 Z" fill="#F4C13B"/><path d="M101.0 162 L85.0 308.22400000000005" stroke="#F7D9BC" stroke-width="20" stroke-linecap="round" fill="none"/><path d="M101.0 162 L93.0 218.77408000000003" stroke="#F4C13B" stroke-width="24" stroke-linecap="round" fill="none"/><circle cx="85.0" cy="312.22400000000005" r="12.4" fill="#F7D9BC"/><path d="M159.0 162 L175.0 308.22400000000005" stroke="#F7D9BC" stroke-width="20" stroke-linecap="round" fill="none"/><path d="M159.0 162 L167.0 218.77408000000003" stroke="#F4C13B" stroke-width="24" stroke-linecap="round" fill="none"/><circle cx="175.0" cy="312.22400000000005" r="12.4" fill="#F7D9BC"/><rect x="120" y="136" width="20" height="20" fill="#F7D9BC" stroke="none"/><circle cx="82" cy="90" r="10" fill="#F7D9BC"/><circle cx="178" cy="90" r="10" fill="#F7D9BC"/><ellipse cx="130" cy="86" rx="50" ry="56" fill="#F7D9BC"/><path d="M78 88 C78 36 106 20 130 22 C160 20 182 36 182 88 C174 62 164 56 154 54 C136 68 102 66 98 54 C86 60 82 70 78 88 Z" fill="#F2C94C"/><circle cx="176" cy="56" r="9" fill="#4A8FE0"/><path d="M101 92 q9 8 18 0" stroke-width="4"/><path d="M141 92 q9 8 18 0" stroke-width="4"/><path d="M96 70 q12 -7 24 -2" stroke-width="3.5"/><path d="M140 68 q12 -5 24 2" stroke-width="3.5"/><path d="M122 116 q8 5 16 0" stroke-width="3.5"/><ellipse cx="98" cy="108" rx="10" ry="6" fill="#FFB3C6" stroke="none" opacity=".8"/><ellipse cx="162" cy="108" rx="10" ry="6" fill="#FFB3C6" stroke="none" opacity=".8"/></g></svg><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 600"><g fill="none" stroke="#1a1a1a" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="93.12" y="305.20000000000005" width="20" height="266.79999999999995" rx="6" fill="#F7D9BC"/><rect x="146.88" y="305.20000000000005" width="20" height="266.79999999999995" rx="6" fill="#F7D9BC"/><path d="M76.0 299.20000000000005 H184.0 L190.0 365.20000000000005 H134 L130 327.20000000000005 L126 365.20000000000005 H70.0 Z" fill="#8B5E34"/><path d="M85.12 572 h38 c6 0 8 16 -2 16 h-34 c-8 0 -8 -16 0 -16 z" fill="#3B3B3B"/><path d="M138.88 572 h38 c6 0 8 16 -2 16 h-34 c-8 0 -8 -16 0 -16 z" fill="#3B3B3B"/><rect x="74.0" y="154" width="112" height="155.20000000000002" rx="16" fill="#4A8FE0"/><path d="M78.0 162 L62.0 308.22400000000005" stroke="#4A8FE0" stroke-width="24" stroke-linecap="round" fill="none"/><circle cx="62.0" cy="312.22400000000005" r="14.879999999999999" fill="#F7D9BC"/><path d="M182.0 162 L198.0 308.22400000000005" stroke="#4A8FE0" stroke-width="24" stroke-linecap="round" fill="none"/><circle cx="198.0" cy="312.22400000000005" r="14.879999999999999" fill="#F7D9BC"/><path d="M114 152 L130 172 L146 152" fill="#fff"/><path d="M130 172 V299.20000000000005" stroke-width="3"/><rect x="120" y="136" width="20" height="20" fill="#F7D9BC" stroke="none"/><circle cx="82" cy="90" r="10" fill="#F7D9BC"/><circle cx="178" cy="90" r="10" fill="#F7D9BC"/><ellipse cx="130" cy="86" rx="50" ry="56" fill="#F7D9BC"/><circle cx="90" cy="56" r="20" fill="#F2C94C"/><circle cx="112" cy="34" r="22" fill="#F2C94C"/><circle cx="140" cy="30" r="22" fill="#F2C94C"/><circle cx="166" cy="46" r="20" fill="#F2C94C"/><circle cx="178" cy="74" r="16" fill="#F2C94C"/><circle cx="80" cy="80" r="16" fill="#F2C94C"/><g stroke-width="3"><circle cx="110" cy="90" r="10" fill="#fff"/></g><circle cx="110" cy="91" r="5.5" fill="#4A8FE0" stroke="none"/><circle cx="110" cy="91" r="2.3" fill="#1a1a1a" stroke="none"/><circle cx="112" cy="88" r="1.6" fill="#fff" stroke="none"/><g stroke-width="3"><circle cx="150" cy="90" r="10" fill="#fff"/></g><circle cx="150" cy="91" r="5.5" fill="#4A8FE0" stroke="none"/><circle cx="150" cy="91" r="2.3" fill="#1a1a1a" stroke="none"/><circle cx="152" cy="88" r="1.6" fill="#fff" stroke="none"/><path d="M96 70 q12 -7 24 -2" stroke-width="3.5"/><path d="M140 68 q12 -5 24 2" stroke-width="3.5"/><path d="M114 114 q16 16 32 0" stroke-width="4"/><g stroke-width="3.5"><circle cx="110" cy="90" r="16"/><circle cx="150" cy="90" r="16"/><path d="M126 90 H134"/></g></g></svg><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 600"><g fill="none" stroke="#1a1a1a" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="105.0" y="414.7" width="16" height="157.3" rx="6" fill="#F7D9BC"/><rect x="139.0" y="414.7" width="16" height="157.3" rx="6" fill="#F7D9BC"/><path d="M99.0 408.7 H161.0 L181.0 476.7 H79.0 Z" fill="#FFFFFF"/><path d="M97.0 572 h34 c6 0 8 16 -2 16 h-30 c-8 0 -8 -16 0 -16 z" fill="#3B3B3B"/><path d="M131.0 572 h34 c6 0 8 16 -2 16 h-30 c-8 0 -8 -16 0 -16 z" fill="#3B3B3B"/><rect x="97.0" y="304" width="66" height="114.7" rx="16" fill="#7A4AB5"/><path d="M101.0 312 L85.0 416.914" stroke="#F7D9BC" stroke-width="20" stroke-linecap="round" fill="none"/><path d="M101.0 312 L93.0 351.42388" stroke="#7A4AB5" stroke-width="24" stroke-linecap="round" fill="none"/><circle cx="85.0" cy="420.914" r="12.4" fill="#F7D9BC"/><path d="M159.0 312 L175.0 416.914" stroke="#F7D9BC" stroke-width="20" stroke-linecap="round" fill="none"/><path d="M159.0 312 L167.0 351.42388" stroke="#7A4AB5" stroke-width="24" stroke-linecap="round" fill="none"/><circle cx="175.0" cy="420.914" r="12.4" fill="#F7D9BC"/><path d="M103.0 353.815 H157.0 M103.0 375.955 H157.0" stroke="#fff" stroke-width="7" fill="none"/><rect x="120" y="286" width="20" height="20" fill="#F7D9BC" stroke="none"/><circle cx="82" cy="240" r="10" fill="#F7D9BC"/><circle cx="178" cy="240" r="10" fill="#F7D9BC"/><ellipse cx="130" cy="236" rx="50" ry="56" fill="#F7D9BC"/><path d="M74 270 C70 196 100 168 130 170 C160 168 190 196 186 270 C174 266 170 226 168 210 C140 202 110 202 92 210 C90 226 86 266 74 270 Z" fill="#8B5E34"/><g stroke-width="3"><circle cx="110" cy="240" r="10" fill="#fff"/></g><circle cx="110" cy="241" r="5.5" fill="#3E9A5A" stroke="none"/><circle cx="110" cy="241" r="2.3" fill="#1a1a1a" stroke="none"/><circle cx="112" cy="238" r="1.6" fill="#fff" stroke="none"/><g stroke-width="3"><circle cx="150" cy="240" r="10" fill="#fff"/></g><circle cx="150" cy="241" r="5.5" fill="#3E9A5A" stroke="none"/><circle cx="150" cy="241" r="2.3" fill="#1a1a1a" stroke="none"/><circle cx="152" cy="238" r="1.6" fill="#fff" stroke="none"/><path d="M96 220 q12 -7 24 -2" stroke-width="3.5"/><path d="M140 218 q12 -5 24 2" stroke-width="3.5"/><path d="M121 268 h18" stroke-width="3.5"/></g></svg></div>
-      <div><h2>Try it with your class first</h2><p class="lead">The free demo has Meet my friends and Mystery friend. Open it on your classroom board and play a round.</p><a class="btn btn-sun" href="demo.html">▶ Open the demo</a></div>
-    </div>
-  </section>
-
-  <section>
-    <div class="card">
-      <h2>Language focus</h2>
-      <p class="lead">The same colours are used on the slides, in the games and in the guide, so children see the patterns.</p>
-      <div class="focus">
-        <b>Looks</b><div class="chips"><span class="chip k1">tall</span><span class="chip k1">short</span><span class="chip k1">strong</span><span class="chip k1">thin</span></div>
-        <b>Hair &amp; eyes</b><div class="chips"><span class="chip k2">long</span><span class="chip k2">short</span><span class="chip k2">curly</span><span class="chip k2">black</span><span class="chip k2">brown</span><span class="chip k2">blonde</span><span class="chip k2">blue eyes</span></div>
-        <b>Clothes</b><div class="chips"><span class="chip k3">dress</span><span class="chip k3">T-shirt</span><span class="chip k3">jumper</span><span class="chip k3">shirt</span><span class="chip k3">shorts</span><span class="chip k3">skirt</span><span class="chip k3">glasses</span></div>
-        <b>Personality</b><div class="chips"><span class="chip k4">friendly</span><span class="chip k4">kind</span><span class="chip k4">funny</span><span class="chip k4">shy</span><span class="chip k4">smart</span><span class="chip k4">quiet</span></div>
-        <b>Grammar</b><div class="chips"><span class="chip g">He is … / She is …</span><span class="chip g">He has … / She has …</span><span class="chip g">He is wearing …</span><span class="chip g">His … / Her …</span><span class="chip g">He often plays …</span><span class="chip g">Who’s your best friend?</span></div>
-        <b>Skills</b><div class="chips"><span class="chip">👂 Listening</span><span class="chip">🗣️ Speaking</span><span class="chip">📖 Reading</span><span class="chip">✏️ Writing</span><span class="chip">🤝 Teamwork</span></div>
+      <div class="prod packs">
+        <div class="ic">📚</div>
+        <span class="tag">Lesson packs</span>
+        <h3>My Friends</h3>
+        <p>A complete lesson on describing a friend for low-level learners: 21 interactive slides, 7 touchscreen games, a mini-book printable and a teacher guide.</p>
+        <ul><li>Low English · Pre-A1–A1</li><li>Games work with no internet</li><li>Try two games free first</li></ul>
+        <div class="price">US$4 · ¥25 · R70</div>
+        <div class="btns"><a class="btn btn-go btn-small" href="lessons/my-friends/">See the pack</a><a class="btn btn-sand btn-small" href="lessons/my-friends/demo.html">▶ Try the demo</a></div>
       </div>
+
+    </div>
+  </section>
+
+  <section id="why">
+    <h2 class="sec">Why teachers like it</h2>
+    <p class="sub">Built in a real classroom, with 30 children and a wobbly internet connection.</p>
+    <div class="why">
+      <div><b>Works offline</b><span>Once it’s open, it keeps working when the school internet drops. No VPN needed in China.</span></div>
+      <div><b>Made for the big screen</b><span>Big buttons and cards, easy to tap on a Seewo or any smartboard.</span></div>
+      <div><b>No accounts</b><span>Nothing to sign up for. Your classes stay on your own device.</span></div>
+      <div><b>One payment</b><span>Buy it once and keep it. No subscriptions.</span></div>
     </div>
   </section>
 
   <section>
-    <div class="card">
-      <h2>The lesson in 40 minutes</h2>
-      <div class="tablewrap"><table class="plan">
-        <tr><td>5 min</td><td>Warm-up</td><td>Mystery friend: tap one clue at a time, guess, reveal.</td></tr>
-        <tr><td>7 min</td><td>Words</td><td>Looks, hair and eyes, His/Her, often + s.</td></tr>
-        <tr><td>5 min</td><td>Model &amp; practise</td><td>Teacher dialogue, His-or-Her game, stand-up game, drag activities.</td></tr>
-        <tr><td>5 min</td><td>Plan</td><td>Choose a friend, plan in three columns, tell a partner.</td></tr>
-        <tr><td>5 min</td><td>Fold</td><td>Fold one A4 sheet into a book, step by step.</td></tr>
-        <tr><td>13 min</td><td>Make</td><td>One sentence and one picture on each page.</td></tr>
-        <tr><td>5 min</td><td>Share</td><td>Read your book to a friend, then to the class.</td></tr>
-      </table></div>
-    </div>
-  </section>
-
-  <section id="buy">
-    <div class="card">
-      <h2>How to buy</h2>
-      <ol class="steps">
-        <li><b>Try the demo</b> on your classroom board so you know it works for you.</li>
-        <li><b>Pay</b> the way that suits where you live (below).</li>
-        <li><b>Get the files</b> by email or WeChat: slides, games, mini book and guide in one folder.</li>
-      </ol>
-      <div class="pay">
-        <div class="way">
-          <div class="way-head"><b>China</b><span>¥25</span></div>
-          <p>Pay with WeChat Pay. Add me on WeChat: <strong>DanziGal88</strong> and say “My Friends pack”.</p>
-        </div>
-        <div class="way">
-          <div class="way-head"><b>South Africa</b><span>R70</span></div>
-          <p>Pay by card or EFT with Payfast. Message me and I’ll send your payment link.</p>
-          <div class="way-btns">
-            <a class="btn btn-plain btn-small" href="mailto:danzigal1988@gmail.com?subject=My%20Friends%20lesson%20pack%20%E2%80%93%20Payfast">Email</a>
-            <a class="btn btn-plain btn-small" href="https://wa.me/27761655758?text=Hi!%20I%27d%20like%20to%20buy%20the%20My%20Friends%20lesson%20pack.">WhatsApp</a>
-          </div>
-        </div>
-        <div class="way">
-          <div class="way-head"><b>Everywhere else</b><span>US$4</span></div>
-          <p>Pay by card or bank transfer through a secure Payoneer payment link. Email me and I’ll send it.</p>
-          <div class="way-btns"><a class="btn btn-plain btn-small" href="mailto:danzigal1988@gmail.com?subject=My%20Friends%20lesson%20pack%20%E2%80%93%20payment%20link&amp;body=Country%3A%20%0A">Ask for a payment link</a></div>
-        </div>
+    <div class="about">
+      <img src="board/icons/icon-192-plain.png" alt="">
+      <div>
+        <h2>Made by a teacher, not a software company</h2>
+        <p>I’m an ESL teacher with eight classes of about thirty children. Everything here started as something I needed on a Monday morning and built that weekend. If something would help in your classroom, tell me — a lot of what’s here came from teachers asking. Say hello on WeChat <b>DanziGal88</b> or by email.</p>
       </div>
-      <p class="lead" style="margin:14px 0 0">Buying for your whole grade team or school? Ask about a school licence.</p>
-    </div>
-  </section>
-
-  <section>
-    <div class="card faq">
-      <h2>Questions</h2>
-      <details><summary>What do I need to use it?</summary><p>PowerPoint for the slides, and Edge or Chrome for the games. It works on Seewo and other smartboards, laptops and tablets. The games don’t need internet.</p></details>
-      <details><summary>Does it follow my textbook?</summary><p>It pairs with the PEP “My friends” unit, and works with any course that teaches describing people. The pack is independent and uses its own characters.</p></details>
-      <details><summary>What level is it for?</summary><p>Low English: Pre-A1 to A1. Everything is picture-led with sentence frames and word banks. For very low classes the guide shows how to split it over two lessons and make a shorter book.</p></details>
-      <details><summary>Can I share it with colleagues?</summary><p>One pack is for one teacher and their own classes. Colleagues can buy their own copy, and school licences are available.</p></details>
-      <details><summary>How do the games open from the slides?</summary><p>Keep the slides and the games file in the same folder. The last slide has an “Open the games” button.</p></details>
     </div>
   </section>
 
   <footer>
     <p>Made with care by a teacher · <b>ZippyTeach</b></p>
-    <p><a href="mailto:danzigal1988@gmail.com?subject=My%20Friends%20lesson%20pack">danzigal1988@gmail.com</a> · WeChat DanziGal88 · <a href="https://wa.me/27761655758">WhatsApp</a> · <a href="../../privacy.html">Privacy</a></p>
+    <p><a href="mailto:danzigal1988@gmail.com?subject=ZippyTeach">danzigal1988@gmail.com</a> · WeChat DanziGal88 · <a href="https://wa.me/27761655758">WhatsApp</a> · <a href="privacy.html">Privacy</a></p>
   </footer>
 </div>
 </body>
