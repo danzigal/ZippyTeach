@@ -94,6 +94,9 @@
   .faq summary{ cursor:pointer; padding:13px 16px; font-weight:800; color:var(--deep); }
   .faq p{ margin:0 16px 14px; color:var(--soft); font-size:15px; }
 
+  .packs-promo{ display:grid; grid-template-columns:220px 1fr; gap:24px; align-items:center; }
+  .packs-promo img{ width:100%; border-radius:16px; border:2px solid var(--sand-lo); display:block; }
+  @media (max-width:600px){ .packs-promo{ grid-template-columns:1fr; } .packs-promo img{ max-width:260px; } }
   footer{ text-align:center; color:#e0f4fb; padding:26px 0 40px; font-size:14px; }
   footer a{ color:#fff; font-weight:700; }
 
@@ -115,6 +118,7 @@
       <a href="#pricing">Pricing</a>
       <a href="#buy">How to buy</a>
       <a href="#install">Install</a>
+      <a href="lessons/">Lesson packs</a>
     </nav>
   </header>
 
@@ -146,6 +150,17 @@
         <div><b>Made for the big screen</b><span>Big desks and buttons in Teach mode, easy to tap on a Seewo or any smartboard.</span></div>
         <div><b>Any device</b><span>Smartboards, laptops, tablets and phones. Install it like an app.</span></div>
         <div><b>Private by design</b><span>No accounts. Your classes stay on your device and are never sent anywhere.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lessons">
+    <div class="card packs-promo">
+      <img src="lessons/my-friends/img/cover.jpg" alt="My Friends lesson pack cover">
+      <div>
+        <h2>New: ESL lesson packs</h2>
+        <p class="lead">Complete lessons made for the same big screen: interactive slides, touchscreen games that work offline, a printable and a teacher guide. First up: <b>My Friends</b> — low English, Pre-A1–A1.</p>
+        <div class="hero-btns" style="justify-content:flex-start"><a class="btn btn-go" href="lessons/my-friends/">See My Friends</a><a class="btn btn-sand" href="lessons/my-friends/demo.html">▶ Try the demo</a></div>
       </div>
     </div>
   </section>
