@@ -1130,6 +1130,17 @@
   body.teach .rules-card > p, body.teach .desk-chip.desk-empty, body.teach .seat-hint-phone{ display:none !important; }
   body.teach .seating-canvas .desk-chip-grip{ cursor:pointer; }
   body.teach .seating-canvas .desk-chip-num{ display:none; }
+  /* Teach mode locks the desks so a lesson tap never drags one; this says how to move them */
+  .seat-hint-teach{ display:none; }
+  body.teach .seat-hint-teach{ display:block; }
+  body.teach .seat-hint-wide{ display:none !important; }
+  /* the team badge on a desk */
+  .desk-chip-group{ position:absolute; top:-9px; left:-9px; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:14px; line-height:1;
+    border:2px solid #fffaf0; box-shadow:0 2px 4px rgba(2,62,138,.35); pointer-events:none; z-index:2; }
+  body.teach .seating-canvas .desk-chip-group{ width:calc(26px * var(--desk-scale)); height:calc(26px * var(--desk-scale));
+    font-size:calc(14px * var(--desk-scale)); top:calc(-9px * var(--desk-scale)); left:calc(-9px * var(--desk-scale)); }
+  @media (max-width: 700px){ body.teach .seat-hint-teach{ display:none; } }
   /* a little shorter while teaching, so all the rows fit on a classroom screen */
   body.teach .seating-canvas{ aspect-ratio:16/8.6 !important; }
   /* desks grow in Teach mode; --desk-scale is worked out so they never touch */
@@ -1201,6 +1212,10 @@
   .pw-way-btns{ display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
   .pw-way-btns .btn{ padding:7px 14px; font-size:13px; text-decoration:none; }
   .pw-way-foot{ font-size:12.5px; color:#666; text-align:center; margin:6px 0 0; }
+
+  /* web version vs Google Play app wording */
+  body.play-app .web-only{ display:none !important; }
+  body:not(.play-app) .app-only{ display:none !important; }
 </style>
 </head>
 <body>
@@ -1694,8 +1709,8 @@
       </details>
 
       <details class="help-topic"><summary>Games &amp; Tools</summary>
-        <p>Open <b>Games &amp; Tools</b> and tap a tile: Wheel of Names, Timer, Voice Meter, Groups, Dice, Bingo, Flashcards, Music or Floating Bubble. Tap <b>All games &amp; tools</b> to go back.</p>
-        <p>The <b>Floating Bubble</b> stays on top of PowerPoint, so you can give points without leaving your slides (Chrome and Edge on a computer).</p>
+        <p>Open <b>Games &amp; Tools</b> and tap a tile: Wheel of Names, Timer, Voice Meter, Groups, Dice, Bingo, Flashcards<span class="web-only">, Music or Floating Bubble</span><span class="app-only"> or Music</span>. Tap <b>All games &amp; tools</b> to go back.</p>
+        <p class="web-only">The <b>Floating Bubble</b> stays on top of PowerPoint, so you can give points without leaving your slides (Chrome and Edge on a computer).</p>
       </details>
 
       <details class="help-topic"><summary>Daily Helper and Profiles</summary>
@@ -1719,7 +1734,7 @@
         </ul>
       </details>
 
-      <details class="help-topic"><summary>Install it as an app</summary>
+      <details class="help-topic web-only"><summary>Install it as an app</summary>
         <ul>
           <li><b>Chrome on a computer:</b> click the install icon at the right of the address bar, or &#8942; &rarr; Cast, save and share &rarr; Install page as app.</li>
           <li><b>Edge:</b> &#8943; &rarr; Apps &rarr; Install this site as an app.</li>
@@ -1739,11 +1754,15 @@
         </ul>
       </details>
 
-      <details class="help-topic"><summary>Unlocking the full version</summary>
+      <details class="help-topic app-only"><summary>Unlocking the full version</summary>
+        <p>Tap any padlock, then <b>Unlock the full version</b> to buy it through Google Play. It&rsquo;s one payment, with no subscription. New phone or reinstalled the app? Tap any padlock, then <b>Restore purchase</b>.</p>
+      </details>
+
+      <details class="help-topic web-only"><summary>Unlocking the full version</summary>
         <p>Tap any padlock and type your name and code exactly as they were sent to you. You only do this once on each computer. If you forget your Lock PIN, your unlock code can reset it.</p>
       </details>
 
-      <p class="help-contact">Still stuck? Email <a href="mailto:danzigal1988@gmail.com?subject=Ocean%20Board%20help">danzigal1988@gmail.com</a> &middot; <a href="../privacy.html" target="_blank" rel="noopener">Privacy policy</a></p>
+      <p class="help-contact">Still stuck? Email <a href="mailto:danzigal1988@gmail.com?subject=Ocean%20Board%20help">danzigal1988@gmail.com</a> &middot; <a href="https://danzigal.github.io/ZippyTeach/privacy.html" target="_blank" rel="noopener">Privacy policy</a></p>
     </div>
   </div>
 
@@ -2604,6 +2623,37 @@ function makeClass() {
   return { desks: makeEmptyDesks(DESK_COUNT), rules: [...DEFAULT_RULES], groups: [], layoutType: 'flexible', deskPositions: null };
 }
 
+/* Each desk remembers which team its student is in, so the seating chart can
+   show that team's little badge. Teachers asked for this so they can see who
+   belongs together while they move the desks around. */
+function syncDeskGroups(className) {
+  const cls = classes[className];
+  if (!cls) return;
+  const groups = cls.groups || [];
+  const where = {};
+  groups.forEach((g, gi) => (g || []).forEach(n => {
+    const key = String(n || '').trim().toLowerCase();
+    if (key && !(key in where)) where[key] = gi;
+  }));
+  cls.desks.forEach(d => {
+    const key = String(d.name || '').trim().toLowerCase();
+    if (key && key in where) d.group = where[key];
+    else delete d.group;
+  });
+}
+
+function deskGroupBadge(desk) {
+  if (desk.group === undefined || desk.group === null) return null;
+  const animal = animalGroups[desk.group % animalGroups.length];
+  if (!animal) return null;
+  const badge = document.createElement('div');
+  badge.className = 'desk-chip-group';
+  badge.style.background = GROUP_COLORS[desk.group % GROUP_COLORS.length];
+  badge.textContent = animal.icon;
+  badge.title = animal.name;
+  return badge;
+}
+
 function getClassGroups(className) {
   const cls = classes[className];
   if (!cls.groups) cls.groups = [];
@@ -3118,7 +3168,8 @@ function renderGamesGrid() {
   const grid = document.getElementById('gamesGrid');
   if (!grid) return;
   const full = hasFullVersion();
-  grid.innerHTML = GAME_TOOLS.map(t => {
+  // the floating bubble needs desktop Chrome or Edge, so it is left out of the app
+  grid.innerHTML = GAME_TOOLS.filter(t => !(t.id === 'bubble' && isPlayApp())).map(t => {
     const locked = !full && !playTabAllowed(t.gate);
     return '<button type="button" class="game-tile' + (locked ? ' pw-locked' : '') + '" onclick="openGameTool(\'' + t.id + '\')">' +
       '<svg class="ico game-tile-ico"><use href="#' + t.icon + '"/></svg>' +
@@ -3209,6 +3260,7 @@ function renderClassContent() {
   html += '<div class="behavior-split">';
   html += '<div class="card seating-card"><h3 style="margin-bottom: 4px; color: #333;">🪑 ' + activeClass + ' Seating Chart <span style="color:#0077b6; font-size:14px; font-weight:600;">(' + filled + '/' + DESK_COUNT + ')</span></h3>';
   html += '<p class="seat-hint-wide" style="color:#888; font-size:13px; margin-bottom:10px;">Choose a layout, then drag any desk to fine-tune it. Tap a desk to edit the name, give points, or open their profile.</p>';
+  html += '<p class="seat-hint-teach" style="color:#888; font-size:13px; margin-bottom:10px;">Tap a desk to give points or open a student. To move the desks around, tap <b>Set up</b> at the top.</p>';
   html += '<p class="seat-hint-phone" style="color:#888; font-size:13px; margin-bottom:10px;">Tap a desk to edit the name, give points, or open their profile. Open the board on a tablet or your classroom screen to arrange the desks to match your room.</p>';
   html += '<div class="layout-picker" id="layoutPicker"></div>';
   html += '<div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">';
@@ -3259,6 +3311,9 @@ function renderSeatingCanvas() {
     numLabel.className = 'desk-chip-num';
     numLabel.textContent = k + 1;
     chip.appendChild(numLabel);
+
+    const gBadge = deskGroupBadge(d);
+    if (gBadge) chip.appendChild(gBadge);
 
     if (d.isLeader) {
       const crown = document.createElement('div');
@@ -5063,8 +5118,10 @@ function shuffleGroups() {
     groups[i % groupCount].push(name);
   });
   classes[activeClass].groups = groups;
+  syncDeskGroups(activeClass);
   saveState();
   renderGroupGrid();
+  renderClassContent();
 }
 
 const GROUP_COLORS = ['#e74c3c', '#3498db', '#06d6a0', '#f39c12', '#5e60ce', '#00b4d8', '#f58231', '#911eb4'];
@@ -5073,6 +5130,7 @@ function renderGroupGrid() {
   const grid = document.getElementById('groupGrid');
   if (!grid) return;
   const groups = getClassGroups(activeClass);
+  syncDeskGroups(activeClass);
   grid.innerHTML = '';
   const applyBtn = document.getElementById('applyGroupsToSeatingBtn');
   if (applyBtn) applyBtn.style.display = groups.some(g => g.length > 0) ? 'block' : 'none';
@@ -5096,8 +5154,10 @@ function renderGroupGrid() {
       if (member === undefined) return;
       liveGroups[data.groupIdx].splice(data.memberIdx, 1);
       liveGroups[i].push(member);
+      syncDeskGroups(activeClass);
       saveState();
       renderGroupGrid();
+      renderClassContent();
     };
 
     const heading = document.createElement('h4');
@@ -5398,7 +5458,12 @@ function renderManageGroups() {
     input.onchange = () => {
       const idx = parseInt(input.dataset.idx, 10);
       const trimmed = input.value.trim();
-      if (trimmed) { animalGroups[idx].name = trimmed; saveState(); }
+      if (trimmed) {
+        animalGroups[idx].name = trimmed;
+        saveState();
+        renderGroupGrid();        // the team cards above show the new name at once
+        renderClassContent();     // and so do the team badges on the desks
+      }
     };
   });
   container.querySelectorAll('.manage-role-delete').forEach(btn => {
@@ -8733,6 +8798,8 @@ function playLockedButtons() {
 }
 
 function refreshPlayLocks() {
+  // lets the guide and tiles show the right wording inside the Google Play app
+  document.body.classList.toggle('play-app', isPlayApp());
   const locked = !hasFullVersion();
   playLockedButtons().forEach(b => {
     b.classList.toggle('pw-locked', locked);
