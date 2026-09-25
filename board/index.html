@@ -1112,6 +1112,14 @@
   .bk-new{ color:#06a97e; }
   .bk-old{ color:#c0392b; }
   .bk-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:14px; flex-wrap:wrap; }
+.hangman-game-layout{display:grid;grid-template-columns:minmax(280px,1.1fr) minmax(280px,1fr);gap:18px;align-items:center;margin:16px 0 8px}
+.hangman-ocean-scene{display:block;width:100%;height:auto;border:3px solid #14546a;border-radius:18px;box-shadow:0 7px 0 #0b394d;background:#dff8ff}
+.hangman-word{min-height:72px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:5px;padding:12px 8px;color:#125b73;font-size:clamp(22px,3vw,34px);font-weight:900;letter-spacing:.12em;text-align:center}
+.hangman-keys{display:grid;grid-template-columns:repeat(7,minmax(34px,1fr));gap:7px;max-width:510px;margin:10px auto}
+.hangman-key{min-height:42px;padding:7px 4px;border:2px solid #15536a;border-radius:12px;background:#fff9e9;color:#15536a;font-size:17px;font-weight:900;box-shadow:0 3px 0 #b8d8d7;cursor:pointer}
+.hangman-key:hover:not(:disabled){background:#ffda87;transform:translateY(-1px)}
+.hangman-key:disabled{opacity:.55;cursor:default;box-shadow:none}
+@media(max-width:760px){.hangman-game-layout{grid-template-columns:1fr}.hangman-keys{grid-template-columns:repeat(7,minmax(30px,1fr));gap:5px}.hangman-key{min-height:38px}}
 </style>
 </head>
 <body>
@@ -1552,7 +1560,7 @@
       </div>
       <p style="color:#e0fbfc; font-size:12px; margin-top:8px; text-shadow: 0 1px 4px rgba(2,62,138,0.5);">"Archive Old Profile Notes" exports and clears out older Student Profile observations (across all classes) to keep storage healthy over a long school year — it never touches points, seating, or rules.</p>
     </details>
-    <p style="text-align:center; color:#e0fbfc; font-size:13px; text-shadow: 0 1px 4px rgba(2,62,138,0.5);">Tap a class above to open its seating chart, rules, wheel, bingo, timer, and voice meter.</p>
+    <p style="text-align:center; color:#e0fbfc; font-size:13px; text-shadow: 0 1px 4px rgba(2,62,138,0.5);">Tap a class above to open its seating chart, class tools, bingo, Hangman, homework, and planning.</p>
   </div>
 
   <!-- CLASS WORKSPACE -->
@@ -1566,11 +1574,12 @@
     <div class="sub-tab-bar">
       <button class="sub-tab-btn active" onclick="switchWorkspaceTab('behavior')"><svg class="ico"><use href="#i-target"/></svg>Behavior</button>
       <button class="sub-tab-btn" onclick="switchWorkspaceTab('homework')">📚 Homework</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('schedule')">🗓️ Schedule</button>
+      <button class="sub-tab-btn" onclick="switchWorkspaceTab('schedule')">🗓️ Planning</button>
       <button class="sub-tab-btn" onclick="switchWorkspaceTab('jobs')"><svg class="ico"><use href="#i-badge"/></svg>Class Jobs</button>
       <button class="sub-tab-btn" onclick="switchWorkspaceTab('notes')"><svg class="ico"><use href="#i-note"/></svg>Notes</button>
       <button class="sub-tab-btn" onclick="switchWorkspaceTab('wheel')"><svg class="ico"><use href="#i-wheel"/></svg>Wheel</button>
       <button class="sub-tab-btn" onclick="switchWorkspaceTab('bingo')"><svg class="ico"><use href="#i-ball"/></svg>Bingo</button>
+      <button class="sub-tab-btn" onclick="switchWorkspaceTab('hangman')">🛟 Hangman</button>
       <button class="sub-tab-btn" onclick="switchWorkspaceTab('tools')"><svg class="ico"><use href="#i-clock"/></svg>Timer &amp; Tools</button>
       <button class="sub-tab-btn" onclick="switchWorkspaceTab('voice')"><svg class="ico"><use href="#i-voice"/></svg>Voice Meter</button>
       <button class="sub-tab-btn" onclick="switchWorkspaceTab('helper')"><svg class="ico"><use href="#i-sunrise"/></svg>Daily Helper</button>
@@ -1691,6 +1700,75 @@
         <h3 style="margin-bottom:6px; color:#333;"><svg class="ico ico-h"><use href="#i-doc"/></svg>Card Preview</h3>
         <p style="color:#888; font-size:13px; margin-bottom:12px;">Each card draws its own selection from your word list, so no two players have the same board.</p>
         <div id="bingoCardPreview"></div>
+      </div>
+    </div>
+
+    <div id="workspace-hangman" class="sub-panel">
+      <div class="card">
+        <h3 style="margin-bottom:6px;color:#17495c;">🛟 Hangman — Save the Diver</h3>
+        <p style="color:#66818a;font-size:13px;margin-bottom:14px;">Choose a flashcard deck or use your own word list. Each wrong guess raises the tide. Can your class save the diver?</p>
+        <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:15px;">
+          <label style="font-weight:700;color:#426b76;font-size:13px;">Words from<br><select id="hangmanCategory" onchange="if(hangmanRound)startHangman()" style="padding:9px 12px;border:2px solid #b8dfeb;border-radius:10px;margin-top:4px;min-width:190px;"></select></label>
+          <button class="btn btn-teal" onclick="startHangman()">↻ New word</button>
+          <button class="btn btn-success" id="hangmanPictureButton" onclick="showHangmanPicture()" disabled>✧ Show the picture</button>
+        </div>
+        <div class="hangman-game-layout">
+          <div>
+            <svg id="hangmanOceanScene" class="hangman-ocean-scene" viewBox="0 0 600 360" role="img" aria-label="A diver waits by a coral reef while the tide rises">
+              <defs>
+                <linearGradient id="hmSky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#dff8ff"/><stop offset="1" stop-color="#93d9eb"/></linearGradient>
+                <linearGradient id="hmSea" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#25bdd0" stop-opacity=".78"/><stop offset="1" stop-color="#087fae" stop-opacity=".92"/></linearGradient>
+              </defs>
+              <rect width="600" height="360" rx="20" fill="url(#hmSky)"/>
+              <circle cx="505" cy="66" r="35" fill="#ffd76e"/>
+              <path d="M0 295 C120 268 210 318 315 290 S485 270 600 298 V360 H0Z" fill="#dfc996"/>
+              <path d="M84 292 Q70 243 103 214 M93 271 Q119 247 120 225 M505 295 Q527 250 512 225 M520 279 Q547 255 553 234" fill="none" stroke="#52a96c" stroke-width="13" stroke-linecap="round"/>
+              <path d="M220 301 Q223 266 243 250 Q259 280 258 300 M341 303 Q352 261 370 246 Q384 280 378 304" fill="#ff9475" stroke="#c96a5b" stroke-width="5"/>
+              <g fill="#fff" opacity=".7"><circle cx="182" cy="77" r="5"/><circle cx="146" cy="112" r="3"/><circle cx="393" cy="91" r="4"/></g>
+              <g id="hangmanFish" fill="#ffad67" stroke="#d87b55" stroke-width="4">
+                <ellipse cx="111" cy="153" rx="26" ry="15"/><path d="M135 153 l22 -16 v32Z"/><circle cx="99" cy="150" r="3" fill="#205468" stroke="none"/>
+                <animateTransform attributeName="transform" type="translate" values="0 0;18 -7;0 0" dur="4s" repeatCount="indefinite"/>
+              </g>
+              <g id="hangmanDiver" stroke="#16485b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M294 220 L268 253 L244 265 M319 220 L345 247 L369 253" fill="none" stroke="#f1b987" stroke-width="15"/>
+                <rect x="281" y="190" width="51" height="52" rx="18" fill="#08a8bd"/>
+                <rect x="334" y="198" width="18" height="42" rx="7" fill="#ffcf4e"/>
+                <circle cx="306" cy="169" r="28" fill="#f5fff8"/>
+                <path d="M286 162 Q306 137 326 162" fill="none" stroke="#16485b" stroke-width="7"/>
+                <circle cx="297" cy="169" r="4" fill="#16485b" stroke="none"/><circle cx="315" cy="169" r="4" fill="#16485b" stroke="none"/>
+                <path d="M299 182 Q307 190 315 182" fill="none" stroke="#16485b" stroke-width="4"/>
+                <path d="M291 239 L283 278 M322 239 L331 278" fill="none" stroke="#143d64" stroke-width="13"/>
+                <path d="M274 280 l15 0 M324 280 l15 0" fill="none" stroke="#ffcf4e" stroke-width="9"/>
+              </g>
+              <path id="hangmanWater" d="M0 304 Q75 291 150 304 T300 304 T450 304 T600 304 V360 H0Z" fill="url(#hmSea)"/>
+              <path id="hangmanWave" d="M0 304 Q75 291 150 304 T300 304 T450 304 T600 304" fill="none" stroke="#a7f3ee" stroke-width="5"/>
+              <g id="hangmanRescueSub" opacity="0" transform="translate(0 0)">
+                <path d="M420 127 Q466 97 512 127 L530 151 Q467 176 406 151Z" fill="#ffdb87" stroke="#16536a" stroke-width="5"/>
+                <rect x="453" y="105" width="25" height="21" rx="10" fill="#f4fffd" stroke="#16536a" stroke-width="4"/>
+                <path d="M436 155 l-10 17 M497 155 l12 17" stroke="#16536a" stroke-width="5" stroke-linecap="round"/>
+                <text x="468" y="148" text-anchor="middle" font-size="13" font-weight="900" fill="#16536a" stroke="none">RESCUE</text>
+              </g>
+            </svg>
+            <div id="hangmanLives" style="text-align:center;font-weight:800;color:#087d9c;margin:7px 0 0;">6 wrong guesses left</div>
+            <div id="hangmanPictureHint" style="display:none;text-align:center;margin-top:10px;"><img id="hangmanHintImage" alt="Flashcard picture hint" style="max-width:170px;max-height:150px;object-fit:contain;border-radius:14px;border:2px solid #b8dfeb;background:white;padding:5px;"></div>
+          </div>
+          <div class="hangman-play-area">
+            <div id="hangmanWord" class="hangman-word" aria-live="polite">Choose words and start a new game</div>
+            <div id="hangmanMessage" style="text-align:center;font-weight:700;min-height:28px;color:#426b76;margin:12px 0;"></div>
+            <div id="hangmanKeys" class="hangman-keys"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:6px;color:#17495c;">Use your own words</h3>
+        <p style="color:#66818a;font-size:13px;margin-bottom:10px;">Type or paste one word or phrase per line, or upload a .txt, .csv, or flashcard .json file. Your list is saved with this class on this device.</p>
+        <textarea id="hangmanCustomWords" rows="4" placeholder="ocean&#10;coral reef&#10;dolphin" style="width:100%;box-sizing:border-box;padding:11px;border:2px solid #b8dfeb;border-radius:10px;font:15px system-ui,sans-serif;resize:vertical;"></textarea>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:9px;">
+          <button class="btn btn-primary" onclick="saveHangmanCustomWordsFromInput()">Save my word list</button>
+          <button class="btn btn-purple" onclick="document.getElementById('hangmanWordFile').click()">📁 Upload word list</button>
+          <input id="hangmanWordFile" type="file" accept=".txt,.csv,.json,text/plain,text/csv,application/json" style="display:none" onchange="importHangmanWords(this.files[0]);this.value='';">
+          <span id="hangmanCustomCount" style="color:#66818a;font-size:13px;font-weight:700;"></span>
+        </div>
       </div>
     </div>
 
@@ -2030,18 +2108,6 @@
           <button class="btn btn-teal" onclick="startMatchingGame()">🔄 Play Again</button>
         </div>
       </div>
-    </div>
-    <div class="card" id="hangmanCard">
-      <h3>🛟 Ocean Rescue Word Game</h3>
-      <p style="color:#667;">Choose a flashcard category and guess the word before the little sea turtle drifts too far from its rescue boat.</p>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0;">
-        <select id="hangmanCategory" style="padding:9px;border:2px solid #caf0f8;border-radius:8px;"></select>
-        <button class="btn btn-teal" onclick="startHangman()">Start / New Word</button>
-      </div>
-      <div style="font-size:48px;text-align:center;margin:8px;" id="hangmanRescue">⛵　🐢</div>
-      <div id="hangmanWord" style="text-align:center;font-size:28px;font-weight:800;letter-spacing:8px;color:#126782;margin:12px;"></div>
-      <div id="hangmanMessage" style="text-align:center;font-weight:700;margin:8px;"></div>
-      <div id="hangmanKeys" style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;"></div>
     </div>
   </div>
 
@@ -2757,7 +2823,6 @@ function switchTab(tab) {
   } else if (tab === 'flashcards') {
     document.getElementById('panel-flashcards').classList.add('active');
     renderCategoryList();
-    renderHangmanCategories();
   } else if (tab === 'tests') {
     document.getElementById('panel-tests').classList.add('active');
     renderTestGenerator();
@@ -2845,6 +2910,8 @@ function switchWorkspaceTab(tab) {
     } else {
       updateBingo();
     }
+  } else if (tab === 'hangman') {
+    renderHangmanPanel();
   } else if (tab === 'mascot') {
     renderMascotPanel();
   } else if (tab === 'homework') {
@@ -8361,7 +8428,8 @@ const PLAY_FEATURE_NAMES = {
   music: 'Music', flashcards: 'Flashcards', tests: 'Tests',
   wheel: 'The Wheel', bingo: 'Bingo', tools: 'Timer & Tools', voice: 'The Voice Meter',
   helper: 'The Daily Helper', profiles: 'Student Profiles', mascot: 'A mascot for every class',
-  jobs: 'Class Jobs', notes: 'Notes'
+  jobs: 'Class Jobs', notes: 'Notes', hangman: 'Hangman',
+  homework: 'Homework', schedule: 'Planning & Class Schedule'
 };
 let playUnlocked = false;
 let playStore = null;
@@ -8401,7 +8469,7 @@ function playGate(featureName) {
    the behaviour board, the wheel, and a mascot on the first class, so a teacher
    can run a real lesson before deciding whether to pay. */
 const PLAY_FREE_CLASSES = 2;
-const PLAY_FREE_TABS = { wheel: true, behavior: true, tools: true, jobs: true, notes: true, homework: true, schedule: true };
+const PLAY_FREE_TABS = { wheel: true, behavior: true, tools: true, jobs: true, notes: true };
 
 function playClassLocked(className) {
   const limit = (typeof ztBoardClassLimit === 'function') ? ztBoardClassLimit() : PLAY_FREE_CLASSES;
@@ -8702,34 +8770,125 @@ function addSchedulePeriod() {
 }
 function deleteSchedulePeriod(index){classes[activeClass].schedule.splice(index,1);saveState();renderSchedulePanel();renderDailyClassPrompt();}
 
-// ========== FLASHCARD HANGMAN: OCEAN RESCUE ==========
+// ========== OCEAN HANGMAN: SAVE THE DIVER ==========
 let hangmanRound=null;
+function hangmanCustomWords(){
+  const cls=classes[activeClass];
+  if(!cls)return [];
+  if(!Array.isArray(cls.hangmanWords))cls.hangmanWords=[];
+  return cls.hangmanWords;
+}
+function hangmanFlashcardSets(){
+  return Object.keys(flashcardBank||{}).map(category=>({category,cards:(flashcardBank[category]||[]).filter(c=>/[a-z]/i.test((c.word||'').trim()))})).filter(set=>set.cards.length);
+}
 function renderHangmanCategories(){
   const sel=document.getElementById('hangmanCategory');if(!sel)return;
-  const previous=sel.value;sel.innerHTML=Object.keys(flashcardBank||{}).filter(c=>(flashcardBank[c]||[]).some(x=>/[a-z]/i.test(x.word||''))).map(c=>'<option value="'+escapeHtml(c)+'">'+escapeHtml(c)+'</option>').join('');
-  if(previous&&flashcardBank[previous])sel.value=previous;
-  const keys=document.getElementById('hangmanKeys');if(keys&&!hangmanRound)keys.innerHTML='';
+  const previous=sel.value,sets=hangmanFlashcardSets(),custom=hangmanCustomWords();
+  let html=sets.length?'<option value="__all__">All my flashcards</option>':'';
+  html+=sets.map(set=>'<option value="'+escapeHtml(set.category)+'">'+escapeHtml(set.category)+'</option>').join('');
+  html+='<option value="__custom__">My word list'+(custom.length?' ('+custom.length+')':'')+'</option>';
+  sel.innerHTML=html;
+  if(previous&&(previous==='__all__'||previous==='__custom__'||sets.some(s=>s.category===previous)))sel.value=previous;
+  else sel.value=sets.length?'__all__':'__custom__';
+  const count=document.getElementById('hangmanCustomCount');if(count)count.textContent=custom.length+' saved word'+(custom.length===1?'':'s')+' for '+activeClass;
+}
+function renderHangmanPanel(){
+  renderHangmanCategories();
+  const input=document.getElementById('hangmanCustomWords');
+  if(input&&document.activeElement!==input)input.value=hangmanCustomWords().join('\n');
+  const hint=document.getElementById('hangmanPictureHint');if(hint)hint.style.display='none';
+  const pictureButton=document.getElementById('hangmanPictureButton');if(pictureButton)pictureButton.disabled=!(hangmanRound&&hangmanRound.image);
+  if(hangmanRound)renderHangmanRound();
+}
+function hangmanWordsFromSelectedSource(){
+  const source=document.getElementById('hangmanCategory').value,sets=hangmanFlashcardSets();
+  if(source==='__custom__')return hangmanCustomWords().map(word=>({word,image:''}));
+  if(source==='__all__')return sets.flatMap(set=>set.cards.map(card=>({word:card.word,image:card.image||''})));
+  const set=sets.find(item=>item.category===source);
+  return set?set.cards.map(card=>({word:card.word,image:card.image||''})):[];
 }
 function startHangman(){
-  renderHangmanCategories();const cat=document.getElementById('hangmanCategory').value,cards=(flashcardBank[cat]||[]).filter(c=>/[a-z]/i.test(c.word||''));
-  if(!cards.length){alert('Add some word flashcards first.');return;}
-  const card=cards[Math.floor(Math.random()*cards.length)];hangmanRound={word:card.word.toUpperCase().replace(/[^A-Z ]/g,''),guessed:[],wrong:0,over:false};
-  document.getElementById('hangmanRescue').textContent='⛵　🐢';document.getElementById('hangmanMessage').textContent='Guess a letter to help the turtle!';renderHangmanRound();
+  renderHangmanCategories();
+  const words=hangmanWordsFromSelectedSource().filter(item=>/[a-z]/i.test((item.word||'').trim()));
+  if(!words.length){
+    hangmanRound=null;
+    document.getElementById('hangmanMessage').textContent='Choose a flashcard deck or add words to your own list below.';
+    document.getElementById('hangmanWord').textContent='Your word will appear here';
+    document.getElementById('hangmanKeys').innerHTML='';
+    document.getElementById('hangmanPictureButton').disabled=true;
+    document.getElementById('hangmanLives').textContent='6 wrong guesses available';
+    return;
+  }
+  const card=words[Math.floor(Math.random()*words.length)],word=card.word.trim().toLocaleUpperCase();
+  hangmanRound={word,image:card.image||'',guessed:[],wrong:0,over:false};
+  document.getElementById('hangmanPictureHint').style.display='none';
+  document.getElementById('hangmanMessage').textContent='Guess a letter to help the diver!';
+  document.getElementById('hangmanPictureButton').disabled=!hangmanRound.image;
+  renderHangmanRound();
+}
+function saveHangmanCustomWords(words){
+  const cleaned=Array.from(new Set((words||[]).map(word=>String(word||'').trim().replace(/\s+/g,' ')).filter(word=>/[a-z]/i.test(word)).map(word=>word.slice(0,60)))).slice(0,300);
+  classes[activeClass].hangmanWords=cleaned;
+  if(hangmanRound&&document.getElementById('hangmanCategory').value==='__custom__')hangmanRound=null;
+  saveState();renderHangmanPanel();
+  const msg=document.getElementById('hangmanMessage');if(msg)msg.textContent=cleaned.length?'Your word list is saved for '+activeClass+'.':'Add one or more words to start a game.';
+}
+function saveHangmanCustomWordsFromInput(){
+  const input=document.getElementById('hangmanCustomWords');
+  const words=input.value.split(/[\n,;]+/).map(word=>word.trim()).filter(Boolean);
+  saveHangmanCustomWords(words);
+}
+function importHangmanWords(file){
+  if(!file)return;
+  file.text().then(raw=>{
+    let incoming=[];
+    if(/\.json$/i.test(file.name)){
+      const data=JSON.parse(raw);
+      if(Array.isArray(data))incoming=data;
+      else if(Array.isArray(data.words))incoming=data.words;
+      else {
+        const bank=data.flashcardBank||data;
+        Object.values(bank).forEach(list=>{if(Array.isArray(list))list.forEach(card=>incoming.push(typeof card==='string'?card:(card&&card.word)||''));});
+      }
+      incoming=incoming.map(item=>typeof item==='string'?item:(item&&item.word)||'');
+    } else incoming=raw.split(/[\r\n,;]+/);
+    const merged=hangmanCustomWords().concat(incoming.map(word=>String(word).trim()).filter(Boolean));
+    saveHangmanCustomWords(merged);
+    document.getElementById('hangmanCategory').value='__custom__';
+    document.getElementById('hangmanMessage').textContent='Words loaded. Choose “My word list” and start a new word.';
+  }).catch(()=>alert('I could not read that word list. Use a .txt, .csv, or supported flashcard .json file.'));
 }
 function guessHangman(letter){
   if(!hangmanRound||hangmanRound.over||hangmanRound.guessed.includes(letter))return;
-  hangmanRound.guessed.push(letter);if(!hangmanRound.word.includes(letter))hangmanRound.wrong++;
-  const won=[...hangmanRound.word].every(c=>c===' '||hangmanRound.guessed.includes(c));
+  hangmanRound.guessed.push(letter);
+  if(!hangmanRound.word.includes(letter))hangmanRound.wrong++;
+  const won=Array.from(hangmanRound.word).every(char=>!/[A-Z]/.test(char)||hangmanRound.guessed.includes(char));
   if(won||hangmanRound.wrong>=6)hangmanRound.over=true;
   renderHangmanRound();
 }
+function showHangmanPicture(){
+  if(!hangmanRound||!hangmanRound.image)return;
+  const img=document.getElementById('hangmanHintImage');img.src=hangmanRound.image;
+  document.getElementById('hangmanPictureHint').style.display='block';
+}
 function renderHangmanRound(){
   if(!hangmanRound)return;
-  const r=hangmanRound,parts=['⛵　🐢','⛵　🐢　🌊','⛵　🐢　🌊🌊','⛵　🐢　🌊🌊🦈','⛵　🐢　🌊🌊🦈🦈','🛟　🐢　🌊🌊🦈🦈','🛟　🛟　🌊🌊🌊'];
-  document.getElementById('hangmanRescue').textContent=parts[Math.min(r.wrong,6)];
-  document.getElementById('hangmanWord').textContent=[...r.word].map(c=>c===' '?'　':r.guessed.includes(c)||r.over?c:'_').join(' ');
-  document.getElementById('hangmanMessage').textContent=r.over?(r.wrong>=6?'The turtle needs help! The word was '+r.word+'.':'🐢 Safe and sound! Great guessing!'):'Wrong guesses: '+r.wrong+' / 6';
-  document.getElementById('hangmanKeys').innerHTML='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(l=>'<button class="btn '+(r.guessed.includes(l)?'btn-danger':'btn-primary')+'" style="min-width:36px;padding:7px;" '+(r.guessed.includes(l)||r.over?'disabled':'')+' onclick="guessHangman(\''+l+'\')">'+l+'</button>').join('');
+  const r=hangmanRound,level=Math.min(r.wrong,6),waterY=304-level*21;
+  const waterPath='M0 '+waterY+' Q75 '+(waterY-13)+' 150 '+waterY+' T300 '+waterY+' T450 '+waterY+' T600 '+waterY+' V360 H0Z';
+  const wavePath='M0 '+waterY+' Q75 '+(waterY-13)+' 150 '+waterY+' T300 '+waterY+' T450 '+waterY+' T600 '+waterY;
+  document.getElementById('hangmanWater').setAttribute('d',waterPath);
+  document.getElementById('hangmanWave').setAttribute('d',wavePath);
+  document.getElementById('hangmanDiver').setAttribute('transform','translate(0 '+(level*2)+')');
+  const sub=document.getElementById('hangmanRescueSub');sub.setAttribute('opacity',level>=3||r.over&&level<6?'1':'0');sub.setAttribute('transform','translate('+(-Math.max(0,level-2)*12)+' 0)');
+  document.getElementById('hangmanLives').textContent=(6-level)+' wrong guess'+(6-level===1?'':'es')+' left';
+  document.getElementById('hangmanWord').textContent=Array.from(r.word).map(char=>!/[A-Z]/.test(char)?char+' ':r.guessed.includes(char)||r.over?char+' ':'_ ').join('').trim();
+  const won=Array.from(r.word).every(char=>!/[A-Z]/.test(char)||r.guessed.includes(char));
+  document.getElementById('hangmanMessage').textContent=r.over?(won?'🌊 Diver rescued! Your class found the word!':'The diver needs rescuing! The word was '+r.word+'.'):'Pick a letter to sound it out.';
+  document.getElementById('hangmanRescueSub').setAttribute('aria-hidden',level>=3?'false':'true');
+  document.getElementById('hangmanKeys').innerHTML='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(letter=>{
+    const used=r.guessed.includes(letter),correct=used&&r.word.includes(letter),cls=correct?' style="background:#bdebd6;border-color:#238365"':used?' style="background:#ffd4c6;border-color:#ca755c"':'';
+    return '<button type="button" class="hangman-key"'+cls+(used||r.over?' disabled':'')+' onclick="guessHangman(\''+letter+'\')">'+letter+'</button>';
+  }).join('');
 }
 
 // ========== INIT ==========
