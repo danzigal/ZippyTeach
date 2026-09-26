@@ -118,6 +118,33 @@
   .desk-chip.dragging { cursor: grabbing; box-shadow: 0 8px 20px rgba(2,62,138,0.3); z-index: 50; opacity: 0.9; }
   .desk-chip-num { position: absolute; top: 2px; left: 4px; font-size: 8px; font-weight: 800; color: #90b8c9; pointer-events: none; }
   .desk-chip-crown { position: absolute; top: -8px; right: -4px; font-size: 16px; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); pointer-events: none; }
+  .desk-sticker-badge { position:absolute; top:3px; right:4px; width:23px; height:23px; border-radius:50%; background:#fff7db; border:1px solid #f0d88a; display:flex; align-items:center; justify-content:center; font-size:13px; line-height:1; box-shadow:0 1px 3px #173f3622; cursor:pointer; z-index:4; }
+  .desk-sticker-count { position:absolute; right:-5px; bottom:-4px; min-width:11px; height:11px; padding:0 2px; border-radius:8px; background:#398b83; color:white; font:700 8px/11px Arial,sans-serif; text-align:center; }
+  .sticker-picker-grid,.profile-sticker-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:8px; }
+  .sticker-picker-modal-box { width:min(920px,94vw); height:auto; min-height:390px; max-height:88vh; overflow:hidden; display:flex; flex-direction:column; }
+  .sticker-picker-tabs { display:flex; gap:8px; margin:8px 0 12px; flex:0 0 auto; }
+  .sticker-picker-tab { flex:1; border:1px solid #c9e4dc; background:#fff; color:#426563; border-radius:10px; padding:9px 12px; font-weight:700; cursor:pointer; }
+  .sticker-picker-tab.active { background:#168e91; color:#fff; border-color:#168e91; box-shadow:0 3px 0 #0b696f; }
+  .ocean-sticker-choice { min-width:0; min-height:105px; border:1px solid #cce8dc; border-radius:14px; background:linear-gradient(160deg,#fff 0%,#f2fff6 100%); padding:7px 5px 8px; color:#244b54; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; transition:transform .16s,box-shadow .16s; box-shadow:0 2px 4px #153d3610; }
+  .ocean-sticker-choice:hover { border-color:#43a9a0; background:#f5fffc; transform:translateY(-3px); box-shadow:0 7px 12px #153d3622; }
+  .ocean-sticker-art { display:flex; align-items:center; justify-content:center; width:88px; height:76px; }
+  .sticker-illustration { display:block; width:100%; height:100%; overflow:visible; filter:drop-shadow(0 4px 3px #163d4533); }
+  .ocean-sticker-choice strong { font-size:12px; }
+  .ocean-sticker-choice small { display:none; }
+  .profile-sticker-card { margin:14px 0; padding:14px; background:#f8fcfa; border:1px solid #dcebe6; border-radius:12px; }
+  .profile-sticker-heading { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px; }
+  .profile-sticker-heading h4 { color:#31595d; margin:0; }
+  .profile-sticker-heading p { color:#7b8885; font-size:12px; margin:3px 0 0; }
+  .sticker-add-button { border:1px solid #b7d9d1; background:white; border-radius:8px; color:#326c68; padding:7px 10px; cursor:pointer; }
+  .sticker-empty { color:#7b8885; font-size:13px; margin:8px 0 2px; }
+  .profile-sticker-item { display:flex; flex-direction:column; align-items:center; gap:3px; padding:9px 4px; border-radius:10px; background:white; }
+  .profile-sticker-item .sticker-illustration { width:62px; height:54px; }
+  .sticker-group-title { grid-column:1/-1; color:#496967; font-size:12px; font-weight:700; margin:7px 0 0; }
+  @media(max-width:760px) { .sticker-picker-grid { grid-template-columns:repeat(5,minmax(0,1fr)); } .sticker-picker-modal-box { max-height:90vh; } }
+  @media(max-width:520px) { .sticker-picker-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:5px; } .ocean-sticker-choice { min-height:88px; } .ocean-sticker-art { width:68px; height:59px; } .sticker-picker-tab { padding:8px 4px; font-size:12px; } }
+  @media(max-width:380px) { .sticker-picker-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+  .sticker-milestone-settings { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:7px 0 12px; font-size:12px; color:#657779; }
+  .sticker-milestone-settings input { width:62px; padding:5px; border:1px solid #cbded8; border-radius:7px; }
   /* only the grip drags and opens the desk panel; the quick-action buttons sit
      outside it so nothing competes with their taps */
   .desk-chip-grip { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; cursor: grab; padding-top: 3px; }
@@ -222,6 +249,8 @@
   .sub-tab-bar { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
   .sub-tab-btn { padding: 8px 14px; border: 2px solid #caf0f8; border-radius: 8px; background: white; color: #555; cursor: pointer; font-weight: 600; font-size: 13px; }
   .sub-tab-btn.active { border-color: #0077b6; background: #0077b6; color: white; }
+  .workspace-group-nav { margin-top: -5px; padding: 8px 10px; border: 1px solid rgba(202,240,248,.9); border-radius: 12px; background: rgba(255,255,255,.72); }
+  .workspace-group-nav .sub-tab-btn { padding: 7px 12px; }
   .sub-panel { display: none; }
   .sub-panel.active { display: block; }
   .timer-display { font-size: 80px; font-weight: 700; color: #2c3e50; text-align: center; font-family: 'Courier New', monospace; letter-spacing: 4px; }
@@ -1120,6 +1149,99 @@
 .hangman-key:hover:not(:disabled){background:#ffda87;transform:translateY(-1px)}
 .hangman-key:disabled{opacity:.55;cursor:default;box-shadow:none}
 @media(max-width:760px){.hangman-game-layout{grid-template-columns:1fr}.hangman-keys{grid-template-columns:repeat(7,minmax(30px,1fr));gap:5px}.hangman-key{min-height:38px}}
+
+  /* Homework + planning preview: warm paper, calm sea-glass accents, practical controls. */
+  .class-day-strip {
+    background: #f7f3e9 !important; color: #344747; border: 1px solid #ded6c7 !important;
+    border-left: 4px solid #3c7b78 !important; border-radius: 5px !important;
+    box-shadow: none !important; padding: 12px 16px !important;
+  }
+  .class-day-strip strong { color: #244f50; }
+  .planner-panel {
+    --planner-paper: #fffdf8; --planner-wash: #f7f4eb; --planner-line: #ded8ca;
+    --planner-ink: #2f4140; --planner-muted: #697675; --planner-sea: #2f706f;
+    max-width: 850px; margin: 10px auto 24px; padding: clamp(18px, 3.5vw, 30px);
+    color: var(--planner-ink); background: var(--planner-paper);
+    border: 1px solid var(--planner-line); border-top: 4px solid #4b8580;
+    border-radius: 6px; box-shadow: 0 5px 16px rgba(9, 47, 57, .10);
+  }
+  .planner-head { padding-bottom: 17px; margin-bottom: 17px; border-bottom: 1px solid var(--planner-line); }
+  .planner-eyebrow { margin: 0 0 6px; color: var(--planner-sea); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .planner-head h3 { display: flex; align-items: center; gap: 9px; margin: 0 0 7px; color: #283c3b; font: 600 25px/1.2 Georgia, 'Times New Roman', serif; }
+  .planner-head h3 .ico { width: 21px; height: 21px; color: var(--planner-sea); }
+  .planner-head p { margin: 0; max-width: 650px; color: var(--planner-muted); font-size: 14px; line-height: 1.55; }
+  .planner-entry { display: grid; grid-template-columns: minmax(200px, 1fr) minmax(150px, 210px) auto; gap: 12px; align-items: end; margin: 0 0 18px; padding: 15px; background: var(--planner-wash); border: 1px solid #e7e0d2; border-radius: 5px; }
+  .schedule-entry { grid-template-columns: minmax(108px, .8fr) minmax(96px, .65fr) minmax(96px, .65fr) minmax(165px, 1.4fr) auto; }
+  .planner-field { display: grid; gap: 6px; color: #53615f; font-size: 12px; font-weight: 700; }
+  .planner-field input, .planner-field select { width: 100%; min-height: 42px; padding: 9px 11px !important; border: 1px solid #c9c7bb !important; border-radius: 4px !important; background: #fff !important; color: #293a39; font: inherit; font-size: 14px; }
+  .planner-field input:focus, .planner-field select:focus { outline: 3px solid rgba(60,123,120,.20); border-color: #3c7b78 !important; }
+  .planner-add.btn-primary { min-height: 42px; padding: 9px 15px; border-radius: 4px; background: #2f706f; color: #fff; font-size: 13px; box-shadow: none; white-space: nowrap; }
+  .planner-add.btn-primary:hover { background: #255b5a; }
+  .planner-list { display: grid; gap: 8px; }
+  .planner-empty { padding: 16px 14px; border: 1px dashed #c9c4b6; border-radius: 5px; background: #fbf9f2; }
+  .planner-empty strong { display: block; margin-bottom: 3px; color: #394b49; font-size: 14px; }
+  .planner-empty p { margin: 0; color: var(--planner-muted); font-size: 13px; line-height: 1.45; }
+  .homework-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 12px; align-items: center; padding: 13px 14px; border: 1px solid #e2ddcf; border-radius: 5px; background: #fff; }
+  .homework-title { margin-bottom: 5px; font-size: 15px; font-weight: 700; color: #2f4140; overflow-wrap: anywhere; }
+  .homework-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; color: var(--planner-muted); font-size: 12px; }
+  .homework-status { padding: 3px 7px; border: 1px solid #d5d7cb; border-radius: 3px; background: #f7f5ed; color: #59625b; font-size: 11px; font-weight: 700; }
+  .homework-status.ready { background: #edf4e9; border-color: #cbdac2; color: #446044; }
+  .homework-status.done { background: #edf3f2; border-color: #cbd9d6; color: #426360; }
+  .homework-completed { margin-top: 7px; color: #566461; font-size: 12px; line-height: 1.45; }
+  .homework-actions { display: flex; align-items: center; justify-content: flex-end; gap: 7px; flex-wrap: wrap; }
+  .homework-actions .btn-success { padding: 7px 11px; border: 1px solid #2f706f; border-radius: 4px; background: #2f706f; color: #fff; font-size: 12px; }
+  .homework-actions .btn-success:hover { background: #255b5a; }
+  .homework-actions .btn-danger, .schedule-row .btn-danger { padding: 6px 8px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: #8a5850; font-size: 12px; }
+  .homework-actions .btn-danger:hover, .schedule-row .btn-danger:hover { border-color: #e4cbc3; background: #fbf4f0; }
+  .planner-today { margin: 0 0 14px; padding: 10px 12px; border-left: 3px solid #4b8580; background: #f4f3e9; color: #425451; font-size: 13px; line-height: 1.45; }
+  .schedule-row { display: grid; grid-template-columns: 112px 135px minmax(0,1fr) auto; align-items: center; gap: 12px; padding: 12px 13px; border: 1px solid #e2ddcf; border-radius: 5px; background: #fff; }
+  .schedule-row.today { border-left: 3px solid #4b8580; background: #fbfaf4; }
+  .schedule-day { color: #58635f; font-size: 12px; font-weight: 800; letter-spacing: .04em; }
+  .schedule-time { color: #485451; font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .schedule-subject { color: #2f4140; font-size: 14px; font-weight: 650; overflow-wrap: anywhere; }
+  @media(max-width: 680px) {
+    .planner-entry { grid-template-columns: 1fr 1fr; }
+    .planner-entry .planner-field:first-child { grid-column: 1 / -1; }
+    .planner-entry .planner-add { grid-column: 1 / -1; }
+    .homework-item { grid-template-columns: 1fr; }
+    .homework-actions { justify-content: flex-start; }
+    .schedule-row { grid-template-columns: 1fr auto; gap: 5px 10px; }
+    .schedule-day { grid-column: 1; }
+    .schedule-time { grid-column: 1; }
+    .schedule-subject { grid-column: 1; }
+    .schedule-row .btn-danger { grid-column: 2; grid-row: 1 / span 3; }
+  }
+
+
+  .schedule-import { margin: 0 0 16px; border: 1px solid #ded8ca; border-radius: 5px; background: #fbfaf5; }
+  .schedule-import summary { padding: 12px 14px; color: #315f5d; font-size: 13px; font-weight: 750; cursor: pointer; }
+  .schedule-import summary:hover { background: #f4f2e9; }
+  .schedule-import-body { padding: 0 14px 15px; }
+  .schedule-import-intro { margin: 0 0 12px; color: #697675; font-size: 13px; line-height: 1.5; }
+  .schedule-import-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .schedule-import-option { padding: 12px; border: 1px solid #e3ddcf; border-radius: 4px; background: #fff; }
+  .schedule-import-option h4 { margin: 0 0 6px; color: #344746; font-size: 13px; }
+  .schedule-import-option p { margin: 0 0 8px; color: #697675; font-size: 12px; line-height: 1.45; }
+  .schedule-import-option textarea { width: 100%; min-height: 96px; padding: 9px 10px; border: 1px solid #c9c7bb; border-radius: 4px; resize: vertical; color: #293a39; font: inherit; font-size: 13px; }
+  .schedule-import-option textarea:focus, .schedule-import-option input:focus { outline: 3px solid rgba(60,123,120,.20); border-color: #3c7b78; }
+  .schedule-import-option input[type=file] { width: 100%; color: #596461; font: inherit; font-size: 12px; }
+  .schedule-import-action { margin-top: 8px; padding: 7px 10px; border: 1px solid #2f706f; border-radius: 4px; background: #2f706f; color: #fff; font-weight: 700; cursor: pointer; }
+  .schedule-import-status { min-height: 18px; margin: 10px 0 0; color: #53635f; font-size: 12px; line-height: 1.4; }
+  .schedule-import-preview { margin-top: 12px; }
+  .schedule-import-preview:empty { display: none; }
+  .schedule-preview-title { margin: 0 0 8px; color: #344746; font-size: 13px; font-weight: 750; }
+  .schedule-preview-row { display: grid; grid-template-columns: minmax(95px,.9fr) 95px 95px minmax(130px,1.5fr) 30px; align-items: center; gap: 7px; margin: 6px 0; }
+  .schedule-preview-row select, .schedule-preview-row input { width: 100%; min-width: 0; min-height: 36px; padding: 6px 7px; border: 1px solid #c9c7bb; border-radius: 3px; background: white; color: #354644; font: inherit; font-size: 12px; }
+  .schedule-preview-row button { border: 0; background: transparent; color: #8a5850; font-size: 19px; cursor: pointer; }
+  .schedule-import-save { margin-top: 8px; padding: 8px 12px; border: 1px solid #2f706f; border-radius: 4px; background: #2f706f; color: white; font-weight: 750; cursor: pointer; }
+  .schedule-import-save:disabled { opacity: .55; cursor: default; }
+  @media(max-width:680px) {
+    .schedule-import-options { grid-template-columns: 1fr; }
+    .schedule-preview-row { grid-template-columns: minmax(100px,1fr) 1fr 1fr 30px; }
+    .schedule-preview-row input.import-subject { grid-column: 1 / 4; grid-row: 2; }
+    .schedule-preview-row button { grid-column: 4; grid-row: 1 / span 2; }
+  }
+
 </style>
 </head>
 <body>
@@ -1570,54 +1692,89 @@
       <h2 id="workspaceClassName" style="color:#ffffff; text-shadow: 0 2px 8px rgba(2,62,138,0.6); margin:0; font-size:22px; display:inline-flex; align-items:center; gap:9px; white-space:nowrap; flex:0 0 auto;">Class</h2>
       <button class="btn btn-warning" onclick="drawStudentsOfDay()"><svg class="ico"><use href="#i-star"/></svg>Students of the Day</button>
     </div>
-    <div id="dailyClassPrompt" class="card" style="padding:12px 16px;margin-bottom:12px;"></div>
-    <div class="sub-tab-bar">
-      <button class="sub-tab-btn active" onclick="switchWorkspaceTab('behavior')"><svg class="ico"><use href="#i-target"/></svg>Behavior</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('homework')">📚 Homework</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('schedule')">🗓️ Planning</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('jobs')"><svg class="ico"><use href="#i-badge"/></svg>Class Jobs</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('notes')"><svg class="ico"><use href="#i-note"/></svg>Notes</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('wheel')"><svg class="ico"><use href="#i-wheel"/></svg>Wheel</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('bingo')"><svg class="ico"><use href="#i-ball"/></svg>Bingo</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('hangman')">🛟 Hangman</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('tools')"><svg class="ico"><use href="#i-clock"/></svg>Timer &amp; Tools</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('voice')"><svg class="ico"><use href="#i-voice"/></svg>Voice Meter</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('helper')"><svg class="ico"><use href="#i-sunrise"/></svg>Daily Helper</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('profiles')"><svg class="ico"><use href="#i-chart"/></svg>Profiles</button>
-      <button class="sub-tab-btn" onclick="switchWorkspaceTab('mascot')"><svg class="ico"><use href="#i-egg"/></svg>Mascot</button>
+    <div id="dailyClassPrompt" class="class-day-strip" style="margin-bottom:12px;"></div>
+    <div class="sub-tab-bar workspace-category-bar" id="workspaceCategoryBar">
+      <button class="sub-tab-btn active" data-workspace-group="behavior" onclick="switchWorkspaceTab('behavior')"><svg class="ico"><use href="#i-target"/></svg>Behavior</button>
+      <button class="sub-tab-btn" data-workspace-group="homeroom" onclick="switchWorkspaceTab('homeroom')"><svg class="ico"><use href="#i-home"/></svg>Homeroom</button>
+      <button class="sub-tab-btn" data-workspace-group="games" onclick="switchWorkspaceTab('games')"><svg class="ico"><use href="#i-dice"/></svg>Games</button>
+      <button class="sub-tab-btn" data-workspace-group="tools" onclick="switchWorkspaceTab('tools')"><svg class="ico"><use href="#i-clock"/></svg>Tools</button>
     </div>
+    <div class="sub-tab-bar workspace-group-nav" id="workspaceGroupNav" aria-label="Pages in this section" style="display:none;"></div>
 
     <div id="workspace-behavior" class="sub-panel active">
       <div id="classContent"></div>
     </div>
 
     <div id="workspace-homework" class="sub-panel">
-      <div class="card">
-        <h3>📚 Homework for <span id="homeworkClassLabel"></span></h3>
-        <p style="color:#667;">Add work for this class. When it is due, review the roster: everyone starts selected, and students who did not complete it can be deselected.</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0;">
-          <input id="homeworkTitle" type="text" placeholder="Homework title or description" style="flex:1;min-width:190px;padding:10px;border:2px solid #caf0f8;border-radius:8px;">
-          <label>Due <input id="homeworkDue" type="date" style="padding:9px;border:2px solid #caf0f8;border-radius:8px;"></label>
-          <button class="btn btn-primary" onclick="addHomework()">＋ Add homework</button>
+      <section class="planner-panel" aria-labelledby="homeworkHeading">
+        <header class="planner-head">
+          <p class="planner-eyebrow">Homework · <span id="homeworkClassLabel"></span></p>
+          <h3 id="homeworkHeading"><svg class="ico"><use href="#i-doc"/></svg>A simple homework check-in</h3>
+          <p>Keep this class’s assignments together. When a due date arrives, check who completed the work and record the points in their profiles.</p>
+        </header>
+        <div class="planner-entry">
+          <label class="planner-field">Assignment
+            <input id="homeworkTitle" type="text" placeholder="e.g. Read pages 12–15" autocomplete="off">
+          </label>
+          <label class="planner-field">Due date
+            <input id="homeworkDue" type="date">
+          </label>
+          <button class="btn btn-primary planner-add" onclick="addHomework()">＋ Add assignment</button>
         </div>
-        <div id="homeworkList"></div>
-      </div>
+        <div id="homeworkList" class="planner-list" aria-live="polite"></div>
+      </section>
     </div>
 
     <div id="workspace-schedule" class="sub-panel">
-      <div class="card">
-        <h3>🗓️ Class schedule for <span id="scheduleClassLabel"></span></h3>
-        <p style="color:#667;">Add the periods for each weekday. Today's schedule appears here when you open this class.</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0;">
-          <select id="scheduleDay" style="padding:9px;border:2px solid #caf0f8;border-radius:8px;"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select>
-          <input id="scheduleStart" type="time" aria-label="Period start time" style="padding:9px;border:2px solid #caf0f8;border-radius:8px;">
-          <input id="scheduleEnd" type="time" aria-label="Period end time" style="padding:9px;border:2px solid #caf0f8;border-radius:8px;">
-          <input id="scheduleSubject" type="text" placeholder="Subject or activity" style="flex:1;min-width:160px;padding:10px;border:2px solid #caf0f8;border-radius:8px;">
-          <button class="btn btn-primary" onclick="addSchedulePeriod()">＋ Add period</button>
+      <section class="planner-panel" aria-labelledby="scheduleHeading">
+        <header class="planner-head">
+          <p class="planner-eyebrow">Planning · <span id="scheduleClassLabel"></span></p>
+          <h3 id="scheduleHeading"><svg class="ico"><use href="#i-clock"/></svg>Plan the class week</h3>
+          <p>Add the regular periods here. Today’s timetable appears at the top of the class board when you open it.</p>
+        </header>
+        <details class="schedule-import">
+          <summary>Bring in a timetable you already have</summary>
+          <div class="schedule-import-body">
+            <p class="schedule-import-intro">Paste rows from a timetable or choose a screenshot. We’ll lay out the periods for you to review before anything is added.</p>
+            <div class="schedule-import-options">
+              <section class="schedule-import-option" aria-labelledby="pasteScheduleHeading">
+                <h4 id="pasteScheduleHeading">Paste schedule text</h4>
+                <p>Works best with one period per line, such as “Monday · 09:00–09:45 · Reading”. Spreadsheet rows are fine too.</p>
+                <label class="planner-field" for="scheduleImportText">Schedule text
+                  <textarea id="scheduleImportText" placeholder="Monday 09:00–09:45 Reading&#10;Monday 10:00–10:45 Maths"></textarea>
+                </label>
+                <button type="button" class="schedule-import-action" onclick="previewPastedSchedule()">Arrange these periods</button>
+              </section>
+              <section class="schedule-import-option" aria-labelledby="uploadScheduleHeading">
+                <h4 id="uploadScheduleHeading">Read a screenshot</h4>
+                <p>The picture is read in this browser. Check the extracted details carefully; busy or blurry timetables may need edits.</p>
+                <label class="planner-field" for="scheduleScreenshot">Choose a timetable image
+                  <input id="scheduleScreenshot" type="file" accept="image/*" onchange="readScheduleScreenshot(this)">
+                </label>
+                <p class="schedule-import-status" id="scheduleOcrStatus" role="status">On the published website, screenshot reading loads its OCR helper the first time. The image itself stays on this device.</p>
+              </section>
+            </div>
+            <div id="scheduleImportPreview" class="schedule-import-preview" aria-live="polite"></div>
+          </div>
+        </details>
+        <div class="planner-entry schedule-entry">
+          <label class="planner-field">Day
+            <select id="scheduleDay"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select>
+          </label>
+          <label class="planner-field">Starts
+            <input id="scheduleStart" type="time" aria-label="Period start time">
+          </label>
+          <label class="planner-field">Ends
+            <input id="scheduleEnd" type="time" aria-label="Period end time">
+          </label>
+          <label class="planner-field">Lesson or activity
+            <input id="scheduleSubject" type="text" placeholder="e.g. Reading groups" autocomplete="off">
+          </label>
+          <button class="btn btn-primary planner-add" onclick="addSchedulePeriod()">＋ Add period</button>
         </div>
-        <div id="scheduleTodayPrompt" style="font-weight:700;color:#126782;margin:12px 0;"></div>
-        <div id="scheduleList"></div>
-      </div>
+        <div id="scheduleTodayPrompt" class="planner-today" aria-live="polite"></div>
+        <div id="scheduleList" class="planner-list" aria-live="polite"></div>
+      </section>
     </div>
 
     <div id="workspace-wheel" class="sub-panel">
@@ -2135,11 +2292,22 @@
       <h3 id="profileModalTitle" style="color:#333; margin-bottom:4px;">📊 Student Profile</h3>
       <p style="color:#888; font-size:13px; margin-bottom:14px;">Pick what you noticed, how they're doing, and add a note if you like. It all builds up into their report summary.</p>
       <div id="profileLogSection"></div>
+      <div id="profileStickerSection"></div>
       <div id="profileHistorySection"></div>
       <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
         <button class="btn btn-teal" id="profileCopyBtn" onclick="copyProfileSummary()">📋 Copy Summary for Report</button>
         <button class="btn btn-danger" onclick="closeProfileModal()">Close</button>
       </div>
+    </div>
+  </div>
+
+  <div class="reward-modal" id="stickerPickerModal" onclick="closeStickerPicker()">
+    <div class="reward-box sticker-picker-modal-box" onclick="event.stopPropagation()">
+      <h3 style="color:#244b54; margin-bottom:5px;">Choose a sticker</h3>
+      <p id="stickerPickerStudent" style="color:#657779; font-size:13px; margin:0;">Choose a sticker to celebrate a moment.</p>
+      <div id="stickerPickerTabs" class="sticker-picker-tabs"></div>
+      <div id="stickerPickerGrid" class="sticker-picker-grid"></div>
+      <button class="btn btn-danger" onclick="closeStickerPicker()" style="margin-top:12px; align-self:flex-start;">Cancel</button>
     </div>
   </div>
 
@@ -2266,6 +2434,7 @@
         <button class="desk-rule-btn" id="deskDetailRuleBtn" style="flex:1;">🏆 Award Rule</button>
         <button class="desk-profile-btn" id="deskDetailProfileBtn" style="flex:1;">📊 Profile</button>
       </div>
+      <button class="btn btn-teal" id="deskDetailStickerBtn" style="width:100%; margin-bottom:10px;">⭐ Give a sticker</button>
       <button class="btn btn-teal" id="deskDetailLeaderBtn" style="width:100%; margin-bottom:10px;">👑 Mark as Group Leader</button>
       <button class="btn btn-warning" id="deskDetailClearBtn" style="width:100%; margin-bottom:10px; visibility:hidden;">Remove this student</button>
       <button class="btn btn-primary" onclick="closeDeskDetail()" style="width:100%;">Close</button>
@@ -2843,7 +3012,9 @@ function openClassWorkspace(className) {  activeClass = className;
   renderSchedulePanel();
   renderDailyClassPrompt();
 
-  document.querySelectorAll('#panel-classroom > .sub-tab-bar .sub-tab-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
+  document.querySelectorAll('#workspaceCategoryBar .sub-tab-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
+  const groupNav = document.getElementById('workspaceGroupNav');
+  if (groupNav) { groupNav.innerHTML = ''; groupNav.style.display = 'none'; }
   document.querySelectorAll('#panel-classroom > .sub-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('workspace-behavior').classList.add('active');
 
@@ -2888,21 +3059,53 @@ function renameClass(oldName) {
   if (bSel) bSel.value = trimmed;
 }
 
+const WORKSPACE_GROUPS = {
+  behavior: { label: 'Behavior', pages: [], defaultPage: 'behavior' },
+  homeroom: { label: 'Homeroom', pages: [
+    ['schedule', 'Planning'], ['homework', 'Homework'], ['profiles', 'Profiles'], ['notes', 'Notes'], ['jobs', 'Class Jobs']
+  ], defaultPage: 'schedule' },
+  games: { label: 'Games', pages: [
+    ['wheel', 'Student Wheel'], ['bingo', 'Bingo'], ['hangman', 'Hangman']
+  ], defaultPage: 'wheel' },
+  tools: { label: 'Tools', pages: [
+    ['tools', 'Timer & Tools'], ['voice', 'Voice Meter'], ['helper', 'Daily Helper'], ['mascot', 'Mascot']
+  ], defaultPage: 'tools' }
+};
+
 function switchWorkspaceTab(tab) {
-  if (!playTabAllowed(tab) && !playGate(PLAY_FEATURE_NAMES[tab])) return;
-  document.querySelectorAll('#panel-classroom > .sub-tab-bar .sub-tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('#panel-classroom > .sub-panel').forEach(p => p.classList.remove('active'));
-  (event.target.closest('.sub-tab-btn') || event.target).classList.add('active');
-  document.getElementById('workspace-' + tab).classList.add('active');
-  if (tab === 'wheel') {
+  let groupKey = Object.keys(WORKSPACE_GROUPS).find(key => key === tab);
+  let page = tab;
+  if (groupKey) {
+    page = WORKSPACE_GROUPS[groupKey].defaultPage;
+  } else {
+    groupKey = Object.keys(WORKSPACE_GROUPS).find(key => WORKSPACE_GROUPS[key].pages.some(item => item[0] === tab));
+  }
+  if (!groupKey || !document.getElementById('workspace-' + page)) return;
+  if (!playTabAllowed(page) && !playGate(PLAY_FEATURE_NAMES[page])) return;
+
+  document.querySelectorAll('#workspaceCategoryBar .sub-tab-btn').forEach(button => {
+    button.classList.toggle('active', button.dataset.workspaceGroup === groupKey);
+  });
+  const group = WORKSPACE_GROUPS[groupKey];
+  const groupNav = document.getElementById('workspaceGroupNav');
+  if (groupNav) {
+    groupNav.innerHTML = group.pages.map(([id, label]) =>
+      `<button class="sub-tab-btn${id === page ? ' active' : ''}" data-workspace-page="${id}" onclick="switchWorkspaceTab('${id}')">${label}</button>`
+    ).join('');
+    groupNav.style.display = group.pages.length ? 'flex' : 'none';
+    groupNav.setAttribute('aria-label', `${group.label} pages`);
+  }
+  document.querySelectorAll('#panel-classroom > .sub-panel').forEach(panel => panel.classList.remove('active'));
+  document.getElementById('workspace-' + page).classList.add('active');
+  if (page === 'wheel') {
     const sel = document.getElementById('wheelClassSelect');
     if (sel && !sel.value) sel.value = activeClass;
     syncPickerFromClass(sel ? sel.value : activeClass);
-  } else if (tab === 'helper') {
+  } else if (page === 'helper') {
     renderDailyHelper();
-  } else if (tab === 'profiles') {
+  } else if (page === 'profiles') {
     renderProfilesTab();
-  } else if (tab === 'bingo') {
+  } else if (page === 'bingo') {
     populateBingoSources();
     // first visit loads the flashcards, so the game is playable straight away
     if (!document.getElementById('bingoNames').value.trim()) {
@@ -2910,18 +3113,18 @@ function switchWorkspaceTab(tab) {
     } else {
       updateBingo();
     }
-  } else if (tab === 'hangman') {
+  } else if (page === 'hangman') {
     renderHangmanPanel();
-  } else if (tab === 'mascot') {
+  } else if (page === 'mascot') {
     renderMascotPanel();
-  } else if (tab === 'homework') {
+  } else if (page === 'homework') {
     renderHomeworkPanel();
-  } else if (tab === 'schedule') {
+  } else if (page === 'schedule') {
     renderSchedulePanel();
-  } else if (tab === 'jobs') {
+  } else if (page === 'jobs') {
     const jn = document.getElementById('roleNames');
     if (jn && !jn.value.trim()) syncNamesFromClass('roleNames');
-  } else if (tab === 'notes') {
+  } else if (page === 'notes') {
     renderNotesTab();
   }
 }
@@ -3092,6 +3295,14 @@ function renderSeatingCanvas() {
       actions.appendChild(ruleBtn);
 
       chip.appendChild(actions);
+      const stickerBadge = document.createElement('button');
+      stickerBadge.type = 'button'; stickerBadge.className = 'desk-sticker-badge';
+      stickerBadge.setAttribute('aria-label', (d.stickers || []).length + ' stickers in ' + d.name + "'s collection");
+      stickerBadge.title = 'Sticker collection · ' + (d.stickers || []).length;
+      stickerBadge.innerHTML = '<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 2.7 14.5 5l3.4-.1.9 3.3 2.8 2-1.2 3.2.8 3.3-3.1 1.3-1.7 2.9-3.3-.8-3.2.8-1.7-2.9-3.1-1.3.8-3.3-1.2-3.2 2.8-2 .9-3.3 3.4.1L12 2.7Z" fill="#f4ca58" stroke="#aa7920" stroke-width="1.2"/><path d="m8.3 12.2 2.3 2.2 5-5" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg><span class="desk-sticker-count">' + ((d.stickers || []).length > 99 ? '99+' : (d.stickers || []).length) + '</span>';
+      stopChipDrag(stickerBadge);
+      bindDeskTap(stickerBadge, () => openProfileModal(i));
+      chip.appendChild(stickerBadge);
     }
 
     attachDeskDrag(chip, canvas, i);
@@ -3258,6 +3469,7 @@ function openDeskDetail(idx) {
   leaderBtn.onclick = () => toggleGroupLeader(idx);
   document.getElementById('deskDetailRuleBtn').onclick = () => { closeDeskDetail(); openRuleAwardModal(idx); };
   document.getElementById('deskDetailProfileBtn').onclick = () => { closeDeskDetail(); openProfileModal(idx); };
+  document.getElementById('deskDetailStickerBtn').onclick = () => openStickerPicker(idx);
   document.getElementById('deskDetailModal').classList.add('show');
 }
 
@@ -3362,6 +3574,7 @@ function changePoints(idx, delta) {
   const before = desk.points;
   desk.points = Math.max(0, Math.min(MAX_POINTS, desk.points + delta));
   addMascotProgress(activeClass, desk.points - before);
+  const milestoneStickerCount = awardStickerMilestones(desk, before, desk.points);
   if (delta > 0 && desk.points !== before && desk.points % 10 === 0) {
     showReward('🎉', desk.name + ' hit ' + desk.points + ' points! Congratulations!');
     launchConfetti();
@@ -3370,17 +3583,20 @@ function changePoints(idx, delta) {
   renderClassGrid();
   renderClassContent();
   populateBingoWinnerStudents();
+  if (milestoneStickerCount) showStickerToast('🌟 ' + desk.name + ' earned ' + milestoneStickerCount + ' sticker' + (milestoneStickerCount === 1 ? '' : 's') + ' for reaching a point milestone!');
 }
 
 function classWidePoints(delta) {
   const desks = classes[activeClass].desks.filter(d => d.name);
   if (desks.length === 0) return;
   let totalGain = 0;
-  desks.forEach(d => { const before = d.points; d.points = Math.max(0, Math.min(MAX_POINTS, d.points + delta)); totalGain += (d.points - before); });
+  let milestoneAwards = 0;
+  desks.forEach(d => { const before = d.points; d.points = Math.max(0, Math.min(MAX_POINTS, d.points + delta)); totalGain += (d.points - before); milestoneAwards += awardStickerMilestones(d, before, d.points); });
   addMascotProgress(activeClass, totalGain);
   saveState();
   renderClassGrid();
   renderClassContent();
+  if (milestoneAwards) showStickerToast('🌟 ' + milestoneAwards + ' point milestone sticker' + (milestoneAwards === 1 ? '' : 's') + ' earned by the class.');
 }
 
 /* Celebrations use the board's own sketched marks; the emoji passed in is just
@@ -3522,6 +3738,7 @@ function awardRulePoint(idx, ruleIdx) {
   const before = desk.points;
   desk.points = Math.max(0, Math.min(MAX_POINTS, desk.points + delta));
   addMascotProgress(activeClass, desk.points - before);
+  const milestoneStickerCount = awardStickerMilestones(desk, before, desk.points);
   logProfileEntryForDesk(idx, 'Classroom Behavior', 'Following Class Rules',
                          delta > 0 ? 'positive' : 'support', rule.text);
   saveState();
@@ -3539,10 +3756,231 @@ function awardRulePoint(idx, ruleIdx) {
       launchConfetti();
     }, 1600);
   }
+  if (milestoneStickerCount) showStickerToast('🌟 ' + desk.name + ' earned a sticker for reaching a point milestone!');
 }
 
 // ========== STUDENT PROFILES ==========
 let profileDeskIdx = null;
+
+const OCEAN_STICKERS = [
+  { id: 'teamwork', name: 'Teamwork', icon: '🐢', note: 'Worked well with others' },
+  { id: 'curiosity', name: 'Curiosity', icon: '🪼', note: 'Asked thoughtful questions' },
+  { id: 'helping', name: 'Helping', icon: '🐙', note: 'Helped someone today' },
+  { id: 'creativity', name: 'Creativity', icon: '🦀', note: 'Shared a creative idea' },
+  { id: 'focus', name: 'Focus', icon: '🐬', note: 'Stayed focused and kept going' }
+];
+const GENERAL_STICKERS = [
+  { id:'pow', name:'Pow!', icon:'💥', note:'A brilliant effort' },
+  { id:'bam', name:'Bam!', icon:'💜', note:'You did it' },
+  { id:'zam', name:'Zam!', icon:'⚡', note:'A bright idea' },
+  { id:'lightbulb', name:'Bright idea', icon:'💡', note:'For clever thinking' },
+  { id:'rocket', name:'Whoosh!', icon:'🚀', note:'Ready to take off' },
+  { id:'graduate', name:'Learning star', icon:'🪐', note:'A learning milestone' },
+  { id:'superstar', name:'Super star', icon:'⭐', note:'A star effort' },
+  { id:'highfive', name:'High five', icon:'🙌', note:'A job well done' },
+  { id:'levelup', name:'Level up', icon:'❤️', note:'Look how far you have come' },
+  { id:'chameleon', name:'Colorful thinker', icon:'🦎', note:'A flexible thinker' },
+  { id:'artist', name:'Creative spark', icon:'🎨', note:'For making something new' },
+  { id:'science', name:'Science star', icon:'🧪', note:'For curious experiments' },
+  { id:'puzzle', name:'Piece by piece', icon:'🧩', note:'Kept working it out' },
+  { id:'reader', name:'Story explorer', icon:'📚', note:'A lovely learning moment' },
+  { id:'maths', name:'Number whiz', icon:'🔢', note:'For number work' },
+  { id:'magic', name:'Ta-da!', icon:'🎩', note:'A little bit of magic' },
+  { id:'cactus', name:'Yippee!', icon:'🌵', note:'Grew through a challenge' },
+  { id:'rainbow', name:'Rainbow ride', icon:'🌈', note:'A bright moment today' },
+  { id:'frog', name:'Nice one!', icon:'🐸', note:'A lovely effort' },
+  { id:'dino', name:'Roar!', icon:'🦖', note:'Brave learning' },
+  { id:'whoosh', name:'Whoosh!', icon:'👟', note:'Kept moving forward' }
+];
+function getOceanSticker(id) { return OCEAN_STICKERS.concat(GENERAL_STICKERS).find(s => s.id === id) || OCEAN_STICKERS[0]; }
+function awardStickerMilestones(desk, before, after) {
+  if (after <= before || !desk.name) return 0;
+  const step = Math.max(1, Math.min(500, parseInt(classes[activeClass].stickerMilestone, 10) || 10));
+  if (!desk.stickers) desk.stickers = [];
+  if (!desk.stickerMilestones) desk.stickerMilestones = [];
+  let awarded = 0;
+  for (let points = (Math.floor(before / step) + 1) * step; points <= after; points += step) {
+    if (desk.stickerMilestones.includes(points)) continue;
+    const generalSticker = GENERAL_STICKERS[(Math.floor(points / step) - 1) % GENERAL_STICKERS.length];
+    desk.stickerMilestones.push(points);
+    desk.stickers.push({ stickerId: generalSticker.id, date: new Date().toISOString(), reason: 'Reached ' + points + ' points', milestone: points });
+    awarded++;
+  }
+  return awarded;
+}
+function showStickerToast(message) {
+  let note = document.getElementById('stickerAwardNotice');
+  if (!note) { note = document.createElement('div'); note.id = 'stickerAwardNotice'; note.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:20000;background:#244b54;color:#fff;padding:11px 17px;border-radius:20px;box-shadow:0 4px 18px #244b5440;font-size:14px;'; document.body.appendChild(note); }
+  note.textContent = message; note.style.display = 'block';
+  clearTimeout(window.stickerNoticeTimer); window.stickerNoticeTimer = setTimeout(() => { note.style.display = 'none'; }, 2800);
+}
+let stickerSvgCounter = 0;
+function chibiOceanArt(kind, uid) {
+  const line = 'stroke="#284a55" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"';
+  if (kind === 'turtle') return `<g ${line}>
+    <path d="M41 71Q29 73 30 83Q34 90 45 81M68 74Q79 75 79 84Q75 91 66 82" fill="url(#${uid}body)" stroke="#fff" stroke-width="8"/><path d="M41 71Q29 73 30 83Q34 90 45 81M68 74Q79 75 79 84Q75 91 66 82" fill="url(#${uid}body)"/>
+    <ellipse cx="55" cy="68" rx="25" ry="17" fill="url(#${uid}shell)" stroke="#fff" stroke-width="9"/><ellipse cx="55" cy="68" rx="25" ry="17" fill="url(#${uid}shell)"/><path d="M55 51V84M33 67Q44 61 55 68Q66 61 77 67M40 56q8 7 7 20m23-20q-8 7-7 20" fill="none" stroke="#8c5549" stroke-width="2"/>
+    <path d="M69 48Q72 28 90 28Q108 29 108 47Q108 67 89 68Q71 68 69 48Z" fill="url(#${uid}body)" stroke="#fff" stroke-width="10"/><path d="M69 48Q72 28 90 28Q108 29 108 47Q108 67 89 68Q71 68 69 48Z" fill="url(#${uid}body)"/><path d="M78 35Q88 29 98 36" fill="none" stroke="#fff" stroke-width="4" opacity=".9"/>
+    <ellipse cx="83" cy="47" rx="4.2" ry="5.7" fill="#203d48" stroke="none"/><ellipse cx="98" cy="47" rx="4.2" ry="5.7" fill="#203d48" stroke="none"/><circle cx="84" cy="45" r="1.6" fill="white" stroke="none"/><circle cx="99" cy="45" r="1.6" fill="white" stroke="none"/><circle cx="77" cy="57" r="3.5" fill="#ffb4b6" stroke="none"/><circle cx="103" cy="57" r="3.5" fill="#ffb4b6" stroke="none"/><path d="M86 58q5 5 10 0" fill="none" stroke="#39705f" stroke-width="2"/></g>`;
+  if (kind === 'ray') return `<g ${line}>
+    <path d="M34 61Q27 53 22 49Q32 43 41 50Q48 34 64 34Q81 34 88 49Q99 42 108 49Q103 57 95 63L87 74Q74 68 63 70Q50 69 40 77Z" fill="url(#${uid}body)" stroke="#fff" stroke-width="10"/><path d="M34 61Q27 53 22 49Q32 43 41 50Q48 34 64 34Q81 34 88 49Q99 42 108 49Q103 57 95 63L87 74Q74 68 63 70Q50 69 40 77Z" fill="url(#${uid}body)"/><path d="M63 69q3 11 8 17" fill="none" stroke="#fff" stroke-width="8"/><path d="M63 69q3 11 8 17" fill="none" stroke="#318ea9" stroke-width="2.8"/><path d="M48 53q15-12 31 0" fill="none" stroke="#fff" stroke-width="4" opacity=".8"/><ellipse cx="55" cy="57" rx="4" ry="5.5" fill="#203c48" stroke="none"/><ellipse cx="73" cy="57" rx="4" ry="5.5" fill="#203c48" stroke="none"/><circle cx="56" cy="55" r="1.5" fill="white" stroke="none"/><circle cx="74" cy="55" r="1.5" fill="white" stroke="none"/><circle cx="46" cy="65" r="3.4" fill="#ffaeb8" stroke="none"/><circle cx="82" cy="65" r="3.4" fill="#ffaeb8" stroke="none"/><path d="M59 65q5 4 10 0" fill="none" stroke="#426879" stroke-width="2"/><path d="M50 65q-4 5-8 4m44-4q4 5 8 4" fill="none" stroke="#4886a0" stroke-width="1.6"/></g>`;
+  if (kind === 'octopus') return `<g ${line}>
+    <path d="M39 69Q28 78 35 87Q42 93 49 81Q51 93 58 92Q64 91 63 81Q69 93 76 90Q82 86 75 76Q88 84 93 77Q96 70 83 64" fill="none" stroke="#fff" stroke-width="13"/><path d="M39 69Q28 78 35 87Q42 93 49 81Q51 93 58 92Q64 91 63 81Q69 93 76 90Q82 86 75 76Q88 84 93 77Q96 70 83 64" fill="none" stroke="url(#${uid}accent)" stroke-width="7"/>
+    <path d="M34 52Q33 25 62 24Q91 25 90 53Q89 74 62 76Q35 75 34 52Z" fill="url(#${uid}accent)" stroke="#fff" stroke-width="10"/><path d="M34 52Q33 25 62 24Q91 25 90 53Q89 74 62 76Q35 75 34 52Z" fill="url(#${uid}accent)"/><path d="M42 37Q56 27 72 35" fill="none" stroke="#fff" stroke-width="4" opacity=".85"/>
+    <ellipse cx="51" cy="51" rx="4.6" ry="6.4" fill="#243e4c" stroke="none"/><ellipse cx="71" cy="51" rx="4.6" ry="6.4" fill="#243e4c" stroke="none"/><circle cx="52" cy="49" r="1.7" fill="#fff" stroke="none"/><circle cx="72" cy="49" r="1.7" fill="#fff" stroke="none"/><circle cx="43" cy="63" r="3.5" fill="#ffb6c3" stroke="none"/><circle cx="79" cy="63" r="3.5" fill="#ffb6c3" stroke="none"/><path d="M56 64q5 5 10 0" fill="none" stroke="#7e4776" stroke-width="2"/><circle cx="39" cy="83" r="1.8" fill="#fff2fa" stroke="none"/><circle cx="84" cy="80" r="1.8" fill="#fff2fa" stroke="none"/></g>`;
+  if (kind === 'crab') return `<g ${line}>
+    <path d="M42 68 34 79M53 72 50 84M70 72 73 84M81 68 90 78" fill="none" stroke="#fff" stroke-width="10"/><path d="M42 68 34 79M53 72 50 84M70 72 73 84M81 68 90 78" fill="none" stroke="#e87964" stroke-width="4.5"/><path d="M36 48Q25 38 20 46Q17 54 33 59M84 47Q96 37 102 45Q104 53 88 59" fill="url(#${uid}accent)" stroke="#fff" stroke-width="9"/><path d="M36 48Q25 38 20 46Q17 54 33 59M84 47Q96 37 102 45Q104 53 88 59" fill="url(#${uid}accent)"/><path d="M34 56Q33 35 61 33Q89 35 88 57Q87 78 61 79Q35 78 34 56Z" fill="url(#${uid}accent)" stroke="#fff" stroke-width="10"/><path d="M34 56Q33 35 61 33Q89 35 88 57Q87 78 61 79Q35 78 34 56Z" fill="url(#${uid}accent)"/><path d="M43 43Q58 35 73 43" fill="none" stroke="#fff" stroke-width="4"/>
+    <path d="M46 41V32Q46 26 51 26Q56 26 56 34M67 34Q67 26 72 26Q77 26 77 32V42" fill="none" stroke="#fff" stroke-width="9"/><path d="M46 41V32Q46 26 51 26Q56 26 56 34M67 34Q67 26 72 26Q77 26 77 32V42" fill="none" stroke="#e87964" stroke-width="4"/><circle cx="52" cy="51" r="4.6" fill="#263f49" stroke="none"/><circle cx="71" cy="51" r="4.6" fill="#263f49" stroke="none"/><circle cx="53" cy="49" r="1.6" fill="#fff" stroke="none"/><circle cx="72" cy="49" r="1.6" fill="#fff" stroke="none"/><circle cx="42" cy="63" r="3.5" fill="#ffbac1" stroke="none"/><circle cx="80" cy="63" r="3.5" fill="#ffbac1" stroke="none"/><path d="M57 64q5 4 10 0" fill="none" stroke="#8b4251" stroke-width="2"/></g>`;
+  return `<g ${line}>
+    <path d="M33 60Q41 39 66 38Q81 37 90 48L105 43 98 57Q103 63 98 69Q90 79 73 76L56 85 59 74Q43 78 33 60Z" fill="url(#${uid}body)" stroke="#fff" stroke-width="11"/><path d="M33 60Q41 39 66 38Q81 37 90 48L105 43 98 57Q103 63 98 69Q90 79 73 76L56 85 59 74Q43 78 33 60Z" fill="url(#${uid}body)"/><path d="M57 72Q73 79 92 67Q83 83 58 78Z" fill="#fff4e8" stroke="#5d9cba" stroke-width="1.2"/><path d="M69 45Q67 36 74 32Q82 37 81 46M56 73Q49 82 43 84Q52 85 60 76" fill="url(#${uid}accent)" stroke="#fff" stroke-width="8"/><path d="M69 45Q67 36 74 32Q82 37 81 46M56 73Q49 82 43 84Q52 85 60 76" fill="url(#${uid}accent)"/><circle cx="87" cy="54" r="4.8" fill="#203e4a" stroke="none"/><circle cx="88" cy="52" r="1.7" fill="white" stroke="none"/><path d="M93 64q-6 5-13 1" fill="none" stroke="#315766" stroke-width="2"/><path d="M43 56Q56 44 71 46" fill="none" stroke="#fff" stroke-width="4" opacity=".9"/></g>`;
+}
+function stickerArtworkSvg(stickerId) {
+  const uid = 'oceanSticker' + (++stickerSvgCounter);
+  const ocean = {
+    teamwork: 'turtle', curiosity: 'ray', helping: 'octopus', creativity: 'crab', focus: 'dolphin'
+  };
+  const general = {
+    pow:'star', bam:'star', zam:'star', superstar:'star', highfive:'star',
+    lightbulb:'bulb', science:'bulb', rocket:'rocket', rainbow:'rainbow',
+    graduate:'planet', levelup:'heart', chameleon:'frog', frog:'frog', cactus:'cactus',
+    artist:'palette', puzzle:'puzzle', reader:'books', maths:'calculator', magic:'hat',
+    dino:'dino', whoosh:'sneaker'
+  };
+  const kind = ocean[stickerId] || general[stickerId] || 'star';
+  const outline = 'stroke="#284a55" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"';
+  let art = '';
+  if (kind === 'turtle') art = `
+    <g ${outline}>
+      <path d="M39 68Q26 70 24 82Q22 89 33 84L45 78M80 68Q96 69 100 80Q102 89 91 84L79 78M43 78Q34 84 38 92Q45 96 52 82M76 78Q85 84 81 92Q74 96 67 82" fill="url(#${uid}body)" stroke="#fff" stroke-width="8"/><path d="M39 68Q26 70 24 82Q22 89 33 84L45 78M80 68Q96 69 100 80Q102 89 91 84L79 78M43 78Q34 84 38 92Q45 96 52 82M76 78Q85 84 81 92Q74 96 67 82" fill="url(#${uid}body)"/>
+      <ellipse cx="61" cy="60" rx="28" ry="23" fill="url(#${uid}shell)" stroke="#fff" stroke-width="9"/><ellipse cx="61" cy="60" rx="28" ry="23" fill="url(#${uid}shell)"/>
+      <path d="M61 38V82M35 59Q48 53 61 60Q75 52 87 59M43 44Q50 52 48 70M79 44Q72 52 74 70" fill="none" stroke="#39806f" stroke-width="2"/>
+      <path d="M88 49Q105 43 108 55Q111 67 98 70L84 65Z" fill="url(#${uid}body)" stroke="#fff" stroke-width="8"/><path d="M88 49Q105 43 108 55Q111 67 98 70L84 65Z" fill="url(#${uid}body)"/>
+      <circle cx="101" cy="55" r="3.2" fill="#263e48" stroke="none"/><circle cx="102" cy="54" r="1.1" fill="white" stroke="none"/><path d="M96 62q5 4 9 0" fill="none" stroke="#477d67" stroke-width="1.8"/>
+      <path d="M49 49Q59 41 73 48" fill="none" stroke="#fff" stroke-width="3.5" opacity=".8"/>
+    </g>`;
+  else if (kind === 'ray') art = `
+    <g ${outline}><path d="M24 57Q36 38 60 40Q84 37 104 57Q95 60 85 76Q75 71 64 72Q48 72 38 80Q34 66 24 57Z" fill="url(#${uid}body)" stroke="#fff" stroke-width="10"/><path d="M24 57Q36 38 60 40Q84 37 104 57Q95 60 85 76Q75 71 64 72Q48 72 38 80Q34 66 24 57Z" fill="url(#${uid}body)"/><path d="M61 70Q65 82 69 91Q72 98 68 101" fill="none" stroke="#fff" stroke-width="9"/><path d="M61 70Q65 82 69 91Q72 98 68 101" fill="none" stroke="#358eae" stroke-width="3"/><path d="M40 58Q61 48 87 58Q78 68 64 67Q49 67 40 58Z" fill="#fff4e8" stroke="#68a9b7" stroke-width="1.5"/><ellipse cx="53" cy="57" rx="3.4" ry="4.5" fill="#243e4c" stroke="none"/><ellipse cx="74" cy="57" rx="3.4" ry="4.5" fill="#243e4c" stroke="none"/><circle cx="54" cy="56" r="1.2" fill="white" stroke="none"/><circle cx="75" cy="56" r="1.2" fill="white" stroke="none"/><circle cx="44" cy="64" r="3" fill="#f29aa1" stroke="none"/><circle cx="83" cy="64" r="3" fill="#f29aa1" stroke="none"/><path d="M60 64q4 3 8 0" fill="none" stroke="#456776" stroke-width="1.8"/></g>`;
+  else if (kind === 'octopus') art = `
+    <g ${outline}><path d="M37 71Q24 81 31 91Q38 97 47 83Q51 101 60 96Q66 93 64 82Q72 100 81 94Q86 90 78 79Q94 89 99 80Q102 72 84 66" fill="none" stroke="#fff" stroke-width="13"/><path d="M37 71Q24 81 31 91Q38 97 47 83Q51 101 60 96Q66 93 64 82Q72 100 81 94Q86 90 78 79Q94 89 99 80Q102 72 84 66" fill="none" stroke="url(#${uid}body)" stroke-width="7"/><path d="M35 56Q34 30 61 29Q88 30 86 57Q85 75 61 77Q37 76 35 56Z" fill="url(#${uid}body)" stroke="#fff" stroke-width="10"/><path d="M35 56Q34 30 61 29Q88 30 86 57Q85 75 61 77Q37 76 35 56Z" fill="url(#${uid}body)"/><path d="M43 39Q56 29 71 37" fill="none" stroke="#fff" stroke-width="4" opacity=".75"/><ellipse cx="52" cy="54" rx="4" ry="5" fill="#253e4a" stroke="none"/><ellipse cx="70" cy="54" rx="4" ry="5" fill="#253e4a" stroke="none"/><circle cx="53" cy="52" r="1.5" fill="white" stroke="none"/><circle cx="71" cy="52" r="1.5" fill="white" stroke="none"/><circle cx="44" cy="64" r="3" fill="#ffabb4" stroke="none"/><circle cx="78" cy="64" r="3" fill="#ffabb4" stroke="none"/><path d="M57 63q4 4 8 0" fill="none" stroke="#704774" stroke-width="2"/><circle cx="42" cy="84" r="2" fill="#f9d2e5" stroke="none"/><circle cx="84" cy="84" r="2" fill="#f9d2e5" stroke="none"/></g>`;
+  else if (kind === 'crab') art = `
+    <g ${outline}><path d="M38 62 28 55 22 60 30 72M47 68 39 82M61 69 59 86M75 68 83 82M85 61 96 54 103 60 94 73" fill="none" stroke="#fff" stroke-width="11"/><path d="M38 62 28 55 22 60 30 72M47 68 39 82M61 69 59 86M75 68 83 82M85 61 96 54 103 60 94 73" fill="none" stroke="url(#${uid}body)" stroke-width="5"/><path d="M26 55Q16 47 20 40Q26 35 33 44L37 50M97 54Q108 45 105 39Q100 34 93 43L89 50" fill="url(#${uid}body)" stroke="#fff" stroke-width="9"/><path d="M26 55Q16 47 20 40Q26 35 33 44L37 50M97 54Q108 45 105 39Q100 34 93 43L89 50" fill="url(#${uid}body)"/><ellipse cx="62" cy="62" rx="32" ry="22" fill="url(#${uid}body)" stroke="#fff" stroke-width="10"/><ellipse cx="62" cy="62" rx="32" ry="22" fill="url(#${uid}body)"/><path d="M42 52Q61 42 80 52" fill="none" stroke="#ffd0ad" stroke-width="4"/><ellipse cx="53" cy="57" rx="3.6" ry="5" fill="#28424a" stroke="none"/><ellipse cx="70" cy="57" rx="3.6" ry="5" fill="#28424a" stroke="none"/><circle cx="54" cy="55" r="1.3" fill="white" stroke="none"/><circle cx="71" cy="55" r="1.3" fill="white" stroke="none"/><circle cx="44" cy="65" r="3" fill="#ffbac0" stroke="none"/><circle cx="79" cy="65" r="3" fill="#ffbac0" stroke="none"/><path d="M58 66q4 4 8 0" fill="none" stroke="#8e4050" stroke-width="1.8"/></g>`;
+  else if (kind === 'dolphin') art = `
+    <g ${outline}><path d="M25 66Q39 47 67 43Q81 41 92 49L105 43 99 57Q105 64 99 69Q89 80 70 78L53 89 56 75Q37 82 25 66Z" fill="url(#${uid}body)" stroke="#fff" stroke-width="11"/><path d="M25 66Q39 47 67 43Q81 41 92 49L105 43 99 57Q105 64 99 69Q89 80 70 78L53 89 56 75Q37 82 25 66Z" fill="url(#${uid}body)"/><path d="M53 73Q73 78 91 67Q80 83 57 80Z" fill="#fff1df" stroke="#5d9cba" stroke-width="1.2"/><path d="M69 48Q67 38 75 34Q83 41 82 48M57 77Q50 86 43 90Q53 90 61 80" fill="url(#${uid}accent)" stroke="#fff" stroke-width="8"/><path d="M69 48Q67 38 75 34Q83 41 82 48M57 77Q50 86 43 90Q53 90 61 80" fill="url(#${uid}accent)"/><circle cx="89" cy="56" r="3.2" fill="#203e4a" stroke="none"/><circle cx="90" cy="55" r="1.1" fill="white" stroke="none"/><path d="M91 64q-6 5-12 1" fill="none" stroke="#315766" stroke-width="1.8"/><path d="M38 61Q55 48 72 49" fill="none" stroke="#fff" stroke-width="3.5" opacity=".85"/><path d="M46 93Q61 98 73 93" fill="none" stroke="#65b5c8" stroke-width="2"/></g>`;
+  else {
+    const common = {
+      star:`<path d="M63 25 72 43 92 40 82 57 96 70 76 73 70 92 57 78 39 86 43 66 26 56 46 51 47 31 63 43Z" fill="url(#${uid}accent)" ${outline}/><path d="M48 51Q61 44 74 51" fill="none" stroke="#fff" stroke-width="4" opacity=".85"/><circle cx="55" cy="62" r="2.2" fill="#375060"/><circle cx="69" cy="62" r="2.2" fill="#375060"/><path d="M57 69q5 4 10 0" fill="none" stroke="#8b5260" stroke-width="1.7"/>`,
+      bulb:`<path d="M48 67Q36 57 39 44Q42 26 62 25Q83 25 86 44Q88 57 76 67L73 76H51Z" fill="url(#${uid}accent)" ${outline}/><path d="M51 76h22v7H51zM53 85h18v6H53z" fill="#74b3c4" ${outline}/><path d="M49 44Q52 34 64 34" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M54 58q8 6 16 0" fill="none" stroke="#f8ffe7" stroke-width="3"/>`,
+      rocket:`<path d="M48 72Q43 46 69 26Q87 20 91 23Q94 45 75 67Q64 78 48 72Z" fill="url(#${uid}accent)" ${outline}/><circle cx="73" cy="43" r="8" fill="#c9f3f2" ${outline}/><path d="m49 61-14 3 9-18M61 75l-2 14 15-13" fill="#ff8e74" ${outline}/><path d="M48 76Q39 87 48 94Q53 84 58 79" fill="#ffd166" stroke="#d97848" stroke-width="2"/><path d="M60 34Q73 25 82 27" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>`,
+      rainbow:`<path d="M30 78A34 34 0 0 1 98 78" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round"/><path d="M30 78A34 34 0 0 1 98 78" fill="none" stroke="#f47779" stroke-width="7" stroke-linecap="round"/><path d="M37 77A27 27 0 0 1 91 77" fill="none" stroke="#ffd166" stroke-width="7"/><path d="M44 77A20 20 0 0 1 84 77" fill="none" stroke="#6bcf9b" stroke-width="7"/><path d="M51 77A13 13 0 0 1 77 77" fill="none" stroke="#68b8ed" stroke-width="7"/><path d="M26 76q-5-8 2-12 6-4 12 2 6-7 12-1 5 6-1 12Z M85 77q-6-8 1-12 6-4 12 2 6-7 12-1 5 6-1 12Z" fill="#fff" stroke="#bddfe9" stroke-width="2"/>`,
+      planet:`<circle cx="63" cy="58" r="25" fill="url(#${uid}accent)" ${outline}/><ellipse cx="63" cy="61" rx="43" ry="12" transform="rotate(-18 63 61)" fill="none" stroke="#fff" stroke-width="11"/><ellipse cx="63" cy="61" rx="43" ry="12" transform="rotate(-18 63 61)" fill="none" stroke="#dfaa68" stroke-width="5"/><path d="M48 47Q61 39 75 47" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><circle cx="57" cy="58" r="2.5" fill="#334759"/><circle cx="69" cy="58" r="2.5" fill="#334759"/><path d="M58 65q5 4 10 0" fill="none" stroke="#8b5260" stroke-width="1.8"/>`,
+      heart:`<path d="M64 88 31 58Q20 43 32 31Q45 20 64 39Q82 20 96 31Q108 44 96 59Z" fill="url(#${uid}accent)" ${outline}/><path d="M39 39Q48 31 57 40" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M47 58Q62 65 79 59" fill="none" stroke="#fff" stroke-width="2" opacity=".6"/>`,
+      palette:`<path d="M61 25Q92 25 96 51Q99 67 84 72Q73 75 74 84Q73 94 58 91Q32 87 28 62Q24 39 44 29Q51 26 61 25Z" fill="url(#${uid}accent)" ${outline}/><path d="M72 38Q88 43 85 56" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><circle cx="47" cy="46" r="5" fill="#f27d88"/><circle cx="62" cy="39" r="5" fill="#ffd15c"/><circle cx="77" cy="47" r="5" fill="#6ed1bb"/><circle cx="48" cy="64" r="5" fill="#78bbed"/><circle cx="64" cy="67" r="5" fill="#b398e8"/>`,
+      puzzle:`<path d="M43 34H56Q55 23 64 23Q74 23 72 34H87Q92 34 92 40V52Q103 51 103 61Q103 70 92 69V84Q92 90 86 90H72Q73 79 63 79Q53 79 54 90H42Q36 90 36 84V70Q25 71 25 61Q25 51 36 52V41Q36 34 43 34Z" fill="url(#${uid}accent)" ${outline}/><path d="M46 42H56M42 76V84" stroke="#fff" stroke-width="4" stroke-linecap="round"/>`,
+      books:`<path d="M31 39Q47 31 63 42V83Q47 73 31 81Z" fill="#ffe0a7" ${outline}/><path d="M63 42Q79 31 95 39V81Q79 73 63 83Z" fill="url(#${uid}accent)" ${outline}/><path d="M63 42V84M37 47Q49 44 56 50M70 49Q81 43 90 47" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`,
+      calculator:`<rect x="39" y="23" width="49" height="70" rx="10" fill="url(#${uid}accent)" ${outline}/><rect x="47" y="31" width="33" height="15" rx="3" fill="#e7fff2" stroke="#527766" stroke-width="1.5"/><path d="M48 38h16" stroke="#6ab493" stroke-width="2"/><g fill="#fff2c4" stroke="#ab8661" stroke-width="1"><circle cx="51" cy="57" r="4"/><circle cx="64" cy="57" r="4"/><circle cx="77" cy="57" r="4"/><circle cx="51" cy="70" r="4"/><circle cx="64" cy="70" r="4"/><circle cx="77" cy="70" r="4"/><circle cx="51" cy="83" r="4"/><circle cx="64" cy="83" r="4"/><circle cx="77" cy="83" r="4"/></g><path d="M49 28h17" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`,
+      hat:`<path d="M35 65Q40 48 50 39Q64 27 76 43Q82 51 82 65Z" fill="url(#${uid}accent)" ${outline}/><path d="M25 66Q58 59 101 66Q100 77 63 78Q28 78 25 66Z" fill="#4c5285" stroke="#fff" stroke-width="8"/><path d="M25 66Q58 59 101 66Q100 77 63 78Q28 78 25 66Z" fill="#4c5285"/><path d="M50 47Q62 37 71 47" fill="none" stroke="#fff" stroke-width="4"/><path d="M56 62q8-8 14 0-7 9-14 0Z" fill="#fff2b0" stroke="#9881bb" stroke-width="1.5"/>`,
+      frog:`<path d="M34 51Q29 37 42 34Q52 32 56 43Q66 39 75 43Q80 31 91 35Q102 40 94 54Q102 65 92 77Q81 91 62 88Q42 88 33 75Q25 64 34 51Z" fill="url(#${uid}body)" ${outline}/><circle cx="47" cy="45" r="9" fill="#b9ef71" stroke="#284a55" stroke-width="2"/><circle cx="82" cy="45" r="9" fill="#b9ef71" stroke="#284a55" stroke-width="2"/><circle cx="49" cy="45" r="3" fill="#28404a"/><circle cx="81" cy="45" r="3" fill="#28404a"/><path d="M47 63Q64 78 82 62" fill="none" stroke="#416b4a" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="64" cy="72" rx="18" ry="10" fill="#d8f5a5" opacity=".85"/><path d="M41 79q-10 7-15 2M84 79q10 7 15 2" fill="none" stroke="#3b7856" stroke-width="4" stroke-linecap="round"/>`,
+      cactus:`<path d="M57 81V43Q57 31 67 31Q77 31 77 43V50Q77 57 84 57Q91 57 91 50V44" fill="none" stroke="#fff" stroke-width="17" stroke-linecap="round"/><path d="M57 81V43Q57 31 67 31Q77 31 77 43V50Q77 57 84 57Q91 57 91 50V44" fill="none" stroke="url(#${uid}body)" stroke-width="11" stroke-linecap="round"/><path d="M57 62Q57 53 48 53Q40 53 40 62V68" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round"/><path d="M57 62Q57 53 48 53Q40 53 40 62V68" fill="none" stroke="#57b67f" stroke-width="10" stroke-linecap="round"/><path d="M48 94Q64 84 81 94L76 102H52Z" fill="#d17954" ${outline}/><path d="M63 39v7M72 55v7M51 63v5M67 71v7" stroke="#e0ffc2" stroke-width="2" stroke-linecap="round"/>`,
+      dino:`<path d="M31 79Q26 68 34 60L38 45 49 50 55 40 66 47 75 36 82 48Q99 49 101 65Q103 78 90 83L88 94H78L75 84H56L52 94H42L42 81Z" fill="url(#${uid}body)" ${outline}/><circle cx="82" cy="61" r="4" fill="#253f48"/><circle cx="83" cy="60" r="1.3" fill="white"/><path d="M87 72q-9 6-18 0" fill="none" stroke="#315b4e" stroke-width="2"/><path d="M42 62Q51 58 58 62" stroke="#c9f58b" stroke-width="3"/><path d="M43 51 48 57M57 46 61 53M75 43 77 51" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`,
+      sneaker:`<path d="M31 65Q43 68 50 49L61 56Q68 65 82 66L96 68Q103 70 101 80Q99 87 87 88H34Q25 85 27 75Z" fill="url(#${uid}accent)" ${outline}/><path d="M28 78Q55 81 101 76L99 84Q92 91 34 88Q26 86 28 78Z" fill="#fff7e7" stroke="#536477" stroke-width="2"/><path d="m50 58 13 7M47 64l14 2M44 69l14-1" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M67 68 76 69" stroke="#ffda74" stroke-width="3"/>`
+    };
+    art = common[kind] || common.star;
+    const mascotFaces = {
+      rocket:'<g fill="#24404b"><circle cx="70" cy="42" r="1.7"/><circle cx="76" cy="42" r="1.7"/></g><path d="M71 47q2 2 4 0" fill="none" stroke="#365563" stroke-width="1.5" stroke-linecap="round"/>',
+      rainbow:'<g fill="#304b58"><circle cx="36" cy="68" r="1.7"/><circle cx="44" cy="68" r="1.7"/><circle cx="90" cy="68" r="1.7"/><circle cx="98" cy="68" r="1.7"/></g><path d="M37 72q3 3 6 0m48 0q3 3 6 0" fill="none" stroke="#53727e" stroke-width="1.4" stroke-linecap="round"/>',
+      heart:'<g fill="#6b4053"><circle cx="55" cy="53" r="2"/><circle cx="70" cy="53" r="2"/></g><path d="M58 61q5 4 10 0" fill="none" stroke="#8b5260" stroke-width="1.8" stroke-linecap="round"/>',
+      palette:'<g fill="#304b58"><circle cx="57" cy="78" r="1.8"/><circle cx="68" cy="78" r="1.8"/></g><path d="M59 84q4 3 8 0" fill="none" stroke="#53727e" stroke-width="1.5" stroke-linecap="round"/>',
+      puzzle:'<g fill="#304b58"><circle cx="56" cy="56" r="2"/><circle cx="71" cy="56" r="2"/></g><path d="M59 64q5 4 10 0" fill="none" stroke="#53727e" stroke-width="1.8" stroke-linecap="round"/>',
+      books:'<g fill="#304b58"><circle cx="49" cy="61" r="1.8"/><circle cx="57" cy="61" r="1.8"/><circle cx="70" cy="61" r="1.8"/><circle cx="78" cy="61" r="1.8"/></g><path d="M50 66q3 3 6 0m15 0q3 3 6 0" fill="none" stroke="#53727e" stroke-width="1.5" stroke-linecap="round"/>',
+      calculator:'<g fill="#304b58"><circle cx="57" cy="38" r="1.7"/><circle cx="70" cy="38" r="1.7"/></g><path d="M59 42q4 3 8 0" fill="none" stroke="#53727e" stroke-width="1.4" stroke-linecap="round"/>',
+      hat:'<g fill="#f8e9b3"><circle cx="57" cy="52" r="1.8"/><circle cx="68" cy="52" r="1.8"/></g><path d="M59 57q4 3 8 0" fill="none" stroke="#f8e9b3" stroke-width="1.5" stroke-linecap="round"/>',
+      cactus:'<g fill="#245344"><circle cx="62" cy="58" r="1.7"/><circle cx="71" cy="58" r="1.7"/></g><path d="M64 64q3 3 6 0" fill="none" stroke="#245344" stroke-width="1.4" stroke-linecap="round"/>',
+      sneaker:'<g fill="#304b58"><circle cx="39" cy="73" r="1.8"/><circle cx="48" cy="73" r="1.8"/></g><path d="M41 78q3 3 6 0" fill="none" stroke="#53727e" stroke-width="1.5" stroke-linecap="round"/>'
+    };
+    if (mascotFaces[kind]) art += mascotFaces[kind];
+  }
+  if (ocean[stickerId]) {
+    art = chibiOceanArt(kind, uid);
+    if (kind === 'ray' || kind === 'dolphin') art = art.split('url(#' + uid + 'body)').join('url(#' + uid + 'sea)');
+    if (kind === 'octopus') art = art.split('url(#' + uid + 'accent)').join('url(#' + uid + 'purple)');
+  }
+  return `<svg class="sticker-illustration" viewBox="0 0 128 112" role="img" aria-hidden="true"><defs>
+    <linearGradient id="${uid}body" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#d8ff66"/><stop offset=".45" stop-color="#48e6a4"/><stop offset="1" stop-color="#00a99d"/></linearGradient>
+    <linearGradient id="${uid}shell" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe77f"/><stop offset=".48" stop-color="#ffad4f"/><stop offset="1" stop-color="#ed6451"/></linearGradient>
+    <linearGradient id="${uid}accent" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff76c"/><stop offset=".42" stop-color="#ff9850"/><stop offset="1" stop-color="#f24487"/></linearGradient>
+    <linearGradient id="${uid}sea" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#82f7f3"/><stop offset=".45" stop-color="#21c7e1"/><stop offset="1" stop-color="#367ce5"/></linearGradient>
+    <linearGradient id="${uid}purple" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#f2a8ff"/><stop offset=".45" stop-color="#c45bea"/><stop offset="1" stop-color="#793fc6"/></linearGradient>
+    <filter id="${uid}shadow" x="-25%" y="-25%" width="150%" height="165%"><feDropShadow dx="0" dy="3" stdDeviation="2" flood-color="#173e4a" flood-opacity=".25"/></filter>
+  </defs><g filter="url(#${uid}shadow)"><path d="M18 61Q9 49 22 39Q26 25 42 29Q50 14 65 24Q81 13 91 29Q108 25 109 42Q122 52 109 64Q118 78 103 84Q99 101 81 93Q67 105 55 94Q37 102 31 87Q13 87 18 73Q12 67 18 61Z" fill="#fff" stroke="#d5e5e9" stroke-width="2"/><path d="M23 61Q15 50 27 42Q30 31 43 34Q51 21 64 29Q78 20 88 34Q102 30 103 44Q115 53 103 64Q112 76 99 80Q95 94 80 88Q67 98 55 88Q40 94 35 82Q20 82 24 71Q18 66 23 61Z" fill="#f5fbfa"/>${art}<path d="M32 38Q40 29 48 31M84 30Q93 29 98 37" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85"/></g></svg>`;
+}
+function openStickerPicker(idx) {
+  const desk = classes[activeClass].desks[idx];
+  if (!desk.name) { showStickerToast('Add a student name first.'); return; }
+  window.stickerPickerDeskIdx = idx;
+  document.getElementById('stickerPickerStudent').textContent = 'Pick one for ' + desk.name + "'s collection.";
+  renderStickerPickerGroup('strengths');
+  document.getElementById('stickerPickerModal').classList.add('show');
+}
+function renderStickerPickerGroup(groupId) {
+  const groupSpecs = [
+    { id:'strengths', label:'Character strengths', stickers:OCEAN_STICKERS },
+    { id:'celebration', label:'Celebration', stickers:GENERAL_STICKERS.filter(s => ['pow','bam','zam','rocket','graduate','superstar','highfive','levelup','magic','cactus','rainbow','frog','dino','whoosh'].includes(s.id)) },
+    { id:'learning', label:'Learning', stickers:GENERAL_STICKERS.filter(s => ['lightbulb','chameleon','artist','science','puzzle','reader','maths'].includes(s.id)) }
+  ];
+  const tabs = document.getElementById('stickerPickerTabs');
+  tabs.innerHTML = '';
+  groupSpecs.forEach(group => {
+    const tab = document.createElement('button');
+    tab.type = 'button'; tab.className = 'sticker-picker-tab' + (group.id === groupId ? ' active' : '');
+    tab.textContent = group.label;
+    tab.onclick = () => renderStickerPickerGroup(group.id);
+    tabs.appendChild(tab);
+  });
+  const grid = document.getElementById('stickerPickerGrid');
+  grid.innerHTML = '';
+  const selectedGroup = groupSpecs.find(group => group.id === groupId) || groupSpecs[0];
+  selectedGroup.stickers.forEach(s => {
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'ocean-sticker-choice';
+    btn.setAttribute('aria-label', s.name + ': ' + s.note);
+    btn.innerHTML = '<span class="ocean-sticker-art">' + stickerArtworkSvg(s.id) + '</span><strong>' + s.name + '</strong>';
+    btn.onclick = () => awardOceanSticker(window.stickerPickerDeskIdx, s.id);
+    grid.appendChild(btn);
+  });
+}
+function closeStickerPicker() {
+  document.getElementById('stickerPickerModal').classList.remove('show');
+  window.stickerPickerDeskIdx = null;
+}
+function awardOceanSticker(idx, stickerId) {
+  const desk = classes[activeClass].desks[idx];
+  if (!desk.stickers) desk.stickers = [];
+  const sticker = getOceanSticker(stickerId);
+  desk.stickers.push({ stickerId, date: new Date().toISOString(), reason: sticker.note });
+  saveState(); closeStickerPicker(); renderSeatingCanvas();
+  if (document.getElementById('deskDetailModal').classList.contains('show')) closeDeskDetail();
+  if (profileDeskIdx === idx && document.getElementById('profileModal').classList.contains('show')) renderProfileStickers();
+  showStickerToast(sticker.icon + ' ' + sticker.name + ' added to ' + desk.name + "'s profile");
+}
+function renderProfileStickers() {
+  const el = document.getElementById('profileStickerSection');
+  if (!el || profileDeskIdx === null) return;
+  const desk = classes[activeClass].desks[profileDeskIdx];
+  const stickers = desk.stickers || [];
+  const classData = classes[activeClass];
+  if (!classData.stickerMilestone) classData.stickerMilestone = 10;
+  let html = '<section class="profile-sticker-card"><div class="profile-sticker-heading"><div><h4>Sticker collection</h4><p>Little moments worth celebrating</p></div><button type="button" class="sticker-add-button" onclick="openStickerPicker(' + profileDeskIdx + ')">＋ Give a sticker</button></div>';
+  html += '<div class="sticker-milestone-settings"><span>For this class, give a fun sticker every</span><input id="stickerMilestoneInput" type="number" min="1" max="500" value="' + classData.stickerMilestone + '" aria-label="Points between automatic sticker rewards"><span>points</span><button type="button" class="sticker-add-button" onclick="saveStickerMilestone()">Save</button></div>';
+  if (!stickers.length) html += '<p class="sticker-empty">No stickers yet. Choose one when you want to celebrate a kind or curious moment.</p>';
+  else html += '<div class="profile-sticker-grid">' + stickers.slice().reverse().map(x => { const s=getOceanSticker(x.stickerId); return '<div class="profile-sticker-item"><span>' + stickerArtworkSvg(x.stickerId) + '</span><strong>' + s.name + '</strong><small>' + new Date(x.date).toLocaleDateString() + '</small>' + (x.reason ? '<small>' + x.reason + '</small>' : '') + '</div>'; }).join('') + '</div>';
+  html += '</section>'; el.innerHTML = html;
+}
+function saveStickerMilestone() {
+  const input = document.getElementById('stickerMilestoneInput');
+  const amount = Math.max(1, Math.min(500, parseInt(input.value, 10) || 10));
+  classes[activeClass].stickerMilestone = amount; saveState(); renderProfileStickers();
+  showStickerToast('Point sticker reward set to every ' + amount + ' points.');
+}
 
 function getDeskProfile(desk) {
   if (!desk.profile) desk.profile = [];
@@ -3563,6 +4001,7 @@ function openProfileModal(idx) {
   getDeskProfile(desk);
   document.getElementById('profileModalTitle').textContent = '📊 ' + desk.name + '\'s Profile';
   renderProfileLogGrid();
+  renderProfileStickers();
   renderProfileHistory();
   document.getElementById('profileModal').classList.add('show');
 }
@@ -4938,6 +5377,7 @@ function awardGroupPoints(groupIdx, delta) {
       const before = desk.points;
       desk.points = Math.max(0, Math.min(MAX_POINTS, desk.points + delta));
       totalGain += (desk.points - before);
+      awardStickerMilestones(desk, before, desk.points);
       matched++;
     }
   });
@@ -7029,12 +7469,14 @@ function confirmVoiceSession() {
   const delta = pendingVoiceSessionClean ? 5 : -2;
   const deskRefs = seated.map(d => ({ desk: d, before: d.points }));
   let totalGain = 0;
-  seated.forEach(d => { const before = d.points; d.points = Math.max(0, Math.min(MAX_POINTS, d.points + delta)); totalGain += (d.points - before); });
+  let milestoneAwards = 0;
+  seated.forEach(d => { const before = d.points; d.points = Math.max(0, Math.min(MAX_POINTS, d.points + delta)); totalGain += (d.points - before); milestoneAwards += awardStickerMilestones(d, before, d.points); });
   const mascotGain = addMascotProgress(activeClass, totalGain);
   lastVoiceSessionChange = { className: activeClass, deskRefs, mascotGain };
   saveState();
   renderClassGrid();
   renderClassContent();
+  if (milestoneAwards) showStickerToast('🌟 ' + milestoneAwards + ' point milestone sticker' + (milestoneAwards === 1 ? '' : 's') + ' earned by the class.');
   document.getElementById('voiceConfirmModal').classList.remove('show');
   if (pendingVoiceSessionClean) {
     showReward('🎉', 'Whole class stayed at the right volume! Everyone +5 points!');
@@ -8706,12 +9148,15 @@ function renderHomeworkPanel() {
   const items = cls.homework.map((h,i)=>({h,i})).sort((a,b) => a.h.due.localeCompare(b.h.due));
   host.innerHTML = items.length ? items.map(({h,i}) => {
     const canReview = !h.reviewed && h.due <= today;
-    return '<div style="padding:12px;margin:8px 0;border:1px solid #cce7ef;border-radius:10px;background:#f8fdff;"><strong>' + escapeHtml(h.title) + '</strong> <span style="color:#667;">· Due ' + escapeHtml(h.due) + '</span>' +
-      (h.reviewed ? '<span style="color:#07845e;font-weight:700;"> · Reviewed</span>' : '') +
-      (canReview ? ' <button class="btn btn-success" onclick="openHomeworkReview(' + i + ')">Check homework</button>' : '') +
-      (h.reviewed ? '<div style="font-size:13px;color:#667;margin-top:5px;">Completed: ' + escapeHtml((h.completedNames || []).join(', ') || 'No students marked complete') + '</div>' : '') +
-      ' <button class="btn btn-danger" onclick="deleteHomework(' + i + ')" aria-label="Delete homework">Delete</button></div>';
-  }).join('') : '<p style="color:#789;">No homework assigned yet.</p>';
+    const status = h.reviewed ? 'Reviewed' : canReview ? 'Ready to check' : 'Coming up';
+    const statusClass = h.reviewed ? 'done' : canReview ? 'ready' : '';
+    const dueLabel = h.due ? new Date(h.due + 'T00:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}) : '';
+    return '<article class="homework-item"><div><div class="homework-title">' + escapeHtml(h.title) + '</div><div class="homework-meta"><span>Due ' + escapeHtml(dueLabel) + '</span><span class="homework-status ' + statusClass + '">' + status + '</span></div>' +
+      (h.reviewed ? '<div class="homework-completed">Completed: ' + escapeHtml((h.completedNames || []).join(', ') || 'No students marked complete') + '</div>' : '') +
+      '</div><div class="homework-actions">' +
+      (canReview ? '<button class="btn btn-success" onclick="openHomeworkReview(' + i + ')">Check homework</button>' : '') +
+      '<button class="btn btn-danger" onclick="deleteHomework(' + i + ')" aria-label="Remove homework assignment">Remove</button></div></article>';
+  }).join('') : '<div class="planner-empty"><strong>No homework on the list yet</strong><p>Add an assignment above. It will stay here until you check it off with the class.</p></div>';
 }
 function addHomework() {
   const title = document.getElementById('homeworkTitle').value.trim(), due = document.getElementById('homeworkDue').value;
@@ -8745,6 +9190,7 @@ function saveHomeworkReview(index, button) {
     profile.push({ category:'Growth & Independence', trait:'Staying Organized', sentiment:done ? 'positive' : 'support', date:now, note:(done ? 'Homework completed: ' : 'Homework not completed: ') + h.title + ' (due ' + h.due + ')' });
     if (done) {
       const before = desk.points || 0; desk.points = Math.min(MAX_POINTS, before + 1);
+      awardStickerMilestones(desk, before, desk.points);
       addMascotProgress(activeClass, desk.points - before); completedNames.push(desk.name);
     }
   });
@@ -8758,10 +9204,120 @@ function renderSchedulePanel() {
   const label=document.getElementById('scheduleClassLabel'); if(label) label.textContent=activeClass;
   cls.schedule=Array.isArray(cls.schedule)?cls.schedule:[];
   const today=OCEAN_WEEKDAYS[new Date().getDay()];
-  if(promptEl) promptEl.textContent='Today · ' + today + (cls.schedule.some(p=>p.day===today) ? ' — this class has periods scheduled.' : ' — no periods are scheduled for this class.');
-  const periods=cls.schedule.map((p,i)=>({p,i})).sort((a,b)=>(a.p.day+a.p.start).localeCompare(b.p.day+b.p.start));
-  host.innerHTML=periods.length?periods.map(({p,i})=>'<div style="display:flex;gap:10px;align-items:center;padding:10px;margin:6px 0;border:1px solid #cce7ef;border-radius:9px;background:'+(p.day===today?'#e4f8f2':'#f8fdff')+';"><strong>'+escapeHtml(p.day)+'</strong><span>'+escapeHtml(p.start)+'–'+escapeHtml(p.end)+'</span><span style="flex:1">'+escapeHtml(p.subject)+'</span><button class="btn btn-danger" onclick="deleteSchedulePeriod('+i+')">Delete</button></div>').join(''):'<p style="color:#789;">No periods added yet.</p>';
+  const dayOffset=day=>{const index=OCEAN_WEEKDAYS.indexOf(day);return (index-OCEAN_WEEKDAYS.indexOf(today)+7)%7;};
+  if(promptEl) promptEl.textContent=cls.schedule.some(p=>p.day===today) ? 'Today · ' + today + ' — today’s periods are listed first.' : 'Today · ' + today + ' — no periods entered for today yet.';
+  const periods=cls.schedule.map((p,i)=>({p,i})).sort((a,b)=>dayOffset(a.p.day)-dayOffset(b.p.day)||a.p.start.localeCompare(b.p.start));
+  host.innerHTML=periods.length?periods.map(({p,i})=>'<article class="schedule-row'+(p.day===today?' today':'')+'"><span class="schedule-day">'+escapeHtml(p.day)+(p.day===today?' · TODAY':'')+'</span><span class="schedule-time">'+escapeHtml(p.start)+' – '+escapeHtml(p.end)+'</span><span class="schedule-subject">'+escapeHtml(p.subject)+'</span><button class="btn btn-danger" onclick="deleteSchedulePeriod('+i+')" aria-label="Remove period">Remove</button></article>').join(''):'<div class="planner-empty"><strong>Your weekly timetable starts here</strong><p>Add a day, time, and lesson above. Your periods will appear here, with today’s lessons first.</p></div>';
 }
+
+function previewPastedSchedule() {
+  const text = document.getElementById('scheduleImportText').value;
+  const result = parseScheduleImportText(text);
+  showScheduleImportPreview(result.rows, result.skipped);
+}
+function parseScheduleImportText(text) {
+  const rows = [], skipped = [];
+  let currentDay = '';
+  const dayPattern = /\b(sun(?:day)?|mon(?:day)?|tue(?:s|sday)?|wed(?:nesday)?|thu(?:rs|rsday)?|fri(?:day)?|sat(?:urday)?)\b/i;
+  const dayMap = { sun:'Sunday', sunday:'Sunday', mon:'Monday', monday:'Monday', tue:'Tuesday', tues:'Tuesday', tuesday:'Tuesday', wed:'Wednesday', wednesday:'Wednesday', thu:'Thursday', thur:'Thursday', thurs:'Thursday', thursday:'Thursday', fri:'Friday', friday:'Friday', sat:'Saturday', saturday:'Saturday' };
+  const timePattern = /\b(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?)?\b/ig;
+  function normalizeTime(token) {
+    const match = token.trim().match(/^(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?)?$/i);
+    if (!match) return '';
+    let hour = Number(match[1]), minute = Number(match[2] || 0), ap = (match[3] || '').toLowerCase().replace(/\./g,'');
+    if (hour > 23 || minute > 59) return '';
+    if (ap) { if (hour < 1 || hour > 12) return ''; hour = hour % 12 + (ap === 'pm' ? 12 : 0); }
+    return String(hour).padStart(2,'0') + ':' + String(minute).padStart(2,'0');
+  }
+  function parseLine(line, lineNumber) {
+    const dayMatch = line.match(dayPattern);
+    let day = dayMatch ? dayMap[dayMatch[1].toLowerCase()] : currentDay;
+    if (dayMatch && line.trim().toLowerCase() === dayMatch[0].toLowerCase()) { currentDay = day; return; }
+    const parts = line.split(/\t|\||\s{2,}/).map(x=>x.trim()).filter(Boolean);
+    let start = '', end = '', rangeMatch = line.match(/(\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)?)\s*(?:-|–|—|to)\s*(\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)?)/i);
+    if (rangeMatch) { start = normalizeTime(rangeMatch[1]); end = normalizeTime(rangeMatch[2]); }
+    if ((!start || !end) && parts.length >= 3) {
+      const times = [];
+      for (const part of parts) { const t=normalizeTime(part); if (t) times.push(t); }
+      if (times.length >= 2) { start=times[0]; end=times[1]; }
+    }
+    if ((!start || !end) && !rangeMatch) {
+      const times = [...line.matchAll(timePattern)].map(m=>normalizeTime(m[0])).filter(Boolean);
+      if (times.length >= 2) { start=times[0]; end=times[1]; }
+    }
+    let subject = '';
+    if (parts.length >= 3) {
+      subject = parts.filter(part => !dayPattern.test(part) && !normalizeTime(part) && !/(?:^|\s)(?:start|end|subject|activity|lesson|day|time)(?:\s|$)/i.test(part)).join(' ').trim();
+    }
+    if (!subject) {
+      subject = line.replace(dayPattern,' ').replace(/\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)?\s*(?:-|–|—|to)\s*\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)?/ig,' ')
+        .replace(/\b\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)?\b/ig,' ').replace(/[|,;\t]+/g,' ').replace(/\s+/g,' ').trim();
+    }
+    if (/^(day\s+)?(start\s+)?(end\s+)?(subject|activity|lesson)?$/i.test(subject)) return;
+    if (day && start && end && subject && end > start) rows.push({day,start,end,subject});
+    else if (line.trim()) skipped.push(lineNumber);
+  }
+  text.split(/\r?\n/).forEach((line,index)=>{ if (line.trim()) parseLine(line.trim(),index+1); });
+  return {rows,skipped};
+}
+function showScheduleImportPreview(rows, skipped) {
+  const host = document.getElementById('scheduleImportPreview');
+  if (!host) return;
+  if (!rows.length) {
+    host.innerHTML = '<div class="planner-empty"><strong>I couldn’t arrange those lines yet</strong><p>Include a weekday, start and end time, and lesson on each line. For example: Monday · 09:00–09:45 · Reading.</p></div>' + (skipped.length ? '<p class="schedule-import-status">Please check the layout or try copying the rows directly from a spreadsheet.</p>' : '');
+    return;
+  }
+  host.innerHTML = '<p class="schedule-preview-title">Review ' + rows.length + ' period' + (rows.length===1?'':'s') + ' before adding them</p>' + rows.map((row,i)=>
+    '<div class="schedule-preview-row" data-import-row="'+i+'"><select class="import-day" aria-label="Day for period '+(i+1)+'">'+OCEAN_WEEKDAYS.slice(1).concat(OCEAN_WEEKDAYS[0]).map(day=>'<option'+(day===row.day?' selected':'')+'>'+day+'</option>').join('')+'</select><input class="import-start" type="time" value="'+row.start+'" aria-label="Start time for period '+(i+1)+'"><input class="import-end" type="time" value="'+row.end+'" aria-label="End time for period '+(i+1)+'"><input class="import-subject" type="text" value="'+escapeHtml(row.subject)+'" aria-label="Lesson for period '+(i+1)+'"><button type="button" onclick="this.closest(\'[data-import-row]\').remove()" aria-label="Remove imported row">×</button></div>'
+  ).join('') + (skipped.length ? '<p class="schedule-import-status">I left out '+skipped.length+' line'+(skipped.length===1?'':'s')+' I couldn’t read clearly. You can still add the periods shown above.</p>' : '') + '<button type="button" class="schedule-import-save" onclick="saveImportedSchedule()">Add these periods to the timetable</button>';
+}
+function previewRowsFromOcr(text) {
+  const result = parseScheduleImportText(text);
+  const status = document.getElementById('scheduleOcrStatus');
+  if (status) status.textContent = result.rows.length ? 'Text found. Please review every period below; unclear lines were left out.' : 'I found text, but couldn’t arrange it into periods. Try a clearer image or paste the schedule text instead.';
+  showScheduleImportPreview(result.rows, result.skipped);
+}
+async function readScheduleScreenshot(input) {
+  const file = input.files && input.files[0], status = document.getElementById('scheduleOcrStatus');
+  if (!file || !status) return;
+  if (!file.type.startsWith('image/')) { status.textContent = 'Choose a screenshot or image file.'; input.value=''; return; }
+  if (location.protocol === 'file:') { status.textContent = 'Screenshot reading is available on the published https website; pasted schedule text works in this preview.'; input.value=''; return; }
+  if (file.size > 12*1024*1024) { status.textContent = 'This image is quite large. Please choose one under 12 MB.'; input.value=''; return; }
+  status.textContent = 'Loading the on-device reading helper…';
+  try {
+    if (!window.Tesseract) {
+      await new Promise((resolve,reject)=>{
+        const script=document.createElement('script');
+        script.src='https://cdn.jsdelivr.net/npm/tesseract.js@7/dist/tesseract.min.js';
+        script.onload=resolve; script.onerror=()=>reject(new Error('The OCR helper could not be loaded.'));
+        document.head.appendChild(script);
+      });
+    }
+    status.textContent = 'Reading the timetable on this device…';
+    const worker = await Tesseract.createWorker('eng');
+    const result = await worker.recognize(file);
+    await worker.terminate();
+    previewRowsFromOcr(result.data.text || '');
+  } catch (error) {
+    status.textContent = 'I couldn’t read that image. Try a clearer screenshot, or paste the schedule text instead.';
+  } finally { input.value=''; }
+}
+function saveImportedSchedule() {
+  const cls=classes[activeClass]; if(!cls) return;
+  const rows=Array.from(document.querySelectorAll('#scheduleImportPreview .schedule-preview-row'));
+  const imported=[];
+  rows.forEach(row=>{
+    const day=row.querySelector('.import-day').value, start=row.querySelector('.import-start').value, end=row.querySelector('.import-end').value, subject=row.querySelector('.import-subject').value.trim();
+    if(day&&start&&end&&end>start&&subject) imported.push({day,start,end,subject});
+  });
+  if(!imported.length){alert('Check that each row has a day, start and end time, and lesson.');return;}
+  cls.schedule=Array.isArray(cls.schedule)?cls.schedule:[];
+  imported.forEach(period=>{if(!cls.schedule.some(old=>old.day===period.day&&old.start===period.start&&old.end===period.end&&old.subject.toLowerCase()===period.subject.toLowerCase()))cls.schedule.push(period);});
+  saveState(); renderSchedulePanel(); renderDailyClassPrompt();
+  const host=document.getElementById('scheduleImportPreview');
+  if(host)host.innerHTML='<div class="planner-empty"><strong>Timetable added</strong><p>Your new periods are in the weekly plan. Existing periods were kept.</p></div>';
+}
+
 function addSchedulePeriod() {
   const day=document.getElementById('scheduleDay').value,start=document.getElementById('scheduleStart').value,end=document.getElementById('scheduleEnd').value,subject=document.getElementById('scheduleSubject').value.trim();
   if(!start||!end||!subject||end<=start){alert('Enter a subject and a valid start and end time.');return;}
