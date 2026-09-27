@@ -199,7 +199,20 @@
     .nav{display:none}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
-</style>
+
+  .story{background:var(--card);border:1.5px solid var(--mist);border-radius:var(--radius);padding:34px;
+    display:grid;grid-template-columns:270px 1fr;gap:34px;align-items:center;box-shadow:0 4px 14px rgba(12,59,82,.05)}
+  .story-photo img{width:100%;border-radius:18px;border:1.5px solid var(--mist);display:block}
+  .story-photo .chip{display:block;text-align:center;margin-top:10px;font-size:13.5px;color:var(--soft);font-weight:700}
+  .story-text h2{color:var(--deep);font-size:clamp(23px,2.6vw,28px);margin:12px 0 14px;font-weight:800;letter-spacing:-.01em}
+  .story-text p{color:var(--soft);margin:0 0 12px;font-size:15.5px}
+  .story-text b{color:var(--ink)}
+  .story-text .quote{border-left:4px solid var(--sun);background:var(--fog);border-radius:0 14px 14px 0;
+    padding:12px 16px;font-weight:700;color:var(--ink);margin:14px 0 4px}
+  .creds{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .creds span{background:var(--aqua);color:var(--sea);font-weight:800;font-size:13px;padding:6px 13px;border-radius:999px}
+.zt-ic{display:inline-flex;align-items:center;justify-content:center;line-height:0;vertical-align:-.12em;flex:0 0 auto}.zt-ic svg{width:1.25em;height:1.25em;display:block}
+  </style>
 </head>
 <body>
 
@@ -221,22 +234,22 @@
   <!-- HERO -->
   <div class="hero">
     <div>
-      <span class="eyebrow"><i data-ic="wave"></i> Made by an ESL teacher, for ESL teachers</span>
+      <span class="eyebrow"><span class="zt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#1ba3c6" stroke-width="2.2" stroke-linecap="round"><path d="M2.5 8.5c2.4-2.4 5.2-2.4 7.6 0s5.2 2.4 7.6 0 3.8-1.6 3.8-1.6"/><path d="M2.5 15.5c2.4-2.4 5.2-2.4 7.6 0s5.2 2.4 7.6 0 3.8-1.6 3.8-1.6" opacity=".5"/></svg></span> Made by an ESL teacher, for ESL teachers</span>
       <h1>Everything your class needs,<br>on <span class="wave">one calm screen</span>.</h1>
       <p class="lead">ZippyTeach is a classroom board for the big screen — seating chart, points, picture rules, class jobs, notes and games in one place — plus ready-to-teach lesson packs for low-level learners. Everything works offline.</p>
       <div class="hero-btns">
-        <a class="btn btn-go" href="board/"><i data-ic="play"></i> Try the board free</a>
+        <a class="btn btn-go" href="board/"><span class="zt-ic"><svg viewBox="0 0 24 24"><path d="M8.5 5.6v12.8c0 .9 1 1.5 1.8 1l9.8-6.4c.7-.5.7-1.6 0-2.1l-9.8-6.1c-.8-.5-1.8.1-1.8.8z" fill="currentColor"/></svg></span> Try the board free</a>
         <a class="btn btn-ghost" href="lessons/">See the lesson packs</a>
       </div>
       <div class="hero-note">
-        <span><i data-ic="check"></i> No sign-up, no accounts</span>
-        <span><i data-ic="wifi-off"></i> Works offline</span>
-        <span><i data-ic="screen"></i> Chrome · Edge · Seewo smartboards</span>
+        <span><span class="zt-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2" fill="#128a7d"/><path d="M7.6 12.4l2.9 2.9 5.9-6.2" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span> No sign-up, no accounts</span>
+        <span><span class="zt-ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4.5 10.5a11 11 0 0 1 4.4-2.7M12 6.6c2.9 0 5.7 1.1 7.8 3M8.3 13.6a6.4 6.4 0 0 1 2.6-1.4M13.9 12.4c1 .2 2 .7 2.8 1.3" stroke="#12799b" stroke-width="2.1"/><circle cx="12" cy="17.6" r="1.5" fill="#12799b"/><path d="M4 4l16 16" stroke="#ef8f6b" stroke-width="2.4"/></svg></span> Works offline</span>
+        <span><span class="zt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#14303d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="12.5" rx="2.2" fill="#fff"/><path d="M9 20.5h6M12 17v3.5"/><circle cx="12" cy="10.5" r="1.4" fill="#1ba3c6" stroke="none"/></svg></span> Chrome · Edge · Seewo smartboards</span>
       </div>
     </div>
     <div class="shot">
       <video src="assets/hero-demo.mp4" poster="assets/hero-poster.jpg" autoplay muted loop playsinline></video>
-      <div class="float-card"><span class="dot"><i data-ic="octopus"></i></span> The board your whole class raises together</div>
+      <div class="float-card"><span class="dot"><span class="zt-ic"><svg viewBox="0 0 24 24"><path d="M6.6 12.6c-1.3 2.7-1.1 5.4.5 7.4M10.1 13.2c-.7 2.8-.4 5.4 1 7.1M13.9 13.2c.7 2.8.4 5.4-1 7.1M17.4 12.6c1.3 2.7 1.1 5.4-.5 7.4" stroke="#12799b" stroke-width="2.1" fill="none" stroke-linecap="round"/><circle cx="12" cy="8.4" r="5.6" fill="#1ba3c6"/><circle cx="9.8" cy="7.9" r="1.15" fill="#fff"/><circle cx="14.2" cy="7.9" r="1.15" fill="#fff"/><circle cx="9.8" cy="8.1" r=".5" fill="#14303d"/><circle cx="14.2" cy="8.1" r=".5" fill="#14303d"/><path d="M10.2 10.7c.6.6 3 .6 3.6 0" stroke="#fff" stroke-width="1.1" fill="none" stroke-linecap="round"/></svg></span></span> The board your whole class raises together</div>
     </div>
   </div>
 
@@ -244,38 +257,31 @@
   <section id="boards">
     <div class="sec-head">
       <h2 class="sec">What's in ZippyTeach</h2>
-      <p class="sub">Two classroom boards and a growing set of lesson packs.</p>
+      <p class="sub">A classroom board and a growing set of lesson packs — built in a real classroom.</p>
     </div>
     <div class="products">
 
       <div class="prod ocean">
-        <div class="ic"><i data-ic="octopus"></i></div>
+        <div class="ic"><span class="zt-ic"><svg viewBox="0 0 24 24"><path d="M6.6 12.6c-1.3 2.7-1.1 5.4.5 7.4M10.1 13.2c-.7 2.8-.4 5.4 1 7.1M13.9 13.2c.7 2.8.4 5.4-1 7.1M17.4 12.6c1.3 2.7 1.1 5.4-.5 7.4" stroke="#12799b" stroke-width="2.1" fill="none" stroke-linecap="round"/><circle cx="12" cy="8.4" r="5.6" fill="#1ba3c6"/><circle cx="9.8" cy="7.9" r="1.15" fill="#fff"/><circle cx="14.2" cy="7.9" r="1.15" fill="#fff"/><circle cx="9.8" cy="8.1" r=".5" fill="#14303d"/><circle cx="14.2" cy="8.1" r=".5" fill="#14303d"/><path d="M10.2 10.7c.6.6 3 .6 3.6 0" stroke="#fff" stroke-width="1.1" fill="none" stroke-linecap="round"/></svg></span></div>
         <span class="tag">Classroom board</span>
         <h3>Ocean Board</h3>
         <p>Seating chart, points, picture rules, class jobs, notes, games and tools in one place, with a sea creature mascot each class raises together.</p>
         <ul><li>Free for 2 classes, for as long as you like</li><li>Works offline once it's open</li><li>Install it like an app</li></ul>
         <div class="price">Free · Full version R180 · ¥75 · US$10</div>
-        <div class="btns"><a class="btn btn-go btn-small" href="board/"><i data-ic="play"></i> Try it free</a><a class="btn btn-ghost btn-small" href="ocean-board/">Pricing &amp; guide</a></div>
+        <div class="btns"><a class="btn btn-go btn-small" href="board/"><span class="zt-ic"><svg viewBox="0 0 24 24"><path d="M8.5 5.6v12.8c0 .9 1 1.5 1.8 1l9.8-6.4c.7-.5.7-1.6 0-2.1l-9.8-6.1c-.8-.5-1.8.1-1.8.8z" fill="currentColor"/></svg></span> Try it free</a><a class="btn btn-ghost btn-small" href="ocean-board/">Pricing &amp; guide</a></div>
       </div>
 
-      <div class="prod jungle">
-        <div class="ic"><i data-ic="monkey"></i></div>
-        <span class="tag">Classroom board · <span class="trial">FREE TRIAL</span></span>
-        <h3>Jungle Board</h3>
-        <p>The same board in a jungle theme, for classes that want a livelier look. Currently a free trial while teachers test it and send feedback.</p>
-        <ul><li>Same tools as the Ocean Board</li><li>Jungle mascots and art</li><li>Feedback welcome</li></ul>
-        <div class="price">Free trial</div>
-        <div class="btns"><a class="btn btn-go btn-small" href="jungle-board-landing-page.html">See Jungle Board</a><a class="btn btn-ghost btn-small" href="jungle-board-guide.html">Teacher guide</a></div>
+      
       </div>
 
       <div class="prod packs">
-        <div class="ic"><i data-ic="book"></i></div>
+        <div class="ic"><span class="zt-ic"><svg viewBox="0 0 24 24"><path d="M12 5.8C10 4.2 7.2 3.8 3.8 4.3v13.9c3.4-.5 6.2-.1 8.2 1.4 2-1.5 4.8-1.9 8.2-1.4V4.3c-3.4-.5-6.2-.1-8.2 1.5z" fill="#fff" stroke="#6d7fc4" stroke-width="1.9" stroke-linejoin="round"/><path d="M12 5.8v13.8" stroke="#6d7fc4" stroke-width="1.9"/><path d="M6.6 8.2c1.5-.2 2.9 0 4 .6M6.6 11.4c1.5-.2 2.9 0 4 .6" stroke="#9aa8dd" stroke-width="1.4" stroke-linecap="round"/></svg></span></div>
         <span class="tag">Lesson packs</span>
         <h3>Ready-to-teach lessons</h3>
         <p>Complete 40-minute lessons for low-level learners: interactive slides, touchscreen games, a printable children make and keep, and a teacher guide.</p>
         <ul><li><b>My Friends</b> — describing a friend</li><li><b>I'm good at …</b> — talents and talent stars</li><li>Low English · Pre-A1–A1 · try two games free</li></ul>
         <div class="price">US$4 · ¥25 · R70 each</div>
-        <div class="btns"><a class="btn btn-go btn-small" href="lessons/">See the packs</a><a class="btn btn-ghost btn-small" href="lessons/im-good-at/demo.html"><i data-ic="play"></i> Try a demo</a></div>
+        <div class="btns"><a class="btn btn-go btn-small" href="lessons/">See the packs</a><a class="btn btn-ghost btn-small" href="lessons/im-good-at/demo.html"><span class="zt-ic"><svg viewBox="0 0 24 24"><path d="M8.5 5.6v12.8c0 .9 1 1.5 1.8 1l9.8-6.4c.7-.5.7-1.6 0-2.1l-9.8-6.1c-.8-.5-1.8.1-1.8.8z" fill="currentColor"/></svg></span> Try a demo</a></div>
       </div>
 
     </div>
@@ -288,18 +294,18 @@
       <p class="sub">No tab-switching mid-lesson. Open your class and it's all there.</p>
     </div>
     <div class="tools">
-      <span class="tool"><i data-ic="target"></i> Behavior &amp; points</span>
-      <span class="tool"><i data-ic="penbook"></i> Homework</span>
-      <span class="tool"><i data-ic="calendar"></i> Planning</span>
-      <span class="tool"><i data-ic="broom"></i> Class jobs</span>
-      <span class="tool"><i data-ic="note"></i> Notes</span>
-      <span class="tool"><i data-ic="wheel"></i> Name wheel</span>
-      <span class="tool"><i data-ic="bingo"></i> Bingo</span>
-      <span class="tool"><i data-ic="letters"></i> Hangman</span>
-      <span class="tool"><i data-ic="timer"></i> Timer &amp; tools</span>
-      <span class="tool"><i data-ic="megaphone"></i> Voice meter</span>
-      <span class="tool"><i data-ic="star"></i> Daily helper</span>
-      <span class="tool"><i data-ic="users"></i> Profiles</span>
+      <span class="tool"><span class="zt-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4" fill="#d9f0f6" stroke="#12799b" stroke-width="2"/><circle cx="12" cy="12" r="4.9" fill="#fff" stroke="#1ba3c6" stroke-width="2"/><circle cx="12" cy="12" r="1.8" fill="#ef8f6b"/></svg></span> Behavior &amp; points</span>
+      <span class="tool"><span class="zt-ic"><svg viewBox="0 0 24 24"><path d="M4 18.5V6.2c2.6-.6 5-.3 6.9 1V19c-1.9-1.3-4.3-1.6-6.9-1z" fill="#fff" stroke="#12799b" stroke-width="1.8" stroke-linejoin="round"/><path d="M20 18.5V6.2c-2.6-.6-5-.3-6.9 1V19c1.9-1.3 4.3-1.6 6.9-1z" fill="#fff" stroke="#12799b" stroke-width="1.8" stroke-linejoin="round"/><path d="M14.8 3.8l3.2 3.2-5.4 5.5-3.5.7.7-3.5z" fill="#f6c453" stroke="#cf9a2b" stroke-width="1.2" stroke-linejoin="round"/></svg></span> Homework</span>
+      <span class="tool"><span class="zt-ic"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.4" fill="#fff" stroke="#12799b" stroke-width="1.9"/><path d="M3.5 9.8h17" stroke="#12799b" stroke-width="1.9"/><path d="M8 3.2v3.4M16 3.2v3.4" stroke="#12799b" stroke-width="1.9" stroke-linecap="round"/><circle cx="8.2" cy="13.8" r="1.15" fill="#1ba3c6"/><circle cx="12" cy="13.8" r="1.15" fill="#1ba3c6"/><circle cx="15.8" cy="13.8" r="1.15" fill="#d9f0f6"/></svg></span> Planning</span>
+      <span class="tool"><span class="zt-ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14.8 3.4L9 11.5" stroke="#a9764e" stroke-width="2.3"/><path d="M9 11.5c-2.6.7-4.4 2.7-5.2 6.4 2.8 1.7 6 2 9.2.6 1.5-2.6 1.7-5.1.5-7z" fill="#35a47a" stroke="#23704f" stroke-width="1.6"/><path d="M7.4 14.6c1.1 1 2.4 1.5 3.9 1.5" stroke="#23704f" stroke-width="1.2"/></svg></span> Class jobs</span>
+      <span class="tool"><span class="zt-ic"><svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2.2" fill="#fff" stroke="#12799b" stroke-width="1.9"/><path d="M8.3 8.2h7.4M8.3 11.8h7.4M8.3 15.4h4.6" stroke="#9aa8dd" stroke-width="1.7" stroke-linecap="round"/></svg></span> Notes</span>
+      <span class="tool"><span class="zt-ic"><svg viewBox="0 0 24 24"><path d="M12 1.8l2.2 3h-4.4z" fill="#f6c453"/><circle cx="12" cy="13" r="8" fill="#fff" stroke="#12799b" stroke-width="2"/><circle cx="12" cy="13" r="2" fill="#12799b"/><path d="M12 5v5.2M12 14.8V21M4.3 13h5.2M14.8 13h5M6.6 7.6l3.7 3.7M13.7 14.7l3.7 3.7M17.4 7.6l-3.7 3.7M10.3 14.7l-3.7 3.7" stroke="#a9d8e6" stroke-width="1.6"/></svg></span> Name wheel</span>
+      <span class="tool"><span class="zt-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2" fill="#0c3b52"/><circle cx="8.6" cy="8.9" r="1.5" fill="#fff"/><circle cx="12" cy="7.7" r="1.5" fill="#fff"/><circle cx="15.4" cy="8.9" r="1.5" fill="#fff"/><circle cx="9.4" cy="13.3" r="1.5" fill="#fff"/><circle cx="14.6" cy="13.3" r="1.5" fill="#fff"/><circle cx="12" cy="16.7" r="1.5" fill="#f6c453"/></svg></span> Bingo</span>
+      <span class="tool"><span class="zt-ic"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="4.6" height="4.6" rx="1.2" fill="#fff" stroke="#12799b" stroke-width="1.7"/><rect x="9.7" y="8" width="4.6" height="4.6" rx="1.2" fill="#12799b"/><path d="M11.4 11.6l1-3.2 1 3.2M11.7 10.6h1.4" stroke="#fff" stroke-width="1.05" stroke-linecap="round" fill="none"/><rect x="16.4" y="8" width="4.6" height="4.6" rx="1.2" fill="#fff" stroke="#9aa8dd" stroke-width="1.7"/></svg></span> Hangman</span>
+      <span class="tool"><span class="zt-ic"><svg viewBox="0 0 24 24"><rect x="9.2" y="2.6" width="5.6" height="2.6" rx="1.2" fill="#12799b"/><circle cx="12" cy="13.4" r="7.8" fill="#fff" stroke="#12799b" stroke-width="2"/><path d="M12 13.4V8.9" stroke="#ef8f6b" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="13.4" r="1.2" fill="#12799b"/></svg></span> Timer &amp; tools</span>
+      <span class="tool"><span class="zt-ic"><svg viewBox="0 0 24 24"><path d="M3.5 10v4.4h3l7.5 4V5.6l-7.5 4z" fill="#ef8f6b" stroke="#d5704a" stroke-width="1.4" stroke-linejoin="round"/><path d="M17.5 9.2a4.6 4.6 0 0 1 0 5.6M20 7.2a8 8 0 0 1 0 9.6" stroke="#12799b" stroke-width="1.9" fill="none" stroke-linecap="round"/></svg></span> Voice meter</span>
+      <span class="tool"><span class="zt-ic"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.7 5.6 6.1.8-4.5 4.3 1.1 6-5.4-2.9-5.4 2.9 1.1-6L3.2 7.2l6.1-.8z" fill="#f6c453" stroke="#cf9a2b" stroke-width="1.3" stroke-linejoin="round"/></svg></span> Daily helper</span>
+      <span class="tool"><span class="zt-ic"><svg viewBox="0 0 24 24"><circle cx="8.6" cy="8.6" r="3.4" fill="#1ba3c6"/><path d="M2.8 19.8c.6-3.4 2.9-5.1 5.8-5.1s5.2 1.7 5.8 5.1z" fill="#1ba3c6"/><circle cx="16.9" cy="9.6" r="2.7" fill="#9aa8dd"/><path d="M14.6 15.1c2.8-.3 5 1.3 5.7 4.7h-6.3c0-1.8.1-3.3.6-4.7z" fill="#9aa8dd"/></svg></span> Profiles</span>
     </div>
 
     <div class="video-row">
@@ -336,10 +342,10 @@
       <p class="sub">Built in a real classroom, with 30 children and a wobbly internet connection.</p>
     </div>
     <div class="why">
-      <div class="w"><div class="ic"><i data-ic="wifi-off"></i></div><b>Works offline</b><span>Once it's open, it keeps working when the school internet drops. No VPN needed in China.</span></div>
-      <div class="w"><div class="ic"><i data-ic="screen"></i></div><b>Made for the big screen</b><span>Big buttons and cards, easy to tap on a Seewo or any smartboard.</span></div>
-      <div class="w"><div class="ic"><i data-ic="key"></i></div><b>No accounts</b><span>Nothing to sign up for. Your classes stay on your own device.</span></div>
-      <div class="w"><div class="ic"><i data-ic="card"></i></div><b>One payment</b><span>Buy it once and keep it. No subscriptions, no renewals.</span></div>
+      <div class="w"><div class="ic"><span class="zt-ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4.5 10.5a11 11 0 0 1 4.4-2.7M12 6.6c2.9 0 5.7 1.1 7.8 3M8.3 13.6a6.4 6.4 0 0 1 2.6-1.4M13.9 12.4c1 .2 2 .7 2.8 1.3" stroke="#12799b" stroke-width="2.1"/><circle cx="12" cy="17.6" r="1.5" fill="#12799b"/><path d="M4 4l16 16" stroke="#ef8f6b" stroke-width="2.4"/></svg></span></div><b>Works offline</b><span>Once it's open, it keeps working when the school internet drops. No VPN needed in China.</span></div>
+      <div class="w"><div class="ic"><span class="zt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#14303d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="12.5" rx="2.2" fill="#fff"/><path d="M9 20.5h6M12 17v3.5"/><circle cx="12" cy="10.5" r="1.4" fill="#1ba3c6" stroke="none"/></svg></span></div><b>Made for the big screen</b><span>Big buttons and cards, easy to tap on a Seewo or any smartboard.</span></div>
+      <div class="w"><div class="ic"><span class="zt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#e0a92f" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="12" r="3.8"/><path d="M11.3 12h8.2M16 12v3M19.5 12v2.2"/></svg></span></div><b>No accounts</b><span>Nothing to sign up for. Your classes stay on your own device.</span></div>
+      <div class="w"><div class="ic"><span class="zt-ic"><svg viewBox="0 0 24 24"><rect x="2.8" y="5.5" width="18.4" height="13" rx="2.4" fill="#fff" stroke="#14303d" stroke-width="1.9"/><path d="M2.8 9.5h18.4" stroke="#14303d" stroke-width="1.9"/><path d="M6 14.5h4.5" stroke="#ef8f6b" stroke-width="2.2" stroke-linecap="round"/></svg></span></div><b>One payment</b><span>Buy it once and keep it. No subscriptions, no renewals.</span></div>
     </div>
   </section>
 
@@ -384,18 +390,26 @@
       </details>
       <details>
         <summary>Can I try it before paying?</summary>
-        <p class="a">Yes — the Ocean Board is free for 2 classes for as long as you like, the Jungle Board is a free trial, and every lesson pack has free games to try. Only pay when it's earning its place in your classroom.</p>
+        <p class="a">Yes — the Ocean Board is free for 2 classes for as long as you like, and every lesson pack has free games to try. Only pay when it's earning its place in your classroom.</p>
       </details>
     </div>
   </section>
 
   <!-- ABOUT -->
   <section>
-    <div class="about">
-      <img src="board/icons/icon-192-plain.png" alt="">
-      <div>
-        <h2>Made by a teacher, not a software company</h2>
-        <p>I'm an ESL teacher with eight classes of about thirty children. Everything here started as something I needed on a Monday morning and built that weekend. If something would help in your classroom, tell me — a lot of what's here came from teachers asking. Say hello on WeChat <b>DanziGal88</b> or by email.</p>
+    <div class="story">
+      <div class="story-photo">
+        <img src="assets/teacher.jpg" alt="The teacher behind ZippyTeach">
+        <span class="chip">The teacher behind ZippyTeach</span>
+      </div>
+      <div class="story-text">
+        <span class="eyebrow">The story behind ZippyTeach</span>
+        <h2>I didn&rsquo;t set out to build an app.</h2>
+        <p>I was sitting in a new school, facing eight classes of thirty children, and I refused to print the same old classroom-management posters — the rules that never stuck. I had to learn two hundred and forty names, keep eight groups engaged, and stay on top of homework. So I started building the tool I needed for my own classroom.</p>
+        <p>I pictured my students&rsquo; names big on the board, placed exactly where they sat, so I could call on them from day one. Points had to stay visible — attention lives on the screen. And I wanted more than a sticker chart: stickers get lost, and children get gifts at home. School should give them an <b>experience</b>. That&rsquo;s where the growing mascot, the wheel, and the games came from.</p>
+        <p>Most ESL teachers live inside PowerPoint, so I built the floating bubble — give points and pick names without ever leaving your slides. And after years as a homeroom teacher watching house points fall short, homework tracking and notes had to be built in too. Then I went and studied it properly: an M.Ed in Advanced Teaching and an Ed.S in Curriculum and Instruction — so this isn&rsquo;t just what worked for me, it&rsquo;s what the research says works.</p>
+        <p class="quote">&ldquo;There are so many tools that never reach a real classroom. I wanted one that becomes part of the lesson.&rdquo;</p>
+        <div class="creds"><span>M.Ed · Advanced Teaching</span><span>Ed.S · Curriculum &amp; Instruction</span></div>
       </div>
     </div>
   </section>
@@ -414,6 +428,5 @@
   </div>
 </footer>
 
-<script src="assets/site.js" defer></script>
 </body>
 </html>
