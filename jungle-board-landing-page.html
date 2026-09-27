@@ -4,127 +4,136 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jungle Board — Classroom Management for ESL Teachers | by ZippyTeach</title>
+<link rel="icon" href="board/icons/icon-192-plain.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
     margin: 0; padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    color: #1b4332;
-    background: #f4f1e8;
+    font-family: "Nunito", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #14303d;
+    background: #f2f7f9;
     overflow-x: hidden;
+    line-height: 1.6; font-size: 16.5px;
   }
+  h1,h2,h3,h4 { font-family: "Baloo 2", "Nunito", sans-serif; }
   .mono { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
 
   /* ===== HERO ===== */
   .hero {
     position: relative;
-    min-height: 100vh;
+    min-height: 92vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 90px 24px 60px;
-    background: linear-gradient(180deg, #d8f3dc 0%, #95d5b2 30%, #52b788 62%, #2d6a4f 88%, #1b4332 100%);
+    background: linear-gradient(180deg, #123f33 0%, #1d5c48 45%, #2e7d5b 80%, #3d9969 100%);
     overflow: hidden;
   }
   #bubbleContainer { position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
   .bubble {
     position: absolute; bottom: -120px; border-radius: 50%;
-    background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.95), rgba(202,240,248,0.35) 60%, rgba(255,255,255,0.05) 100%);
+    background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.9), rgba(217,240,246,0.3) 60%, rgba(255,255,255,0.05) 100%);
     animation-name: bubbleRise; animation-timing-function: linear; animation-iteration-count: infinite;
   }
   @keyframes bubbleRise {
     0% { transform: translateY(0); opacity: 0; }
-    8% { opacity: 0.85; }
-    92% { opacity: 0.5; }
+    8% { opacity: 0.8; }
+    92% { opacity: 0.45; }
     100% { transform: translateY(-115vh) translateX(var(--drift, 30px)); opacity: 0; }
   }
   #waveStrip { position: absolute; bottom: 0; left: 0; width: 100%; height: 140px; z-index: 1; overflow: hidden; pointer-events: none; }
   .wave-layer { position: absolute; bottom: 0; left: 0; width: 200%; height: 100%; }
   .wave-back { animation: waveScroll 16s linear infinite; opacity: 0.5; }
-  .wave-front { animation: waveScroll 9s linear infinite reverse; opacity: 0.85; }
+  .wave-front { animation: waveScroll 9s linear infinite reverse; opacity: 0.9; }
   @keyframes waveScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
   .hero-inner { position: relative; z-index: 2; max-width: 780px; }
   .eyebrow {
-    display: inline-block; background: rgba(255,255,255,0.85); color: #2d6a4f;
-    font-weight: 800; font-size: 12px; letter-spacing: 1.5px; padding: 7px 16px;
-    border-radius: 20px; margin-bottom: 22px; text-transform: uppercase;
+    display: inline-block; background: rgba(255,255,255,0.92); color: #1d5c48;
+    font-family: "Baloo 2"; font-weight: 800; font-size: 12.5px; letter-spacing: 1.5px; padding: 8px 16px;
+    border-radius: 999px; margin-bottom: 22px; text-transform: uppercase;
   }
   .hero h1 {
-    font-size: clamp(38px, 7vw, 64px); font-weight: 800; line-height: 1.06;
+    font-size: clamp(36px, 7vw, 60px); font-weight: 800; line-height: 1.08;
     letter-spacing: -1px; color: #ffffff; margin: 0 0 18px;
-    text-shadow: 0 4px 24px rgba(27,67,50,0.5);
+    text-shadow: 0 4px 24px rgba(10,40,30,0.45);
   }
-  .hero h1 span { color: #ffd166; }
+  .hero h1 span { color: #ffd97a; }
   .hero p.sub {
-    font-size: clamp(16px, 2.2vw, 19px); color: #e5faff; line-height: 1.6;
-    max-width: 560px; margin: 0 auto 34px; text-shadow: 0 2px 10px rgba(27,67,50,0.4);
+    font-size: clamp(16px, 2.2vw, 19px); color: #d8efe4; line-height: 1.6;
+    max-width: 560px; margin: 0 auto 34px;
   }
   .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
   .btn {
-    display: inline-block; padding: 15px 30px; border-radius: 12px; font-weight: 700;
-    font-size: 16px; text-decoration: none; border: none; cursor: pointer; transition: transform 0.15s ease;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 15px 30px; border-radius: 14px; font-family: "Baloo 2"; font-weight: 800;
+    font-size: 16px; text-decoration: none; border: none; cursor: pointer; transition: transform .15s ease, filter .15s ease;
   }
-  .btn:hover { transform: translateY(-2px); }
-  .btn-primary { background: #ffd166; color: #4a2f00; box-shadow: 0 8px 24px rgba(255,209,102,0.4); }
-  .btn-ghost { background: rgba(255,255,255,0.12); color: #fff; border: 2px solid rgba(255,255,255,0.55); }
+  .btn:hover { filter: brightness(1.05); }
+  .btn-primary { background: #f6c453; color: #5b430e; box-shadow: 0 6px 0 #cf9a2b, 0 12px 22px rgba(246,196,83,.3); }
+  .btn-ghost { background: rgba(255,255,255,0.14); color: #fff; border: 2px solid rgba(255,255,255,0.6); box-shadow: none; }
+  .btn-ghost:hover { background: rgba(255,255,255,0.24); }
 
   /* ===== SECTIONS ===== */
-  section { padding: 90px 24px; }
+  section { padding: 84px 24px; }
   .section-inner { max-width: 1040px; margin: 0 auto; }
   .kicker {
     font-family: 'SFMono-Regular', Consolas, monospace; font-size: 12px; font-weight: 700;
-    letter-spacing: 2px; color: #52b788; text-transform: uppercase; margin-bottom: 10px;
+    letter-spacing: 2px; color: #2e7d5b; text-transform: uppercase; margin-bottom: 10px;
   }
-  h2 { font-size: clamp(26px, 4vw, 38px); font-weight: 800; letter-spacing: -0.5px; margin: 0 0 16px; color: #1b4332; }
-  .lede { font-size: 17px; line-height: 1.65; color: #33533f; max-width: 620px; }
+  h2 { font-size: clamp(26px, 4vw, 36px); font-weight: 800; letter-spacing: -0.5px; margin: 0 0 16px; color: #0c3b52; }
+  .lede { font-size: 17px; line-height: 1.65; color: #4c6a78; max-width: 620px; }
 
   /* ===== WHO ===== */
   .who { background: #ffffff; }
   .who-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-top: 40px; }
   .who-card {
-    background: #f4f1e8; border-radius: 16px; padding: 24px; border: 2px solid #c7e8ca;
+    background: #f2f7f9; border-radius: 18px; padding: 24px; border: 1.5px solid #e2eef3;
   }
-  .who-card .num { font-family: monospace; font-size: 13px; color: #52b788; font-weight: 700; }
-  .who-card p { font-size: 15px; line-height: 1.55; color: #33533f; margin: 8px 0 0; }
+  .who-card .num { font-family: monospace; font-size: 13px; color: #2e7d5b; font-weight: 700; }
+  .who-card p { font-size: 15px; line-height: 1.55; color: #4c6a78; margin: 8px 0 0; }
 
-  /* ===== FEATURES (desk-grid motif) ===== */
-  .features { background: linear-gradient(180deg, #f4f1e8 0%, #c7e8ca 100%); }
+  /* ===== FEATURES ===== */
+  .features { background: linear-gradient(180deg, #f2f7f9 0%, #e3f2ec 100%); }
   .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 44px; }
   .feature-card {
-    background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 4px 18px rgba(4,95,168,0.08);
-    border-top: 4px solid #52b788;
+    background: #fff; border-radius: 18px; padding: 24px; box-shadow: 0 4px 14px rgba(12,59,82,.06);
+    border-top: 5px solid #2e7d5b;
   }
   .feature-card .icon { font-size: 30px; margin-bottom: 10px; display: block; }
-  .feature-card h3 { font-size: 16px; margin: 0 0 8px; color: #2d6a4f; }
-  .feature-card p { font-size: 14px; line-height: 1.55; color: #4a6b52; margin: 0; }
+  .feature-card h3 { font-size: 16px; margin: 0 0 8px; color: #123f33; font-family: "Baloo 2"; }
+  .feature-card p { font-size: 14px; line-height: 1.55; color: #4c6a78; margin: 0; }
 
-  /* ===== PRICING (ticket stub motif) ===== */
-  .pricing { background: #1b4332; color: #fff; text-align: center; }
+  /* ===== PRICING ===== */
+  .pricing { background: #0c3b52; color: #fff; text-align: center; }
   .pricing h2 { color: #fff; }
-  .pricing .lede { color: #c7e8ca; margin: 0 auto 50px; }
+  .pricing .lede { color: #bcdcea; margin: 0 auto 50px; }
   .ticket-row { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; }
   .support-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
-  .btn-support { background: #ffd166; color: #4a2f00; font-size: 16px; padding: 15px 28px; box-shadow: 0 8px 24px rgba(255,209,102,0.35); }
+  .btn-support { background: #f6c453; color: #5b430e; font-size: 16px; padding: 15px 28px; box-shadow: 0 6px 0 #cf9a2b; }
   .ticket {
-    background: #fff; color: #1b4332; border-radius: 16px; width: 300px; text-align: left;
+    background: #fff; color: #14303d; border-radius: 18px; width: 300px; text-align: left;
     padding: 28px; position: relative; overflow: hidden;
   }
   .ticket::before {
     content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 0;
-    border-left: 3px dashed #c7e8ca;
+    border-left: 3px dashed #e2eef3;
   }
-  .ticket-badge { font-family: monospace; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: #52b788; text-transform: uppercase; }
-  .ticket .price { font-size: 40px; font-weight: 800; margin: 10px 0 4px; letter-spacing: -1px; }
-  .ticket .price small { font-size: 15px; font-weight: 600; color: #4a6b52; }
+  .ticket-badge { font-family: monospace; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: #2e7d5b; text-transform: uppercase; }
+  .ticket .price { font-size: 38px; font-weight: 800; margin: 10px 0 4px; letter-spacing: -1px; color: #0c3b52; font-family: "Baloo 2"; }
+  .ticket .price small { font-size: 15px; font-weight: 600; color: #4c6a78; }
   .ticket ul { list-style: none; padding: 0; margin: 18px 0 24px; }
-  .ticket li { font-size: 14px; padding: 6px 0; color: #33533f; display: flex; gap: 8px; }
-  .ticket li::before { content: '✓'; color: #06d6a0; font-weight: 800; }
-  .ticket.full { border: 3px solid #ffd166; }
+  .ticket li { font-size: 14px; padding: 6px 0; color: #4c6a78; display: flex; gap: 8px; }
+  .ticket li::before { content: '✓'; color: #2e7d5b; font-weight: 800; }
+  .ticket.full { border: 3px solid #f6c453; box-shadow: 0 0 0 4px rgba(246,196,83,.18); }
   .ticket .btn { width: 100%; text-align: center; }
+  .ticket .btn-ghost { background: #f2f7f9; color: #1d5c48; border: 2px solid #e2eef3; }
 
   /* ===== HOW TO BUY ===== */
   .howto { background: #fff; }
@@ -132,30 +141,31 @@
   .step { position: relative; padding-left: 44px; }
   .step::before {
     counter-increment: step; content: counter(step);
-    position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%;
-    background: #52b788; color: #fff; font-weight: 800; font-size: 14px;
+    position: absolute; left: 0; top: 0; width: 32px; height: 32px; border-radius: 11px;
+    background: linear-gradient(180deg,#3d9969,#2e7d5b); color: #fff; font-family: "Baloo 2"; font-weight: 800; font-size: 15px;
     display: flex; align-items: center; justify-content: center;
   }
-  .step h4 { margin: 0 0 6px; font-size: 15px; color: #2d6a4f; }
-  .step p { margin: 0; font-size: 14px; line-height: 1.55; color: #4a6b52; word-break: break-word; overflow-wrap: break-word; }
+  .step h4 { margin: 0 0 6px; font-size: 15.5px; color: #123f33; font-family: "Baloo 2"; }
+  .step p { margin: 0; font-size: 14px; line-height: 1.55; color: #4c6a78; word-break: break-word; overflow-wrap: break-word; }
 
   /* ===== FOOTER ===== */
-  footer { background: #031f4d; color: #9cc9e6; text-align: center; padding: 40px 24px; font-size: 13px; }
+  footer { background: #0c3b52; color: #bcdcea; text-align: center; padding: 40px 24px; font-size: 13.5px; }
   footer strong { color: #fff; }
+  footer a { color: #f6c453; font-weight: 700; text-decoration: none; }
 
   @media (prefers-reduced-motion: reduce) {
     .bubble, .wave-back, .wave-front { animation: none !important; }
   }
 
   /* ===== EMAIL GATE ===== */
-  .email-modal { position: fixed; inset: 0; background: rgba(27,67,50,0.6); display: none; align-items: center; justify-content: center; z-index: 999; padding: 20px; }
+  .email-modal { position: fixed; inset: 0; background: rgba(12,59,82,0.55); display: none; align-items: center; justify-content: center; z-index: 999; padding: 20px; }
   .email-modal.show { display: flex; }
-  .email-modal-box { background: #fff; border-radius: 18px; padding: 32px; max-width: 440px; width: 100%; box-shadow: 0 20px 60px rgba(27,67,50,0.35); box-sizing: border-box; text-align: left; }
-  .email-modal-box h3 { margin: 0 0 10px; color: #1b4332; font-size: 20px; }
-  .email-modal-box p { color: #33533f; font-size: 14px; line-height: 1.55; margin: 0 0 18px; }
+  .email-modal-box { background: #fff; border-radius: 20px; padding: 32px; max-width: 440px; width: 100%; box-shadow: 0 20px 60px rgba(12,59,82,0.35); box-sizing: border-box; text-align: left; }
+  .email-modal-box h3 { margin: 0 0 10px; color: #0c3b52; font-size: 20px; font-family: "Baloo 2"; }
+  .email-modal-box p { color: #4c6a78; font-size: 14px; line-height: 1.55; margin: 0 0 18px; }
   .email-modal-box .btn { width: 100%; text-align: center; box-sizing: border-box; margin-bottom: 12px; }
-  .email-modal-box .btn:last-child { margin-bottom: 0; }
-  .email-modal-close { display: block; text-align: center; margin-top: 14px; color: #7fa88a; font-size: 13px; cursor: pointer; }
+  .email-modal-box .btn:last-of-type { margin-bottom: 0; }
+  .email-modal-close { display: block; text-align: center; margin-top: 14px; color: #4c6a78; font-size: 13px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -165,8 +175,8 @@
   <div id="bubbleContainer"></div>
   <div id="waveStrip">
     <svg class="wave-layer wave-back" viewBox="0 0 1600 130" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0,60 C200,110 400,10 600,60 C800,110 1000,10 1200,60 C1400,110 1600,10 1800,60 L1800,130 L0,130 Z" fill="#d8f3dc"/>
-      <path d="M800,60 C1000,110 1200,10 1400,60 C1600,110 1800,10 2000,60 L2000,130 L800,130 Z" fill="#d8f3dc"/>
+      <path d="M0,60 C200,110 400,10 600,60 C800,110 1000,10 1200,60 C1400,110 1600,10 1800,60 L1800,130 L0,130 Z" fill="#d8efe4"/>
+      <path d="M800,60 C1000,110 1200,10 1400,60 C1600,110 1800,10 2000,60 L2000,130 L800,130 Z" fill="#d8efe4"/>
     </svg>
     <svg class="wave-layer wave-front" viewBox="0 0 1600 130" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M0,80 C250,30 450,120 700,80 C950,30 1150,120 1400,80 C1550,55 1650,70 1800,80 L1800,130 L0,130 Z" fill="#ffffff"/>
@@ -174,8 +184,8 @@
     </svg>
   </div>
   <div class="hero-inner">
-    <a href="index.html" style="display:inline-block; color:#e5faff; font-weight:800; font-size:13px; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; text-shadow:0 2px 10px rgba(27,67,50,0.4); text-decoration:none;">← ZippyTeach</a>
-    <span class="eyebrow">🌴 Built for ESL classrooms in China</span>
+    <a href="index.html" style="display:inline-block; color:#d8efe4; font-family:'Baloo 2'; font-weight:800; font-size:13px; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; text-decoration:none;">← ZippyTeach</a>
+    <span class="eyebrow"><i data-ic="leaf"></i> Built for ESL classrooms in China</span>
     <h1>Run your whole classroom<br>from <span>the jungle</span>.</h1>
     <p class="sub">The same classroom manager teachers love — seating chart, behavior points, group roles, a growing class mascot, and built-in formative assessments — wrapped in a fresh jungle theme. Fully offline, no VPN needed.</p>
     <div class="cta-row">
@@ -205,20 +215,20 @@
     <div class="kicker">Everything on one screen</div>
     <h2>Same powerful tools, jungle-themed top to bottom.</h2>
     <div class="feature-grid">
-      <div class="feature-card" style="border-top-color:#ffd166;"><span class="icon">📡</span><h3>Fully Offline — No VPN Needed</h3><p>Runs entirely from a single file with zero internet connection required. No VPN workarounds, no dropped connections mid-lesson — just open it and teach.</p></div>
-      <div class="feature-card"><span class="icon">🫧</span><h3>Stay in Your PowerPoint</h3><p>Teaching from a slide deck? A small floating bubble lets you give points or pick a name without ever leaving presentation mode.</p></div>
-      <div class="feature-card"><span class="icon">🪑</span><h3>Seating That Mirrors Your Real Room</h3><p>Choose Flexible, Diagonal Rows, Pair Seating, or Clusters/Pods, then drag any desk to match your actual classroom — separately for every one of your 8 classes.</p></div>
-      <div class="feature-card"><span class="icon">📜</span><h3>Visual Classroom Rules</h3><p>Icon-based positive and negative rules, with your own icon picker, shared across every class.</p></div>
-      <div class="feature-card"><span class="icon">📊</span><h3>Student Profiles + Real Assessments</h3><p>Log participation and behavior with one tap, and generate formative Reading & Vocabulary quizzes that save scores straight to each student's profile — free in the trial.</p></div>
-      <div class="feature-card"><span class="icon">🎡</span><h3>Wheel & Bingo Pickers</h3><p>Names are removed once drawn, so nobody's picked twice in the same round.</p></div>
-      <div class="feature-card"><span class="icon">🐾</span><h3>Groups & Roles</h3><p>Shuffle into jungle animal teams — monkeys, lions, elephants, and more — and drag names between groups anytime. Add your own custom roles too.</p></div>
-      <div class="feature-card"><span class="icon">🥚</span><h3>A Class Mascot That Grows With Them</h3><p>Individual points reward each student, while every point the class earns together helps their own jungle mascot hatch and grow — a shared goal alongside personal ones.</p></div>
-      <div class="feature-card"><span class="icon">📢</span><h3>Noise Meter</h3><p>Live volume tracking with automatic class-wide points for staying on target.</p></div>
-      <div class="feature-card"><span class="icon">🎵</span><h3>Focus Music</h3><p>Built-in ambient tracks for independent work, plus room to add your own.</p></div>
-      <div class="feature-card"><span class="icon">🌅</span><h3>Daily Helper Routine</h3><p>Today's date, day, and weather, plus rotating helper questions for your morning routine.</p></div>
-      <div class="feature-card"><span class="icon">🎴</span><h3>Flashcard Bank</h3><p>Build vocabulary decks with pictures and words, then browse or quiz any class on them.</p></div>
-      <div class="feature-card"><span class="icon">🧩</span><h3>Matching Game</h3><p>Drag a word onto the picture it matches, built right on top of your flashcard decks.</p></div>
-      <div class="feature-card"><span class="icon">🌟</span><h3>Student of the Day</h3><p>Draw your top 3 point-earners at the end of the day, with confetti.</p></div>
+      <div class="feature-card" style="border-top-color:#f6c453;"><span class="icon"><i data-ic="wifi-off"></i></span><h3>Fully Offline — No VPN Needed</h3><p>Runs entirely from a single file with zero internet connection required. No VPN workarounds, no dropped connections mid-lesson — just open it and teach.</p></div>
+      <div class="feature-card"><span class="icon"><i data-ic="bubble"></i></span><h3>Stay in Your PowerPoint</h3><p>Teaching from a slide deck? A small floating bubble lets you give points or pick a name without ever leaving presentation mode.</p></div>
+      <div class="feature-card"><span class="icon"><i data-ic="grid"></i></span><h3>Seating That Mirrors Your Real Room</h3><p>Choose Flexible, Diagonal Rows, Pair Seating, or Clusters/Pods, then drag any desk to match your actual classroom — separately for every one of your 8 classes.</p></div>
+      <div class="feature-card"><span class="icon"><i data-ic="scroll"></i></span><h3>Visual Classroom Rules</h3><p>Icon-based positive and negative rules, with your own icon picker, shared across every class.</p></div>
+      <div class="feature-card"><span class="icon"><i data-ic="chart"></i></span><h3>Student Profiles + Real Assessments</h3><p>Log participation and behavior with one tap, and generate formative Reading & Vocabulary quizzes that save scores straight to each student's profile — free in the trial.</p></div>
+      <div class="feature-card"><span class="icon"><i data-ic="wheel"></i></span><h3>Wheel & Bingo Pickers</h3><p>Names are removed once drawn, so nobody's picked twice in the same round.</p></div>
+      <div class="feature-card"><span class="icon"><i data-ic="paw"></i></span><h3>Groups & Roles</h3><p>Shuffle into jungle animal teams — monkeys, lions, elephants, and more — and drag names between groups anytime. Add your own custom roles too.</p></div>
+      <div class="feature-card"><span class="icon"><i data-ic="egg"></i></span><h3>A Class Mascot That Grows With Them</h3><p>Individual points reward each student, while every point the class earns together helps their own jungle mascot hatch and grow — a shared goal alongside personal ones.</p></div>
+      <div class="feature-card"><span class="icon"><i data-ic="megaphone"></i></span><h3>Noise Meter</h3><p>Live volume tracking with automatic class-wide points for staying on target.</p></div>
+      <div class="feature-card"><span class="icon"><i data-ic="music"></i></span><h3>Focus Music</h3><p>Built-in ambient tracks for independent work, plus room to add your own.</p></div>
+      <div class="feature-card"><span class="icon"><i data-ic="sun"></i></span><h3>Daily Helper Routine</h3><p>Today's date, day, and weather, plus rotating helper questions for your morning routine.</p></div>
+      <div class="feature-card"><span class="icon"><i data-ic="flash"></i></span><h3>Flashcard Bank</h3><p>Build vocabulary decks with pictures and words, then browse or quiz any class on them.</p></div>
+      <div class="feature-card"><span class="icon"><i data-ic="puzzle"></i></span><h3>Matching Game</h3><p>Drag a word onto the picture it matches, built right on top of your flashcard decks.</p></div>
+      <div class="feature-card"><span class="icon"><i data-ic="star"></i></span><h3>Student of the Day</h3><p>Draw your top 3 point-earners at the end of the day, with confetti.</p></div>
     </div>
   </div>
 </section>
@@ -238,7 +248,7 @@
           <li>Wheel, Bingo, Student Profiles & Voice Meter unlock in the full version</li>
           <li>Locks automatically after 3 days</li>
         </ul>
-        <a href="#" onclick="openEmailGate('Jungle-Board-TRIAL.html'); return false;" class="btn btn-ghost" style="background:#f4f1e8; color:#2d6a4f; border:2px solid #c7e8ca;">Get the trial</a>
+        <a href="#" onclick="openEmailGate('Jungle-Board-TRIAL.html'); return false;" class="btn btn-ghost">Get the trial</a>
       </div>
       <div class="ticket full">
         <div class="ticket-badge">Full version</div>
@@ -252,8 +262,8 @@
       </div>
     </div>
     <div class="support-row">
-      <a href="jungle-board-guide.html" class="btn btn-support">📖 How to Use This App</a>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSenxj4OEt_WG4Gxoc8Oz_xBJK2wlPBxwMAuDNA7V9vohPe_Hg/viewform?usp=publish-editor" target="_blank" rel="noopener" class="btn btn-support">💬 Share Your Feedback</a>
+      <a href="jungle-board-guide.html" class="btn btn-support"><i data-ic="book"></i> How to Use This App</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSenxj4OEt_WG4Gxoc8Oz_xBJK2wlPBxwMAuDNA7V9vohPe_Hg/viewform?usp=publish-editor" target="_blank" rel="noopener" class="btn btn-support"><i data-ic="bubble"></i> Share Your Feedback</a>
     </div>
   </div>
 </section>
@@ -264,9 +274,9 @@
     <div class="kicker">How it works</div>
     <h2>From trial to your desktop in a few steps.</h2>
     <div class="step-row">
-      <div class="step"><h4>Download the trial</h4><p>Get the 3-day trial file and open it directly in any browser — no install needed. <a href="#" onclick="openEmailGate('Jungle-Board-TRIAL.html'); return false;" style="color:#52b788; font-weight:700;">Download now →</a></p></div>
+      <div class="step"><h4>Download the trial</h4><p>Get the 3-day trial file and open it directly in any browser — no install needed. <a href="#" onclick="openEmailGate('Jungle-Board-TRIAL.html'); return false;" style="color:#2e7d5b; font-weight:700;">Download now →</a></p></div>
       <div class="step"><h4>Try it in your classroom</h4><p>Set up your classes, roster, and rules. Everything you build stays on your computer.</p></div>
-      <div class="step"><h4>Pay to unlock</h4><p style="color:#2d6a4f; font-weight:700;">Email danzigal1988@gmail.com to arrange payment.</p></div>
+      <div class="step"><h4>Pay to unlock</h4><p style="color:#123f33; font-weight:700;">Email danzigal1988@gmail.com to arrange payment.</p></div>
       <div class="step"><h4>Receive your copy</h4><p>You'll get a personal, permanently-unlocked file — your existing classes carry over.</p></div>
     </div>
   </div>
@@ -274,19 +284,19 @@
 
 <footer>
   <p><strong>Jungle Board</strong> — ESL Jungle Classroom Manager Board</p>
-  <p>By <a href="index.html" style="color:#fff; text-decoration:none; font-weight:700;">ZippyTeach</a></p>
+  <p>By <a href="index.html">ZippyTeach</a></p>
   <p>Questions or ready to buy? <span style="color:#fff; font-weight:700;">danzigal1988@gmail.com</span></p>
-  <p><a href="jungle-board-guide.html" style="color:#ffd166; text-decoration:none; font-weight:700;">📖 How to Use Jungle Board — Teacher Guide</a></p>
-  <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSenxj4OEt_WG4Gxoc8Oz_xBJK2wlPBxwMAuDNA7V9vohPe_Hg/viewform?usp=publish-editor" target="_blank" rel="noopener" style="color:#ffd166; text-decoration:none; font-weight:700;">💬 Share Your Feedback</a></p>
+  <p><a href="jungle-board-guide.html"><i data-ic="book"></i> How to Use Jungle Board — Teacher Guide</a></p>
+  <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSenxj4OEt_WG4Gxoc8Oz_xBJK2wlPBxwMAuDNA7V9vohPe_Hg/viewform?usp=publish-editor" target="_blank" rel="noopener"><i data-ic="bubble"></i> Share Your Feedback</a></p>
 </footer>
 
 <!-- EMAIL GATE MODAL -->
 <div class="email-modal" id="emailGateModal">
   <div class="email-modal-box">
-    <h3>📬 Get your download + updates</h3>
+    <h3><i data-ic="mail"></i> Get your download + updates</h3>
     <p>Pop your email in so I can let you know about new versions and fixes — takes 10 seconds, and your download link is right below either way.</p>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLScX3gyuNOw1QrhKt1143qzs_WbIIjCODBwuuLqQ3C_Q6VZBIg/viewform?usp=publish-editor" target="_blank" rel="noopener" class="btn btn-primary">✉️ Enter your email</a>
-    <a href="#" id="emailGateDownloadLink" download class="btn btn-ghost" style="background:#f4f1e8; color:#2d6a4f; border:2px solid #c7e8ca;">⬇️ Continue to download</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScX3gyuNOw1QrhKt1143qzs_WbIIjCODBwuuLqQ3C_Q6VZBIg/viewform?usp=publish-editor" target="_blank" rel="noopener" class="btn btn-primary"><i data-ic="mail"></i> Enter your email</a>
+    <a href="#" id="emailGateDownloadLink" download class="btn btn-ghost" style="background:#f2f7f9; color:#1d5c48; border:2px solid #e2eef3;"><i data-ic="download"></i> Continue to download</a>
     <span class="email-modal-close" onclick="closeEmailGate()">No thanks, close this</span>
   </div>
 </div>
@@ -324,5 +334,6 @@ function closeEmailGate() {
 })();
 </script>
 
+<script src="assets/site.js" defer></script>
 </body>
 </html>
