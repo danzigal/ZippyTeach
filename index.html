@@ -55,10 +55,10 @@
   *{box-sizing:border-box}
   html{scroll-behavior:smooth;background:var(--fog)}
   body{margin:0;font-family:"Nunito",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
-    color:var(--ink);background:var(--fog);line-height:1.6;font-size:16.5px}
+    color:var(--ink);background:var(--fog);line-height:1.65;font-size:17px}
   h1,h2,h3,.baloo{font-family:"Baloo 2","Nunito",sans-serif}
   a{color:var(--sea)}
-  .wrap{max-width:1140px;margin:0 auto;padding:0 22px}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 clamp(18px,3vw,34px)}
 
   /* ---------- header ---------- */
   header.top{position:sticky;top:0;z-index:50;background:rgba(242,247,249,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--mist)}
@@ -85,12 +85,12 @@
   .btn-small{padding:10px 18px;font-size:14.5px;border-radius:12px}
 
   /* ---------- hero ---------- */
-  .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:44px;align-items:center;padding:56px 0 44px}
+  .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding:64px 0 52px}
   .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--mist);color:var(--sea);
     font-weight:800;font-size:13.5px;padding:7px 14px;border-radius:999px;letter-spacing:.02em}
-  .hero h1{font-size:clamp(34px,4.6vw,54px);line-height:1.08;margin:18px 0 16px;color:var(--deep);font-weight:800;letter-spacing:-.01em}
+  .hero h1{font-size:clamp(38px,5vw,64px);line-height:1.06;margin:18px 0 18px;color:var(--deep);font-weight:800;letter-spacing:-.018em}
   .hero h1 .wave{color:var(--sea-hi)}
-  .hero p.lead{font-size:clamp(16.5px,1.6vw,19px);max-width:560px;margin:0 0 24px;color:var(--soft)}
+  .hero p.lead{font-size:clamp(17.5px,1.8vw,21px);max-width:620px;margin:0 0 26px;color:var(--soft)}
   .hero-btns{display:flex;gap:12px;flex-wrap:wrap}
   .hero-note{margin-top:16px;font-size:14.5px;color:var(--soft);display:flex;gap:16px;flex-wrap:wrap}
   .hero-note span{display:inline-flex;align-items:center;gap:6px}
@@ -101,13 +101,13 @@
   .float-card .dot{width:38px;height:38px;border-radius:12px;background:var(--aqua);display:grid;place-items:center;font-size:20px}
 
   /* ---------- sections ---------- */
-  section{padding:52px 0}
+  section{padding:62px 0}
   .sec-head{text-align:center;max-width:640px;margin:0 auto 34px}
   h2.sec{color:var(--deep);font-size:clamp(26px,3vw,34px);margin:0 0 10px;font-weight:800;letter-spacing:-.01em}
   p.sub{color:var(--soft);margin:0;font-size:17px}
 
   /* ---------- product cards ---------- */
-  .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+  .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px}
   .prod{background:var(--card);border:1.5px solid var(--mist);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column;gap:12px;
     position:relative;overflow:hidden;box-shadow:0 4px 14px rgba(12,59,82,.05);transition:transform .15s,box-shadow .15s}
   .prod:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
@@ -115,8 +115,8 @@
   .prod .ic{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font-size:27px;background:var(--tint);margin-top:4px}
   .prod .tag{font-size:12.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
   .prod h3{margin:0;font-size:23px;color:var(--deep);font-weight:800}
-  .prod p{margin:0;color:var(--soft);font-size:15.5px}
-  .prod ul{margin:0;padding-left:20px;color:var(--soft);font-size:15px}
+  .prod p{margin:0;color:var(--soft);font-size:16px}
+  .prod ul{margin:0;padding-left:20px;color:var(--soft);font-size:15.5px}
   .prod li{margin:3px 0}
   .prod .price{font-weight:800;color:var(--deep);font-size:16px;margin-top:auto;padding-top:10px}
   .prod .btns{display:flex;gap:10px;flex-wrap:wrap}
@@ -186,26 +186,36 @@
   footer .links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:12px;font-size:14.5px}
 
   @media (max-width:860px){
-    .hero{grid-template-columns:1fr;gap:28px;padding-top:36px}
+    .hero{grid-template-columns:1fr;gap:32px;padding-top:40px}
     .video-row{grid-template-columns:1fr}
     .app-banner{grid-template-columns:1fr;padding:30px 26px;text-align:center}
     .app-banner p{margin:0 auto}
+    .products{grid-template-columns:1fr}
+    .story{grid-template-columns:1fr;gap:28px;padding:30px 24px}
+    .story-photo{max-width:280px;margin:0 auto}
   }
   @media (max-width:600px){
     .btn{width:100%}
-    .prod{padding:22px 18px}
+    .prod{padding:24px 20px}
     .about{grid-template-columns:1fr;text-align:center;justify-items:center}
     .shot .float-card{left:8px;bottom:12px}
     .nav{display:none}
+    .hero h1{font-size:clamp(34px,11vw,46px)}
+    .hero p.lead{font-size:17px}
+    section{padding:48px 0}
+    .story{padding:26px 18px;border-radius:18px}
+    .story-text p{font-size:15.5px}
+    .creds{gap:6px}
+    .creds span{font-size:12px}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
-  .story{background:var(--card);border:1.5px solid var(--mist);border-radius:var(--radius);padding:34px;
-    display:grid;grid-template-columns:270px 1fr;gap:34px;align-items:center;box-shadow:0 4px 14px rgba(12,59,82,.05)}
+  .story{background:var(--card);border:1.5px solid var(--mist);border-radius:var(--radius);padding:38px;width:100%;max-width:1180px;margin:0 auto;
+    display:grid;grid-template-columns:250px minmax(0,1fr);gap:38px;align-items:start;box-shadow:0 4px 14px rgba(12,59,82,.05)}
   .story-photo img{width:100%;border-radius:18px;border:1.5px solid var(--mist);display:block}
   .story-photo .chip{display:block;text-align:center;margin-top:10px;font-size:13.5px;color:var(--soft);font-weight:700}
-  .story-text h2{color:var(--deep);font-size:clamp(23px,2.6vw,28px);margin:12px 0 14px;font-weight:800;letter-spacing:-.01em}
-  .story-text p{color:var(--soft);margin:0 0 12px;font-size:15.5px}
+  .story-text h2{color:var(--deep);font-size:clamp(25px,2.8vw,32px);margin:12px 0 16px;font-weight:800;letter-spacing:-.01em}
+  .story-text p{color:var(--soft);margin:0 0 14px;font-size:16.5px;line-height:1.7}
   .story-text b{color:var(--ink)}
   .story-text .quote{border-left:4px solid var(--sun);background:var(--fog);border-radius:0 14px 14px 0;
     padding:12px 16px;font-weight:700;color:var(--ink);margin:14px 0 4px}
@@ -267,11 +277,8 @@
         <h3>Ocean Board</h3>
         <p>Seating chart, points, picture rules, class jobs, notes, games and tools in one place, with a sea creature mascot each class raises together.</p>
         <ul><li>Free for 2 classes, for as long as you like</li><li>Works offline once it's open</li><li>Install it like an app</li></ul>
-        <div class="price">Free · Full version R180 · ¥75 · US$10</div>
+        <div class="price">Free · Full version R180 · US$10</div>
         <div class="btns"><a class="btn btn-go btn-small" href="board/"><span class="zt-ic"><svg viewBox="0 0 24 24"><path d="M8.5 5.6v12.8c0 .9 1 1.5 1.8 1l9.8-6.4c.7-.5.7-1.6 0-2.1l-9.8-6.1c-.8-.5-1.8.1-1.8.8z" fill="currentColor"/></svg></span> Try it free</a><a class="btn btn-ghost btn-small" href="ocean-board/">Pricing &amp; guide</a></div>
-      </div>
-
-      
       </div>
 
       <div class="prod packs">
@@ -280,7 +287,7 @@
         <h3>Ready-to-teach lessons</h3>
         <p>Complete 40-minute lessons for low-level learners: interactive slides, touchscreen games, a printable children make and keep, and a teacher guide.</p>
         <ul><li><b>My Friends</b> — describing a friend</li><li><b>I'm good at …</b> — talents and talent stars</li><li>Low English · Pre-A1–A1 · try two games free</li></ul>
-        <div class="price">US$4 · ¥25 · R70 each</div>
+        <div class="price">US$4 · R70 each</div>
         <div class="btns"><a class="btn btn-go btn-small" href="lessons/">See the packs</a><a class="btn btn-ghost btn-small" href="lessons/im-good-at/demo.html"><span class="zt-ic"><svg viewBox="0 0 24 24"><path d="M8.5 5.6v12.8c0 .9 1 1.5 1.8 1l9.8-6.4c.7-.5.7-1.6 0-2.1l-9.8-6.1c-.8-.5-1.8.1-1.8.8z" fill="currentColor"/></svg></span> Try a demo</a></div>
       </div>
 
@@ -404,11 +411,10 @@
       </div>
       <div class="story-text">
         <span class="eyebrow">The story behind ZippyTeach</span>
-        <h2>I didn&rsquo;t set out to build an app.</h2>
-        <p>Eight years into teaching — with three education degrees already behind me — I landed at a new school with eight classes of thirty children. I didn&rsquo;t want to print the same old classroom-management posters, the ones with rules that never stuck. I needed to learn two hundred and forty names, keep eight groups engaged, and stay on top of homework. So I started building something that fit the way my classroom actually worked.</p>
-        <p>I pictured my students&rsquo; names big on the board, placed exactly where they sat, so I could call on them from day one. Points had to stay visible — attention lives on the screen. And I wanted more than a sticker chart: stickers get lost, and children get gifts at home. School should give them an <b>experience</b>. That&rsquo;s where the growing mascot, the wheel, and the games came from.</p>
-        <p>I built it for my own classroom. But the more teachers I spoke to, the clearer it became that I wasn&rsquo;t the only one in this situation — large classes, young learners, and never enough hours in the day. So I tidied it up, gave it a name, and put it here for any teacher facing the same thing.</p>
-        <p class="quote">&ldquo;So many tools never reach a real classroom. I wanted to build one that becomes part of the lesson.&rdquo;</p>
+        <h2>I didn&rsquo;t build ZippyTeach because I wanted to make an app.</h2>
+        <p>I built it because I walked into a new school with eight classes, thirty children in each room, and a head full of names I was terrified I&rsquo;d forget. I&rsquo;d spent years studying education, but what I needed each morning was simpler: my students&rsquo; names where they sat, points they could see, class jobs they could own, games that made English feel like play, and one calm screen that could hold the day together.</p>
+        <p>So I made the tool I wished I had. It helped my classroom run better, and then other teachers started asking to use it. That&rsquo;s when I realized I wasn&rsquo;t the only one carrying too much with too little time.</p>
+        <p class="quote">ZippyTeach is my way of handing some of that weight back to teachers — built from a real classroom, for real classrooms.</p>
         <div class="creds"><span>M.Ed · Advanced Teaching</span><span>Ed.S · Curriculum &amp; Instruction</span><span>MA · Educational Leadership</span></div>
       </div>
     </div>
