@@ -149,6 +149,8 @@
      outside it so nothing competes with their taps */
   .desk-chip-grip { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; cursor: grab; padding-top: 3px; }
   .desk-chip-name { font-size: 11px; font-weight: 700; color: #023e8a; text-align: center; max-width: 92px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .desk-chip-group-icon { display:inline-flex; align-items:center; justify-content:center; min-width:20px; height:20px; margin:2px 0 0; padding:0 5px; border-radius:999px; background:#fff; border:1px solid rgba(2,62,138,.2); box-shadow:0 1px 2px rgba(0,0,0,.12); font-size:13px; line-height:1; }
+  .group-member-icon { display:inline-flex; width:22px; height:22px; margin-right:7px; align-items:center; justify-content:center; border-radius:50%; background:#fff; border:1px solid rgba(2,62,138,.14); vertical-align:middle; }
   .desk-chip-points { font-size: 10px; font-weight: 700; color: #06a97e; margin-top: 1px; }
   .desk-chip-actions { display: flex; gap: 4px; margin-top: 5px; position: relative; z-index: 3; }
   .desk-chip-action-btn { width: 28px; height: 26px; border: 1px solid rgba(2,62,138,0.12) !important; border-radius: 6px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; touch-action: manipulation; box-shadow: none !important; transform: none !important; filter: none !important; position: relative; z-index: 3; }
@@ -185,6 +187,7 @@
   .icon-picker-btn:hover { border-color: #0077b6; background: #eaf9fd; }
   .manage-role-row { display: flex; align-items: center; gap: 10px; padding: 6px 4px; border-bottom: 1px solid #f0f0f0; }
   .manage-role-icon { font-size: 20px; width: 28px; text-align: center; }
+  .manage-role-row .icon-preview-btn { width: 38px; height: 38px; }
   .manage-role-name { flex: 1; font-size: 14px; font-weight: 600; color: #333; }
   .manage-group-name-input { flex: 1; font-size: 14px; font-weight: 600; color: #333; border: 1px solid #eee; border-radius: 6px; padding: 4px 8px; }
   .manage-role-delete { background: none; border: none; color: #ef476f; font-weight: 800; font-size: 15px; cursor: pointer; padding: 0 6px; }
@@ -276,6 +279,9 @@
   .group-card { background: white; border-radius: 12px; padding: 16px; border-left: 5px solid; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: background 0.15s ease, box-shadow 0.15s ease; }
   .group-card.group-card-dragover { background: #eef6f9; box-shadow: 0 0 0 3px #0077b6 inset; }
   .group-card h4 { margin: 0 0 10px 0; font-size: 16px; }
+  .group-score { display:flex; align-items:baseline; gap:7px; margin:0 0 12px; padding:8px 10px; border-radius:9px; background:#eff8f6; border:1px solid #d6ebe5; color:#315e59; }
+  .group-score strong { font-size:24px; line-height:1; color:#176f69; font-variant-numeric:tabular-nums; }
+  .group-score span { font-size:10px; font-weight:850; letter-spacing:.1em; text-transform:uppercase; }
   .group-member-list { min-height: 34px; }
   .group-member { padding: 6px 10px; background: #f8f9fa; border-radius: 6px; margin-bottom: 6px; font-size: 14px; font-weight: 500; cursor: grab; user-select: none; transition: opacity 0.15s ease; }
   .group-member:active { cursor: grabbing; }
@@ -1274,95 +1280,6 @@
     .schedule-preview-row button { grid-column: 4; grid-row: 1 / span 2; }
   }
 
-
-  /* sticker album */
-  .sticker-set-row{ display:flex; justify-content:space-between; align-items:baseline; margin:14px 0 6px;
-                    font-size:12px; font-weight:800; color:#4a6b6e; letter-spacing:.03em; text-transform:uppercase; }
-  .sticker-set-row b{ color:#168e91; }
-  .profile-sticker-item{ position:relative; }
-  .profile-sticker-item.locked strong{ color:#c2ced2; }
-  .profile-sticker-item .sticker-shade{ position:relative; display:block; }
-  .profile-sticker-item .sticker-shade .sticker-illustration{ filter:grayscale(1) opacity(.22); }
-  .profile-sticker-item .sticker-shade em{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-                                           font:800 22px/1 system-ui,sans-serif; color:#b7c6cb; font-style:normal; }
-  .sticker-dupe{ position:absolute; right:2px; bottom:4px; background:#168e91; color:#fff; border-radius:9px;
-                 padding:1px 5px; font:700 10px/1.4 system-ui,sans-serif; font-style:normal; }
-
-  /* ---------- Teach / Set up ---------- */
-  .mode-switch{ display:inline-flex; background:rgba(3,30,45,.45); border-radius:30px; padding:4px; gap:4px; margin-left:auto; }
-  .mode-switch button{ border:none; border-radius:24px; padding:9px 20px; font-weight:800; font-size:15px; cursor:pointer;
-    background:transparent; color:#e0fbfc; font-family:var(--face); }
-  .mode-switch button.on{ background:#fff4dc; color:#023e8a; box-shadow:0 2px 0 rgba(0,0,0,.25); }
-  /* the ocean decorations stay on the class list; inside a class they soften while teaching */
-  body.in-class.teach #seaDecor{ opacity:.3; }
-  body.in-class.teach .bubble{ display:none; }
-  body.in-class #app > h1, body.in-class #app > p{ display:none; }
-  body.teach .setup-only,
-  body.teach .roster-card, body.teach #layoutPicker, body.teach .seat-hint-wide,
-  body.teach .rule-remove-btn, body.teach .rules-card .rule-add-row, body.teach #resetRulesBtn,
-  body.teach .rules-card > p, body.teach .desk-chip.desk-empty, body.teach .seat-hint-phone{ display:none !important; }
-  body.teach .seating-canvas .desk-chip-grip{ cursor:pointer; }
-  body.teach .seating-canvas .desk-chip-num{ display:none; }
-  /* Teach mode locks the desks so a lesson tap never drags one; this says how to move them */
-  .seat-hint-teach{ display:none; }
-  body.teach .seat-hint-teach{ display:block; }
-  body.teach .seat-hint-wide{ display:none !important; }
-  /* the team badge on a desk */
-  .desk-chip-group{ position:absolute; top:-9px; left:-9px; width:26px; height:26px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center; font-size:14px; line-height:1;
-    border:2px solid #fffaf0; box-shadow:0 2px 4px rgba(2,62,138,.35); pointer-events:none; z-index:2; }
-  body.teach .seating-canvas .desk-chip-group{ width:calc(26px * var(--desk-scale)); height:calc(26px * var(--desk-scale));
-    font-size:calc(14px * var(--desk-scale)); top:calc(-9px * var(--desk-scale)); left:calc(-9px * var(--desk-scale)); }
-  @media (max-width: 700px){ body.teach .seat-hint-teach{ display:none; } }
-  /* a little shorter while teaching, so all the rows fit on a classroom screen */
-  body.teach .seating-canvas{ aspect-ratio:16/8.6 !important; }
-  /* desks grow in Teach mode; --desk-scale is worked out so they never touch */
-  .seating-canvas{ --desk-scale:1; }
-  body.teach .seating-canvas .desk-chip{
-    width:calc(100px * var(--desk-scale)); height:calc(88px * var(--desk-scale));
-    margin-left:calc(-50px * var(--desk-scale)); margin-top:calc(-44px * var(--desk-scale));
-  }
-  body.teach .seating-canvas .desk-chip-name{ font-size:calc(11px * var(--desk-scale) * 1.15); max-width:calc(92px * var(--desk-scale)); }
-  body.teach .seating-canvas .desk-chip-points{ font-size:calc(10px * var(--desk-scale) * 1.1); }
-  body.teach .seating-canvas .desk-chip-action-btn{ width:calc(28px * var(--desk-scale)); height:calc(26px * var(--desk-scale)); font-size:calc(14px * var(--desk-scale)); }
-  body.teach .seating-canvas .desk-chip-actions{ gap:calc(4px * var(--desk-scale)); margin-top:calc(5px * var(--desk-scale)); }
-  @media (min-width:1500px){
-    body.teach .behavior-split{ grid-template-columns:minmax(0,1fr) 260px !important; }
-    body.teach .rules-card .rules-grid{ grid-template-columns:repeat(2,1fr) !important; gap:8px !important; }
-  }
-  @media (max-width:700px){
-    .mode-switch{ margin-left:0; }
-    body.teach .seating-canvas .desk-chip{ width:auto; height:auto; margin:0; }
-  }
-
-  /* ---------- Games & Tools ---------- */
-
-
-  /* ---------- How to use ---------- */
-  .help-card{ max-width:860px; margin-left:auto; margin-right:auto; }
-  .help-title{ margin:0 0 6px; color:var(--deep, #023e8a); font-family:var(--face); font-size:24px; display:flex; align-items:center; gap:8px; }
-  .help-lead{ color:#666; font-size:15px; margin:0 0 14px; }
-  .help-steps{ margin:0 0 18px; padding-left:0; list-style:none; counter-reset:hs; display:flex; flex-direction:column; gap:10px; }
-  .help-steps li{ counter-increment:hs; position:relative; padding:12px 14px 12px 56px; background:#fff; border:2px solid #e6d8b8; border-radius:12px; font-size:15px; line-height:1.5; color:#234; }
-  .help-steps li::before{ content:counter(hs); position:absolute; left:14px; top:12px; width:30px; height:30px; border-radius:50%;
-    background:#16697f; color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center; font-family:var(--face); }
-  .help-topic{ border:2px solid #e6d8b8; border-radius:12px; background:rgba(255,255,255,.75); margin-bottom:8px; }
-  .help-topic summary{ cursor:pointer; padding:13px 16px; font-weight:800; font-size:16px; color:var(--deep, #023e8a); font-family:var(--face); list-style-position:inside; }
-  .help-topic[open] summary{ border-bottom:1px solid #eee2c8; }
-  .help-topic p, .help-topic ul{ margin:10px 16px; font-size:14.5px; line-height:1.55; color:#345; }
-  .help-topic ul{ padding-left:18px; }
-  .help-topic li{ margin-bottom:5px; }
-  .help-contact{ margin:16px 0 0; font-size:14px; color:#666; text-align:center; }
-  .help-contact a{ color:#16697f; font-weight:700; }
-  .help-welcome{ align-items:center; gap:12px; flex-wrap:wrap; background:#fff4dc; border:2px solid #f0c078; border-radius:14px;
-    padding:12px 14px; margin-bottom:14px; font-size:15px; color:#3a2a00; position:relative; }
-  .help-welcome span{ flex:1 1 260px; }
-  .help-welcome-x{ background:none; border:none; font-size:18px; cursor:pointer; color:#8a6a2a; padding:4px 8px; }
-  .help-warn{ background:#fff4dc; border-left:4px solid #f0a848; border-radius:8px; padding:10px 14px !important; color:#4a3000 !important; }
-  .help-foot{ margin:16px 0 0; font-size:14px; color:#666; text-align:center; }
-  .help-foot a{ color:#16697f; font-weight:700; }
-  body.play-app .web-only{ display:none !important; }
-  body:not(.play-app) .app-only{ display:none !important; }
 </style>
 </head>
 <body>
@@ -1780,18 +1697,12 @@
     <button class="tab-btn" onclick="switchTab('music')"><svg class="ico"><use href="#i-music"/></svg>Music</button>
     <button class="tab-btn" onclick="switchTab('flashcards')"><svg class="ico"><use href="#i-cards"/></svg>Flashcards</button>
     <button class="tab-btn" onclick="switchTab('tests')"><svg class="ico"><use href="#i-doc"/></svg>Tests</button>
-    <button class="tab-btn" id="helpTabBtn" onclick="switchTab('help')"><svg class="ico"><use href="#i-help"/></svg>How to use</button>
     <button class="tab-btn" id="ztLockBtn" onclick="ztLockButtonPressed()"
             title="Lock the board while you step away"><svg class="ico"><use href="#i-lock"/></svg>Lock</button>
   </div>
 
   <!-- MY CLASSES (home) -->
   <div id="panel-classes" class="panel active">
-    <div id="helpWelcome" class="help-welcome" style="display:none;">
-      <span>&#128075; New to the Ocean Board? The quick guide shows you how to set up your classes in a few minutes.</span>
-      <button type="button" class="btn btn-primary" onclick="switchTab('help')">How to use</button>
-      <button type="button" class="help-welcome-x" onclick="dismissHelpWelcome()" aria-label="Hide this message">&#10005;</button>
-    </div>
     <div class="class-grid" id="classGrid"></div>
     <div style="text-align:center;"><button class="btn btn-warning" id="playUnlockPromo" onclick="openPlayUnlock()"><svg class="ico"><use href="#i-lock"/></svg>Unlock the full Ocean Board</button></div>
     <div style="display: flex; gap: 8px; margin-bottom: 12px;">
@@ -1812,126 +1723,12 @@
     <p style="text-align:center; color:#e0fbfc; font-size:13px; text-shadow: 0 1px 4px rgba(2,62,138,0.5);">Tap a class above to open its seating chart, class tools, bingo, Hangman, homework, and planning.</p>
   </div>
 
-  <!-- HOW TO USE -->
-  <div id="panel-help" class="panel">
-    <div class="card help-card">
-      <h2 class="help-title"><svg class="ico ico-h"><use href="#i-help"/></svg>How to use the Ocean Board</h2>
-      <p class="help-lead">Three steps to get going. Everything else is below &mdash; tap a topic to open it.</p>
-      <ol class="help-steps">
-        <li><b>Make your classes.</b> On <b>My Classes</b>, type a class name and tap <b>+ Add Class</b>. Tap a class to open it. The &#9999;&#65039; next to its name renames it.</li>
-        <li><b>Add your students.</b> In the class, tap <b>Set up</b>, then <b>Paste Class Roster</b>. Paste your list, one name per line, and tap <b>Add These Names to the Seating Chart</b>. Use <b>first names or nicknames only</b>.</li>
-        <li><b>Teach.</b> Tap <b>Teach</b>. Give points with <b>+</b> and <b>&minus;</b> on each desk, or tap <b>&#127942;</b> to award a classroom rule. Tap a name to open that student.</li>
-      </ol>
-
-      <details class="help-topic"><summary>Teach and Set up</summary>
-        <p><b>Teach</b> is for during a lesson: big desks, points and your rules, nothing else. The desks stay put so nothing moves by accident when you tap. A class that already has students always opens in Teach.</p>
-        <p><b>Set up</b> is for getting ready: adding names, choosing a layout, dragging desks to match your room, and editing rules. Switch with the <b>Teach / Set up</b> button at the top right of the class.</p>
-      </details>
-
-      <details class="help-topic"><summary>Points and classroom rules</summary>
-        <ul>
-          <li><b>+</b> and <b>&minus;</b> on a desk give or take one point.</li>
-          <li><b>&#127942;</b> on a desk awards one of your classroom rules, with its points, and notes it on the student&rsquo;s profile.</li>
-          <li><b>+1 / &minus;1 to Whole Class</b> changes everyone at once.</li>
-          <li><b>Students of the Day</b> picks today&rsquo;s stars.</li>
-          <li>Rules are shared by all your classes. Add or remove them in <b>Set up</b>.</li>
-        </ul>
-      </details>
-
-      <details class="help-topic"><summary>Stickers and the sticker album</summary>
-        <p>Every student has a <b>sticker album</b> of 24 characters &mdash; ten sea friends, ten class friends and four shiny ones saved for the big milestones.</p>
-        <ul>
-          <li>Stickers arrive <b>on their own</b> as a student reaches point milestones. The album fills in order, so the shiny ones are the last to turn up.</li>
-          <li>Change how often they come in a student&rsquo;s profile: <i>&ldquo;For this class, a sticker every ___ points&rdquo;</i>. It is set per class, and 10 is a good place to start.</li>
-          <li>You can also hand one out yourself &mdash; open a student and tap <b>&#65291; Give a sticker</b>.</li>
-          <li>Greyed-out spaces with a <b>?</b> are the ones still to collect. Children can see what is out there, which is half the fun.</li>
-        </ul>
-      </details>
-
-      <details class="help-topic"><summary>Homework</summary>
-        <p>Open a class, tap <b>Homeroom</b>, then <b>Homework</b>. Type the task and a due date, and add it.</p>
-        <p>When the due date arrives, open it and tick off who did the work. Everyone starts ticked, so you only untick the few who didn&rsquo;t. Ticked students get their point, and what happened is written into each student&rsquo;s profile so you have it at report time.</p>
-      </details>
-
-      <details class="help-topic"><summary>Your timetable and the day&rsquo;s plan</summary>
-        <p>Under <b>Homeroom &rsaquo; Planning</b> you can set your periods and which class you teach in each one. The strip at the top of a class then shows what today looks like, so you can see the day at a glance.</p>
-      </details>
-
-      <details class="help-topic"><summary>Seating chart</summary>
-        <p>In <b>Set up</b>, choose a layout, then drag any desk to match your room. Tap a desk to change the name or open the student. On a phone the desks show as a simple grid &mdash; arrange them on a tablet or your classroom screen.</p>
-      </details>
-
-      <details class="help-topic"><summary>Student profiles and notes</summary>
-        <p>Tap a student&rsquo;s name, then <b>Profile</b>, to see their points, their sticker album, and everything logged about them. Write a note there, or use <b>Homeroom &rsaquo; Notes</b> to work through the class one student at a time.</p>
-        <p>A note can have a subject, which helps if you teach the same children for more than one subject. <b>Copy Summary for Report</b> gives you the lot as text to paste into a report.</p>
-        <p class="help-warn">Keep to first names or nicknames, and keep notes short and factual. Anything official &mdash; assessments, safeguarding &mdash; belongs in your school&rsquo;s own system, not here.</p>
-      </details>
-
-      <details class="help-topic"><summary>Games</summary>
-        <ul>
-          <li><b>Student Wheel</b> &mdash; spins to pick a name.</li>
-          <li><b>Bingo</b> &mdash; builds a game from your flashcards or your own word list.</li>
-          <li><b>Hangman</b> &mdash; picks a word from your flashcards for the class to guess.</li>
-        </ul>
-      </details>
-
-      <details class="help-topic"><summary>Tools</summary>
-        <ul>
-          <li><b>Timer &amp; Tools</b> &mdash; a countdown timer, dice and group maker.</li>
-          <li><b>Voice Meter</b> &mdash; shows how loud the room is. It listens live and records nothing.</li>
-          <li><b>Daily Helper</b> &mdash; a short daily routine one student can lead.</li>
-          <li><b>Mascot</b> &mdash; grows as the class earns points together.</li>
-        </ul>
-      </details>
-
-      <details class="help-topic"><summary>Class Jobs</summary>
-        <p>Under <b>Homeroom &rsaquo; Class Jobs</b>, tap <b>Assign Jobs!</b> and every student gets one at random. Add, change or remove jobs in <b>Set up</b>.</p>
-      </details>
-
-      <details class="help-topic"><summary>Flashcards, music and tests</summary>
-        <p><b>Flashcards</b> make your own picture cards, which Bingo and Hangman then use. <b>Music</b> plays a quiet background track. <b>Tests</b> records scores, which land in the students&rsquo; profiles.</p>
-      </details>
-
-      <details class="help-topic"><summary>Moving between your classroom screens</summary>
-        <p>The board saves onto the device you are using &mdash; nothing is sent anywhere. To carry your classes to another screen, use <b>Download Backup</b> on <b>My Classes</b>, then <b>Load Backup</b> on the other device.</p>
-        <p>Loading a backup lets you choose which classes to bring in, so the classes already on that screen are left alone. Whichever screen you last taught on has the newest points, so back up from that one.</p>
-      </details>
-
-      <details class="help-topic web-only"><summary>Working without internet</summary>
-        <p>Once the board has opened, it keeps working with no connection. On a classroom screen, install it: open it in Chrome or Edge and choose <b>Install</b> (or <b>Add to Home screen</b>). It then opens like an app, offline.</p>
-      </details>
-
-      <details class="help-topic app-only"><summary>Working without internet</summary>
-        <p>The app works with no connection at all. Everything is saved on this device, so you can teach a full day offline and nothing is lost.</p>
-      </details>
-
-      <details class="help-topic"><summary>If something goes wrong</summary>
-        <ul>
-          <li><b>My changes disappeared</b> &mdash; the board saves per device and per browser. Check you are on the same one, and not in a private window.</li>
-          <li><b>The board looks squashed</b> &mdash; turn a tablet landscape, or use the classroom screen.</li>
-          <li><b>The desks will not move</b> &mdash; you are in <b>Teach</b>. Tap <b>Set up</b> first.</li>
-          <li><b>The Voice Meter does nothing</b> &mdash; the browser needs microphone permission for this page.</li>
-        </ul>
-      </details>
-
-      <details class="help-topic app-only"><summary>Unlocking the full version</summary>
-        <p>Tap any locked tool and choose <b>Unlock the full version</b>. It is one payment through Google Play, yours to keep, with no subscription. Changed phone or reinstalled? Tap <b>Restore purchase</b> on the same screen.</p>
-      </details>
-
-      <p class="help-foot">Still stuck? Email <a href="mailto:danzigal1988@gmail.com">danzigal1988@gmail.com</a> or WeChat <b>DanziGal88</b>. &middot; <a href="https://danzigal.github.io/ZippyTeach/privacy.html" target="_blank" rel="noopener">Privacy policy</a></p>
-    </div>
-  </div>
-
   <!-- CLASS WORKSPACE -->
   <div id="panel-classroom" class="panel">
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap;">
       <button class="btn btn-primary" onclick="backToClasses()"><svg class="ico"><use href="#i-back"/></svg>Back to Classes</button>
       <h2 id="workspaceClassName" style="color:#ffffff; text-shadow: 0 2px 8px rgba(2,62,138,0.6); margin:0; font-size:22px; display:inline-flex; align-items:center; gap:9px; white-space:nowrap; flex:0 0 auto;">Class</h2>
       <button class="btn btn-warning" onclick="drawStudentsOfDay()"><svg class="ico"><use href="#i-star"/></svg>Students of the Day</button>
-      <div class="mode-switch" role="group" aria-label="Board mode">
-        <button type="button" id="modeTeachBtn" onclick="setBoardMode('teach')">Teach</button>
-        <button type="button" id="modeSetupBtn" onclick="setBoardMode('setup')">Set up</button>
-      </div>
     </div>
     <div id="dailyClassPrompt" class="class-day-strip" style="margin-bottom:12px;"></div>
     <div class="sub-tab-bar workspace-category-bar" id="workspaceCategoryBar">
@@ -2221,8 +2018,9 @@
       <div id="tools-panel-groups" class="sub-panel">
         <div class="card">
           <h3 style="margin-bottom: 8px; color: #333;"><svg class="ico ico-h"><use href="#i-users"/></svg>Group Organizer</h3>
-          <p style="color: #888; font-size: 13px; margin-bottom: 12px;">Paste names, choose group count, and shuffle! Or pull the current class roster in one tap. Once shuffled, drag a name onto another group to move them.</p>
-          <textarea class="group-input" id="groupNames"></textarea>
+          <p style="color: #888; font-size: 13px; margin-bottom: 12px;">Set up teams for this class, then keep them in place and award points as you go. You can drag a student to another group whenever needed.</p>
+          <p class="group-class-scope-note" style="padding:9px 11px;border-radius:8px;background:#eff8f6;color:#426b67;font-size:12px;margin-bottom:10px;">Each class has its own roster, team names, icons, and group scores. Changing a group point also adds or removes one point for each seated student in that team.</p>
+          <textarea class="group-input" id="groupNames" oninput="saveGroupRosterInput()" placeholder="One student name per line"></textarea>
           <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
             <button class="btn btn-teal" onclick="syncNamesFromClass('groupNames')"><svg class="ico"><use href="#i-waves"/></svg>Sync Roster</button>
             <span style="color: #666; font-weight: 600;">Groups:</span>
@@ -2241,6 +2039,15 @@
           <details id="manageGroupsDetails" ontoggle="if(this.open) renderManageGroups()">
             <summary style="cursor:pointer; color:#0077b6; font-weight:700; font-size:14px;"><svg class="ico"><use href="#i-pencil"/></svg> Manage Group Names &amp; Icons</summary>
             <div id="manageGroupsBody" style="margin-top:14px;"></div>
+          </details>
+          <details style="margin-top:14px; border-top:1px solid #e7e1d1; padding-top:12px;">
+            <summary style="cursor:pointer; color:#315e59; font-weight:700; font-size:14px;">Points &amp; group cycle settings</summary>
+            <p style="color:#647474;font-size:12px;margin:10px 0;">Resetting student points keeps collected stickers, profiles, and mascot growth. The sticker point milestones start again from zero, so students can earn new stickers as they build points again.</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-warning" onclick="resetClassPoints('individual')">Reset student points</button>
+              <button type="button" class="btn btn-warning" onclick="resetClassPoints('group')">Reset group scores</button>
+              <button type="button" class="btn btn-danger" onclick="resetClassPoints('both')">Reset both point totals</button>
+            </div>
           </details>
         </div>
       </div>
@@ -2514,6 +2321,18 @@
       <div class="reward-emoji" id="rewardEmoji">🎉</div>
       <div class="reward-text" id="rewardText">Great Job!</div>
       <button class="btn btn-primary" onclick="closeReward()" style="margin-top: 16px;">Awesome!</button>
+    </div>
+  </div>
+
+  <div class="reward-modal" id="groupCycleModal" onclick="closeGroupCycleDialog()">
+    <div class="reward-box" onclick="event.stopPropagation()" style="max-width:480px;text-align:left;">
+      <h3 style="color:#173f49;margin-bottom:8px;">Starting a new group cycle?</h3>
+      <p style="color:#607277;font-size:14px;margin-bottom:14px;">Student points, stickers, profiles and mascot growth will stay as they are. Choose what to do with the current team scores:</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button type="button" class="btn btn-success" onclick="shuffleGroups(true)">Shuffle &amp; start group scores at 0</button>
+        <button type="button" class="btn btn-teal" onclick="shuffleGroups(false)">Shuffle &amp; keep team scores</button>
+        <button type="button" class="btn btn-danger" onclick="closeGroupCycleDialog()">Cancel</button>
+      </div>
     </div>
   </div>
 
@@ -2902,6 +2721,16 @@ function getClassGroups(className) {
   return cls.groups;
 }
 
+function getStudentGroupInfo(className, studentName) {
+  const target = String(studentName || '').trim().toLocaleLowerCase();
+  if (!target) return null;
+  const groups = getClassGroups(className);
+  const groupIdx = groups.findIndex(group => Array.isArray(group) && group.some(name => String(name || '').trim().toLocaleLowerCase() === target));
+  if (groupIdx < 0) return null;
+  const team = getClassTeamSettings(className)[groupIdx];
+  return team ? { index: groupIdx, icon: team.icon, name: team.name } : null;
+}
+
 // ========== SEATING LAYOUTS ==========
 /* Every layout takes the number of desks actually on show, so the room
    re-flows to the class size instead of always drawing DESK_COUNT seats. */
@@ -3214,30 +3043,54 @@ const DEFAULT_ANIMAL_GROUPS = [
   { name: 'Shark Team', icon: '🦈' },
   { name: 'Turtle Team', icon: '🐢' },
   { name: 'Crab Team', icon: '🦀' },
-  { name: 'Whale Team', icon: '🐳' },
-  { name: 'Dolphin Team', icon: '🐬' },
-  { name: 'Seahorse Team', icon: '🌊' }
+  { name: 'Whale Team', icon: '🐳' }
 ];
-let animalGroups = DEFAULT_ANIMAL_GROUPS.map(g => ({ ...g }));
+const LEGACY_DEFAULT_ANIMAL_GROUPS = [
+  { name: 'Dog Team', icon: '🐶' },
+  { name: 'Cat Team', icon: '🐱' },
+  { name: 'Panda Team', icon: '🐼' },
+  { name: 'Mouse Team', icon: '🐭' },
+  { name: 'Tiger Team', icon: '🐯' },
+  { name: 'Horse Team', icon: '🐴' }
+];
+function getClassTeamSettings(className) {
+  const cls = classes[className];
+  if (!cls) return [];
+  if (!Array.isArray(cls.teamSettings)) {
+    cls.teamSettings = DEFAULT_ANIMAL_GROUPS.map(team => ({ name: team.name, icon: team.icon || '⭐', points: 0 }));
+  }
+  // Earlier builds shipped with these six generic animal teams. Convert only
+  // those exact built-in names, keeping each team's existing points and roster.
+  cls.teamSettings.forEach(team => {
+    if (!team || typeof team !== 'object') return;
+    const legacyIndex = LEGACY_DEFAULT_ANIMAL_GROUPS.findIndex(old => String(team.name || '').trim().toLowerCase() === old.name.toLowerCase());
+    if (legacyIndex >= 0 && DEFAULT_ANIMAL_GROUPS[legacyIndex]) {
+      team.name = DEFAULT_ANIMAL_GROUPS[legacyIndex].name;
+      team.icon = DEFAULT_ANIMAL_GROUPS[legacyIndex].icon;
+    }
+  });
+  cls.teamSettings.forEach((team, index) => {
+    const fallback = DEFAULT_ANIMAL_GROUPS[index % DEFAULT_ANIMAL_GROUPS.length];
+    const item = team && typeof team === 'object' ? team : (cls.teamSettings[index] = {});
+    const points = Number(item.points);
+    item.name = String(item.name || fallback.name);
+    item.icon = String(item.icon || fallback.icon || '⭐');
+    item.points = Number.isFinite(points) ? Math.max(0, points) : 0;
+  });
+  return cls.teamSettings;
+}
 
 // ========== TABS ==========
 function switchTab(tab) {
-  /* the guide is never locked — a teacher who cannot read it cannot get started */
-  if (tab !== 'classes' && tab !== 'help' && !playGate(PLAY_FEATURE_NAMES[tab])) return;
+  if (tab !== 'classes' && !playGate(PLAY_FEATURE_NAMES[tab])) return;
   document.querySelectorAll('.tab-bar .tab-btn').forEach(b => b.classList.remove('active'));
-  /* works whether a teacher tapped the button or the board switched tabs itself */
-  const ev = (typeof event !== 'undefined' && event) ? event : null;
-  const hit = ev && ev.target ? (ev.target.closest('.tab-btn') || ev.target.closest('.sub-tab-btn') || ev.target) : null;
-  if (hit && hit.classList) hit.classList.add('active');
-  else {
-    const btn = document.querySelector('.tab-bar .tab-btn[onclick*="\'' + tab + '\'"]');
-    if (btn) btn.classList.add('active');
-  }
-  ['panel-classes', 'panel-classroom', 'panel-music', 'panel-flashcards', 'panel-tests', 'panel-help']
-    .forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active'); });
-  if (tab === 'help') {
-    document.getElementById('panel-help').classList.add('active');
-  } else if (tab === 'classes') {
+  (event.target.closest('.sub-tab-btn') || event.target).classList.add('active');
+  document.getElementById('panel-classes').classList.remove('active');
+  document.getElementById('panel-classroom').classList.remove('active');
+  document.getElementById('panel-music').classList.remove('active');
+  document.getElementById('panel-flashcards').classList.remove('active');
+  document.getElementById('panel-tests').classList.remove('active');
+  if (tab === 'classes') {
     document.getElementById('panel-classes').classList.add('active');
     renderClassGrid();
   } else if (tab === 'music') {
@@ -3251,8 +3104,8 @@ function switchTab(tab) {
   }
 }
 
-function openClassWorkspace(className) {  activeClass = className;
-  setTimeout(() => setBoardMode(classes[className].desks.some(d => d.name) ? 'teach' : 'setup', true), 0);
+function openClassWorkspace(className) {  saveGroupRosterInput(true); activeClass = className;
+  groupRosterLoadedForClass = null;
   notesDeskIdx = null;
   { const jn = document.getElementById('roleNames'); if (jn) jn.value = ''; }
   if (typeof loadClassNotepad === 'function') setTimeout(loadClassNotepad, 0);
@@ -3282,6 +3135,7 @@ function openClassWorkspace(className) {  activeClass = className;
 }
 
 function backToClasses() {
+  saveGroupRosterInput(true);
   document.getElementById('panel-classroom').classList.remove('active');
   document.getElementById('panel-classes').classList.add('active');
   document.querySelectorAll('.tab-bar .tab-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
@@ -3297,13 +3151,14 @@ function renameClass(oldName) {
     alert('A class with that name already exists.');
     return;
   }
+  if (activeClass === oldName) saveGroupRosterInput(true);
   const ordered = {};
   Object.keys(classes).forEach(k => {
     if (k === oldName) ordered[trimmed] = classes[oldName];
     else ordered[k] = classes[k];
   });
   classes = ordered;
-  if (activeClass === oldName) activeClass = trimmed;
+  if (activeClass === oldName) { activeClass = trimmed; groupRosterLoadedForClass = trimmed; }
   saveState();
   setWorkspaceClassName(trimmed);
   renderClassSelectors();
@@ -3380,6 +3235,8 @@ function switchWorkspaceTab(tab) {
     if (jn && !jn.value.trim()) syncNamesFromClass('roleNames');
   } else if (page === 'notes') {
     renderNotesTab();
+  } else if (page === 'tools') {
+    loadGroupOrganizerForClass();
   }
 }
 
@@ -3388,7 +3245,7 @@ function switchToolsTab(tab) {
   document.querySelectorAll('#workspace-tools .sub-panel').forEach(p => p.classList.remove('active'));
   (event.target.closest('.sub-tab-btn') || event.target).classList.add('active');
   document.getElementById('tools-panel-' + tab).classList.add('active');
-  if (tab === 'groups') renderGroupGrid();
+  if (tab === 'groups') loadGroupOrganizerForClass();
 }
 
 function renderClassSelectors() {
@@ -3431,45 +3288,6 @@ function getBadge(points) {
   return '';
 }
 
-let boardMode = 'setup';
-
-function setBoardMode(mode, quiet) {
-  boardMode = mode === 'teach' ? 'teach' : 'setup';
-  document.body.classList.toggle('teach', boardMode === 'teach');
-  const t = document.getElementById('modeTeachBtn'), u = document.getElementById('modeSetupBtn');
-  if (t) { t.classList.toggle('on', boardMode === 'teach'); t.setAttribute('aria-pressed', boardMode === 'teach'); }
-  if (u) { u.classList.toggle('on', boardMode === 'setup'); u.setAttribute('aria-pressed', boardMode === 'setup'); }
-  fitDeskSize();
-}
-
-/* In Teach mode the desks grow to fill the room, as far as they can without
-   touching each other. Works for any layout, including hand-placed desks. */
-function fitDeskSize() {
-  const canvas = document.getElementById('seatingCanvas');
-  if (!canvas) return;
-  let scale = 1;
-  if (boardMode === 'teach' && !isPhoneSeating()) {
-    const chips = [...canvas.querySelectorAll('.desk-chip:not(.desk-empty)')];
-    const W = canvas.clientWidth, H = canvas.clientHeight;
-    const pts = chips.map(c => [parseFloat(c.style.left) / 100 * W, parseFloat(c.style.top) / 100 * H]);
-    scale = 1.45;
-    for (let i = 0; i < pts.length; i++) {
-      for (let j = i + 1; j < pts.length; j++) {
-        const dx = Math.abs(pts[i][0] - pts[j][0]), dy = Math.abs(pts[i][1] - pts[j][1]);
-        const fits = Math.max(dx / 100, dy / 88) * 0.94;   // base desk is 100 x 88
-        if (fits < scale) scale = fits;
-      }
-    }
-    scale = Math.max(1, Math.min(1.45, scale));
-  }
-  canvas.style.setProperty('--desk-scale', scale.toFixed(3));
-}
-window.addEventListener('resize', () => { clearTimeout(window.__fitT); window.__fitT = setTimeout(fitDeskSize, 150); });
-
-/* whenever the chart is redrawn, resize the desks to suit the current mode */
-const ztBaseRenderSeating = renderSeatingCanvas;
-renderSeatingCanvas = function () { ztBaseRenderSeating.apply(this, arguments); fitDeskSize(); };
-
 function renderClassContent() {
   const container = document.getElementById('classContent');
   const cls = classes[activeClass];
@@ -3487,7 +3305,6 @@ function renderClassContent() {
   html += '<div class="behavior-split">';
   html += '<div class="card seating-card"><h3 style="margin-bottom: 4px; color: #333;">🪑 ' + activeClass + ' Seating Chart <span style="color:#0077b6; font-size:14px; font-weight:600;">(' + filled + '/' + DESK_COUNT + ')</span></h3>';
   html += '<p class="seat-hint-wide" style="color:#888; font-size:13px; margin-bottom:10px;">Choose a layout, then drag any desk to fine-tune it. Tap a desk to edit the name, give points, or open their profile.</p>';
-  html += '<p class="seat-hint-teach" style="color:#888; font-size:13px; margin-bottom:10px;">Tap a desk to give points or open a student. To move the desks around, tap <b>Set up</b> at the top.</p>';
   html += '<p class="seat-hint-phone" style="color:#888; font-size:13px; margin-bottom:10px;">Tap a desk to edit the name, give points, or open their profile. Open the board on a tablet or your classroom screen to arrange the desks to match your room.</p>';
   html += '<div class="layout-picker" id="layoutPicker"></div>';
   html += '<div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">';
@@ -3554,6 +3371,18 @@ function renderSeatingCanvas() {
     nameLabel.className = 'desk-chip-name';
     nameLabel.textContent = d.name || '+ Add';
     grip.appendChild(nameLabel);
+
+    if (d.name) {
+      const studentGroup = getStudentGroupInfo(activeClass, d.name);
+      if (studentGroup) {
+        const groupBadge = document.createElement('span');
+        groupBadge.className = 'desk-chip-group-icon';
+        groupBadge.textContent = studentGroup.icon;
+        groupBadge.title = studentGroup.name;
+        groupBadge.setAttribute('aria-label', studentGroup.name);
+        grip.appendChild(groupBadge);
+      }
+    }
 
     if (d.name) {
       const pointsLabel = document.createElement('div');
@@ -3657,7 +3486,7 @@ function attachDeskDrag(chip, canvas, idx) {
     startY = e.clientY;
     moved = false;
     // on a phone the desks sit in a tiled grid, so they can be tapped but not dragged
-    if (!isPhoneSeating() && boardMode !== 'teach') chip.classList.add('dragging');
+    if (!isPhoneSeating()) chip.classList.add('dragging');
   });
   grip.addEventListener('pointermove', (e) => {
     if (pointerId === undefined || e.pointerId !== pointerId) return;
@@ -3852,8 +3681,10 @@ function addClass() {
     return;
   }
   if (name && !classes[name]) {
+    saveGroupRosterInput(true);
     classes[name] = makeClass();
     activeClass = name;
+    groupRosterLoadedForClass = null;
     document.getElementById('newClassName').value = '';
     saveState();
     renderClassGrid();
@@ -3877,9 +3708,7 @@ function changePoints(idx, delta) {
   renderClassGrid();
   renderClassContent();
   populateBingoWinnerStudents();
-  if (milestoneStickerCount) showStickerToast('🌟 ' + desk.name + ' collected ' +
-    (ztLastSticker ? ztLastSticker.name : 'a new sticker') +
-    (milestoneStickerCount > 1 ? ' and ' + (milestoneStickerCount - 1) + ' more' : '') + '!');
+  if (milestoneStickerCount) showStickerToast('🌟 ' + desk.name + ' earned ' + milestoneStickerCount + ' sticker' + (milestoneStickerCount === 1 ? '' : 's') + ' for reaching a point milestone!');
 }
 
 function classWidePoints(delta) {
@@ -3922,14 +3751,15 @@ function closeReward() {
 }
 
 const RULE_ICON_CHOICES = ['✋','🤫','🪑','🤝','👂','📚','✏️','🎯','💪','🙌','👀','🧠','😊','👍','🗣️','🧹','⏰','📵','😤','⚠️','❌','🔇','🚫','🌟'];
+const GROUP_ICON_CHOICES = ['🐟','🐠','🐙','🦈','🐢','🦀','🐳','🐬','🪼','🦭','🐚','🪸','🌊','⭐','🐧','🦦'];
 let selectedRuleEmoji = '⭐';
 let iconPickerCallback = null;
 
-function openIconPicker(callback) {
+function openIconPicker(callback, choices = RULE_ICON_CHOICES) {
   iconPickerCallback = callback;
   const grid = document.getElementById('ruleIconGrid');
   grid.innerHTML = '';
-  RULE_ICON_CHOICES.forEach(icon => {
+  choices.forEach(icon => {
     const btn = document.createElement('button');
     btn.className = 'icon-picker-btn';
     btn.textContent = icon;
@@ -4052,435 +3882,163 @@ function awardRulePoint(idx, ruleIdx) {
       launchConfetti();
     }, 1600);
   }
-  if (milestoneStickerCount) showStickerToast('🌟 ' + desk.name + ' collected ' +
-    (ztLastSticker ? ztLastSticker.name : 'a new sticker') +
-    (milestoneStickerCount > 1 ? ' and ' + (milestoneStickerCount - 1) + ' more' : '') + '!');
+  if (milestoneStickerCount) showStickerToast('🌟 ' + desk.name + ' earned a sticker for reaching a point milestone!');
 }
 
 // ========== STUDENT PROFILES ==========
 let profileDeskIdx = null;
 
-/* ZippyTeach sticker album — chibi characters.
-   One shared build: oversized head, tiny body, pared-back details, big reaction.
-   Every sticker is a character so the set reads as one family. */
-
-const ZT_STICKER_SETS = [
-  { id: 'sea',   label: 'Sea friends' },
-  { id: 'land',  label: 'Class friends' },
-  { id: 'shiny', label: 'Shiny ones' }
+const OCEAN_STICKERS = [
+  { id: 'teamwork', name: 'Teamwork', icon: '🐢', note: 'Worked well with others' },
+  { id: 'curiosity', name: 'Curiosity', icon: '🪼', note: 'Asked thoughtful questions' },
+  { id: 'helping', name: 'Helping', icon: '🐙', note: 'Helped someone today' },
+  { id: 'creativity', name: 'Creativity', icon: '🦀', note: 'Shared a creative idea' },
+  { id: 'focus', name: 'Focus', icon: '🐬', note: 'Stayed focused and kept going' }
 ];
-
-const ZT_STICKERS = [
-  // ---- Sea friends ----
-  { id: 'turtle',   set: 'sea',  name: 'Steady Turtle',  note: 'Kept going, bit by bit' },
-  { id: 'octopus',  set: 'sea',  name: 'Helpful Octopus',note: 'Helped someone today' },
-  { id: 'jelly',    set: 'sea',  name: 'Curious Jelly',  note: 'Asked a great question' },
-  { id: 'crab',     set: 'sea',  name: 'Brave Crab',     note: 'Tried something hard' },
-  { id: 'dolphin',  set: 'sea',  name: 'Happy Dolphin',  note: 'Brought a smile to class' },
-  { id: 'star',     set: 'sea',  name: 'Little Starfish',note: 'A star effort' },
-  { id: 'seahorse', set: 'sea',  name: 'Kind Seahorse',  note: 'Was kind to a classmate' },
-  { id: 'whale',    set: 'sea',  name: 'Big-Heart Whale',note: 'A big, kind heart' },
-  { id: 'puffer',   set: 'sea',  name: 'Proud Puffer',   note: 'Proud of your work' },
-  { id: 'narwhal',  set: 'sea',  name: 'Bright Narwhal', note: 'A bright idea' },
-  // ---- Class friends ----
-  { id: 'fox',      set: 'land', name: 'Clever Fox',     note: 'Clever thinking' },
-  { id: 'panda',    set: 'land', name: 'Calm Panda',     note: 'Calm and ready' },
-  { id: 'bunny',    set: 'land', name: 'Quick Bunny',    note: 'Quick and eager' },
-  { id: 'bear',     set: 'land', name: 'Strong Bear',    note: 'Strong effort' },
-  { id: 'cat',      set: 'land', name: 'Curious Cat',    note: 'Wanted to find out more' },
-  { id: 'penguin',  set: 'land', name: 'Team Penguin',   note: 'Worked well with others' },
-  { id: 'owl',      set: 'land', name: 'Wise Owl',       note: 'Listened and learned' },
-  { id: 'frog',     set: 'land', name: 'Leap Frog',      note: 'A big leap forward' },
-  { id: 'dino',     set: 'land', name: 'Roaring Dino',   note: 'Roared through the tricky bit' },
-  { id: 'sloth',    set: 'land', name: 'Steady Sloth',   note: 'Slow and steady wins' },
-  // ---- Shiny ones (the big milestones) ----
-  { id: 'crown',    set: 'shiny', name: 'Crown Star',    note: 'A shining moment' },
-  { id: 'trophy',   set: 'shiny', name: 'Champion Cup',  note: 'A real achievement' },
-  { id: 'rainbow',  set: 'shiny', name: 'Rainbow Day',   note: 'You brightened the day' },
-  { id: 'gem',      set: 'shiny', name: 'Treasure Gem',  note: 'A rare and lovely effort' }
+const GENERAL_STICKERS = [
+  { id:'pow', name:'Pow!', icon:'💥', note:'A brilliant effort' },
+  { id:'bam', name:'Bam!', icon:'💜', note:'You did it' },
+  { id:'zam', name:'Zam!', icon:'⚡', note:'A bright idea' },
+  { id:'lightbulb', name:'Bright idea', icon:'💡', note:'For clever thinking' },
+  { id:'rocket', name:'Whoosh!', icon:'🚀', note:'Ready to take off' },
+  { id:'graduate', name:'Learning star', icon:'🪐', note:'A learning milestone' },
+  { id:'superstar', name:'Super star', icon:'⭐', note:'A star effort' },
+  { id:'highfive', name:'High five', icon:'🙌', note:'A job well done' },
+  { id:'levelup', name:'Level up', icon:'❤️', note:'Look how far you have come' },
+  { id:'chameleon', name:'Colorful thinker', icon:'🦎', note:'A flexible thinker' },
+  { id:'artist', name:'Creative spark', icon:'🎨', note:'For making something new' },
+  { id:'science', name:'Science star', icon:'🧪', note:'For curious experiments' },
+  { id:'puzzle', name:'Piece by piece', icon:'🧩', note:'Kept working it out' },
+  { id:'reader', name:'Story explorer', icon:'📚', note:'A lovely learning moment' },
+  { id:'maths', name:'Number whiz', icon:'🔢', note:'For number work' },
+  { id:'magic', name:'Ta-da!', icon:'🎩', note:'A little bit of magic' },
+  { id:'cactus', name:'Yippee!', icon:'🌵', note:'Grew through a challenge' },
+  { id:'rainbow', name:'Rainbow ride', icon:'🌈', note:'A bright moment today' },
+  { id:'frog', name:'Nice one!', icon:'🐸', note:'A lovely effort' },
+  { id:'dino', name:'Roar!', icon:'🦖', note:'Brave learning' },
+  { id:'whoosh', name:'Whoosh!', icon:'👟', note:'Kept moving forward' }
 ];
-
-/* palette per character: body, body-dark, belly/face patch, extra */
-const ZT_PAL = {
-  turtle:   ['#7fd77f', '#46a862', '#fff0cf', '#f3a950'],
-  octopus:  ['#d98cf0', '#a558cf', '#ffe3f4', '#ffd166'],
-  jelly:    ['#8fd9f5', '#4aa8d8', '#fff4fb', '#ff9fc0'],
-  crab:     ['#ff8a72', '#e4573c', '#ffe2d3', '#ffd166'],
-  dolphin:  ['#7fc6ef', '#3d8fce', '#fff2e2', '#ffd166'],
-  star:     ['#ffd35c', '#eba52b', '#fff4cf', '#ff9fc0'],
-  seahorse: ['#ffb27a', '#e2814a', '#fff0e0', '#8fd9f5'],
-  whale:    ['#8fb8f0', '#4f7fd0', '#fff3ea', '#ff9fc0'],
-  puffer:   ['#ffd98a', '#e0a63f', '#fff6e2', '#f3866e'],
-  narwhal:  ['#b8bdf2', '#7a80d8', '#fff2f8', '#ffd166'],
-  fox:      ['#ff9a5c', '#dd6a30', '#fff2e4', '#ffffff'],
-  panda:    ['#f6f4ef', '#cfc9bd', '#ffffff', '#3d4450'],
-  bunny:    ['#fbd7e4', '#e2a3ba', '#fff6fa', '#ff9fc0'],
-  bear:     ['#d3a172', '#a87646', '#ffeed9', '#ffd166'],
-  cat:      ['#ffc98a', '#dd9c4e', '#fff4e3', '#ff9fc0'],
-  penguin:  ['#6b7f95', '#3f5265', '#fff7ea', '#ffab47'],
-  owl:      ['#c2a4e8', '#8a६6c9', '#fff1dd', '#ffd166'],
-  frog:     ['#93df8c', '#4faa58', '#f2ffe3', '#ff9fc0'],
-  dino:     ['#79d9c4', '#39a08d', '#fff0d6', '#f3866e'],
-  sloth:    ['#c8bda8', '#9a8d77', '#fff3dd', '#a8916f'],
-  crown:    ['#ffd35c', '#e0a41f', '#fff6d6', '#ff9fc0'],
-  trophy:   ['#ffcf4d', '#d99b1c', '#fff4cf', '#7fc6ef'],
-  rainbow:  ['#ffffff', '#d9e6ea', '#ffffff', '#ff9fc0'],
-  gem:      ['#7fe7e0', '#2fb3c4', '#e6fffd', '#ffd166']
-};
-ZT_PAL.owl = ['#c2a4e8', '#8a66c9', '#fff1dd', '#ffd166'];
-
-let ztStickerUid = 0;
-
-/* ---- shared face parts -------------------------------------------------- */
-/* Eyes sit low and wide on a big head, which is what makes chibi read as cute. */
-function ztEyes(kind) {
-  const L = 52, R = 76, Y = 56;
-  if (kind === 'happy')  // ^ ^  — eyes closed with delight
-    return `<path d="M${L - 7} ${Y + 2}q7 -9 14 0M${R - 7} ${Y + 2}q7 -9 14 0" fill="none" stroke="#33414d" stroke-width="3.6" stroke-linecap="round"/>`;
-  if (kind === 'sparkle')
-    return `<g fill="#33414d"><path d="M${L} ${Y - 8}l2.6 5.4 5.4 2.6-5.4 2.6L${L} ${Y + 8}l-2.6-5.4-5.4-2.6 5.4-2.6Z"/>` +
-           `<path d="M${R} ${Y - 8}l2.6 5.4 5.4 2.6-5.4 2.6L${R} ${Y + 8}l-2.6-5.4-5.4-2.6 5.4-2.6Z"/></g>`;
-  if (kind === 'wide')
-    return `<g><ellipse cx="${L}" cy="${Y}" rx="7.5" ry="8.6" fill="#33414d"/><ellipse cx="${R}" cy="${Y}" rx="7.5" ry="8.6" fill="#33414d"/>` +
-           `<circle cx="${L + 2.6}" cy="${Y - 3}" r="2.8" fill="#fff"/><circle cx="${R + 2.6}" cy="${Y - 3}" r="2.8" fill="#fff"/></g>`;
-  // 'dot' — the default
-  return `<g><ellipse cx="${L}" cy="${Y}" rx="5.6" ry="6.6" fill="#33414d"/><ellipse cx="${R}" cy="${Y}" rx="5.6" ry="6.6" fill="#33414d"/>` +
-         `<circle cx="${L + 2}" cy="${Y - 2.4}" r="2.1" fill="#fff"/><circle cx="${R + 2}" cy="${Y - 2.4}" r="2.1" fill="#fff"/></g>`;
-}
-
-function ztMouth(kind) {
-  const Y = 70;
-  if (kind === 'cheer')   // wide open — the exaggerated reaction
-    return `<path d="M56 ${Y - 3}q8 14 16 0q-8 5 -16 0Z" fill="#6d3340"/><path d="M60 ${Y + 4}q4 4 8 0Z" fill="#ff8fa6"/>`;
-  if (kind === 'wow')
-    return `<ellipse cx="64" cy="${Y + 1}" rx="5.4" ry="6.4" fill="#6d3340"/>`;
-  if (kind === 'grin')
-    return `<path d="M55 ${Y - 4}q9 11 18 0" fill="none" stroke="#6d3340" stroke-width="3.4" stroke-linecap="round"/>`;
-  // 'smile'
-  return `<path d="M58 ${Y - 3}q6 7 12 0" fill="none" stroke="#6d3340" stroke-width="3.2" stroke-linecap="round"/>`;
-}
-
-function ztBlush(c) {
-  return `<ellipse cx="41" cy="66" rx="6" ry="4.2" fill="${c}" opacity=".75"/>` +
-         `<ellipse cx="87" cy="66" rx="6" ry="4.2" fill="${c}" opacity=".75"/>`;
-}
-
-/* Tiny body, tucked under the head so the head dominates. */
-function ztBody(p, arms) {
-  const a = arms === 'up'
-    ? `<path d="M46 88q-9 -6 -11 -15" stroke="${p[0]}" stroke-width="9" stroke-linecap="round" fill="none"/>
-       <path d="M82 88q9 -6 11 -15" stroke="${p[0]}" stroke-width="9" stroke-linecap="round" fill="none"/>`
-    : `<path d="M46 90q-8 3 -11 9" stroke="${p[0]}" stroke-width="9" stroke-linecap="round" fill="none"/>
-       <path d="M82 90q8 3 11 9" stroke="${p[0]}" stroke-width="9" stroke-linecap="round" fill="none"/>`;
-  return a +
-    `<path d="M48 80h32q6 0 6 8v6q0 8 -8 8H50q-8 0 -8 -8v-6q0 -8 6 -8Z" fill="${p[0]}"/>` +
-    `<ellipse cx="64" cy="98" rx="11" ry="7" fill="${p[2]}"/>` +
-    `<ellipse cx="52" cy="103" rx="7" ry="4.5" fill="${p[1]}"/>` +
-    `<ellipse cx="76" cy="103" rx="7" ry="4.5" fill="${p[1]}"/>`;
-}
-
-/* The big head, with an optional lighter face patch. */
-function ztHead(p, patch) {
-  return `<ellipse cx="64" cy="54" rx="31" ry="28" fill="${p[0]}"/>` +
-    (patch === false ? '' : `<ellipse cx="64" cy="60" rx="24" ry="20" fill="${p[2]}" opacity=".95"/>`) +
-    `<path d="M45 38q9 -9 20 -8" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".55"/>`;
-}
-
-/* ---- per-character extras ---------------------------------------------- */
-/* Each entry: [behind the head, on/around the head, face expression] */
-function ztCharacter(id, uid) {
-  const p = ZT_PAL[id] || ZT_PAL.star;
-  const ink = '#33414d';
-  let behind = '', front = '', eyes = 'dot', mouth = 'smile', patch = true, body = ztBody(p, 'down');
-
-  switch (id) {
-    case 'turtle':
-      behind = `<ellipse cx="64" cy="84" rx="35" ry="22" fill="${p[3]}"/>
-                <path d="M64 62v44M30 82q16 -8 34 4q18 -12 34 -4" fill="none" stroke="#c07f36" stroke-width="2.8" opacity=".8"/>
-                <ellipse cx="24" cy="92" rx="11" ry="7" transform="rotate(-18 24 92)" fill="${p[0]}"/>
-                <ellipse cx="104" cy="92" rx="11" ry="7" transform="rotate(18 104 92)" fill="${p[0]}"/>
-                <ellipse cx="46" cy="106" rx="9" ry="5.5" fill="${p[0]}"/>
-                <ellipse cx="82" cy="106" rx="9" ry="5.5" fill="${p[0]}"/>`;
-      body = '';
-      mouth = 'grin';
-      break;
-    case 'octopus':
-      body = `<g stroke="${p[0]}" stroke-width="10" stroke-linecap="round" fill="none">
-                <path d="M46 80q-12 8 -8 20"/><path d="M56 84q-6 12 0 20"/>
-                <path d="M72 84q6 12 0 20"/><path d="M82 80q12 8 8 20"/></g>
-              <circle cx="38" cy="101" r="3" fill="${p[1]}"/><circle cx="90" cy="101" r="3" fill="${p[1]}"/>`;
-      front = `<circle cx="34" cy="34" r="4" fill="#fff" opacity=".7"/><circle cx="26" cy="46" r="2.6" fill="#fff" opacity=".6"/>`;
-      eyes = 'sparkle'; mouth = 'cheer';
-      break;
-    case 'jelly':
-      body = `<g stroke="${p[0]}" stroke-width="7" stroke-linecap="round" fill="none">
-                <path d="M48 80q-5 12 2 22"/><path d="M58 82q-3 13 1 22"/>
-                <path d="M70 82q3 13 -1 22"/><path d="M80 80q5 12 -2 22"/></g>`;
-      eyes = 'sparkle'; mouth = 'wow';
-      break;
-    case 'crab':
-      behind = `<g fill="${p[0]}">
-                  <path d="M28 40q-17 2 -18 17q-1 15 15 17q7 1 10 -5l-14 -7 15 -8q0 -12 -8 -14Z"/>
-                  <path d="M100 40q17 2 18 17q1 15 -15 17q-7 1 -10 -5l14 -7 -15 -8q0 -12 8 -14Z"/>
-                </g>
-                <path d="M46 34V22M82 34V22" stroke="${p[1]}" stroke-width="4" stroke-linecap="round"/>
-                <circle cx="46" cy="18" r="6" fill="${p[0]}"/><circle cx="82" cy="18" r="6" fill="${p[0]}"/>
-                <circle cx="46" cy="18" r="2.6" fill="#33414d"/><circle cx="82" cy="18" r="2.6" fill="#33414d"/>`;
-      body = `<g stroke="${p[0]}" stroke-width="7" stroke-linecap="round" fill="none">
-                <path d="M46 86 38 100"/><path d="M57 90 54 104"/><path d="M71 90 74 104"/><path d="M82 86 90 100"/></g>`;
-      eyes = 'wide'; mouth = 'cheer';
-      break;
-    case 'dolphin':
-      patch = false;
-      behind = `<path d="M58 24q-5 -17 8 -21q12 9 7 21Z" fill="${p[1]}"/>
-                <ellipse cx="66" cy="56" rx="31" ry="28" fill="${p[0]}"/>
-                <ellipse cx="68" cy="64" rx="23" ry="18" fill="${p[2]}"/>
-                <path d="M100 86q16 -5 18 -17q4 21 -17 25Z" fill="${p[1]}"/>`;
-      front = `<path d="M36 60q-19 2 -21 10q13 7 23 2Z" fill="${p[0]}"/>
-               <path d="M16 70q10 4 19 1" fill="none" stroke="${p[1]}" stroke-width="2.6" stroke-linecap="round"/>`;
-      body = '';
-      mouth = ''; eyes = 'happy';
-      break;
-    case 'star':
-      patch = false;
-      behind = `<path d="M64 14 76 44l32 2-25 21 8 31-27-18-27 18 8-31-25-21 32-2Z" fill="${p[0]}"/>`;
-      body = `<g stroke="${p[1]}" stroke-width="8" stroke-linecap="round"><path d="M44 92 34 102"/><path d="M84 92 94 102"/></g>`;
-      eyes = 'happy'; mouth = 'cheer';
-      break;
-    case 'seahorse':
-      patch = false;
-      behind = `<path d="M62 78q25 3 27 19q2 17 -15 19q-13 1 -15 -10q10 3 13 -4q3 -9 -10 -11Z" fill="${p[0]}"/>
-                <path d="M90 82q11 -3 13 5q-9 5 -13 1Z" fill="${p[1]}" opacity=".85"/>
-                <ellipse cx="66" cy="54" rx="30" ry="28" fill="${p[0]}"/>
-                <ellipse cx="68" cy="61" rx="22" ry="18" fill="${p[2]}" opacity=".95"/>
-                <g fill="${p[1]}"><circle cx="68" cy="26" r="6"/><circle cx="80" cy="31" r="5.5"/><circle cx="89" cy="40" r="5"/></g>`;
-      front = `<path d="M38 58q-21 1 -23 9q14 8 24 3Z" fill="${p[0]}"/>
-               <path d="M16 68q11 4 21 1" fill="none" stroke="${p[1]}" stroke-width="2.4" stroke-linecap="round"/>`;
-      body = '';
-      mouth = ''; eyes = 'sparkle';
-      break;
-    case 'whale':
-      patch = false;
-      behind = `<g stroke="${p[3]}" stroke-width="5.5" stroke-linecap="round" fill="none">
-                  <path d="M58 22q-9 -13 -3 -20"/><path d="M66 22q9 -13 16 -16"/></g>
-                <ellipse cx="62" cy="56" rx="35" ry="29" fill="${p[0]}"/>
-                <path d="M32 74q30 10 60 -2q-2 12 -30 12T32 74Z" fill="${p[2]}"/>`;
-      front = `<path d="M30 72q32 11 64 -3" fill="none" stroke="${p[1]}" stroke-width="2.6" stroke-linecap="round" opacity=".7"/>
-               <path d="M96 86q18 -6 20 -18q5 22 -18 26Z" fill="${p[1]}"/>`;
-      body = '';
-      mouth = ''; eyes = 'happy';
-      break;
-    case 'puffer':
-      patch = false;
-      behind = `<path d="M100 74q16 -8 20 -2q-4 10 -18 14Z" fill="${p[1]}"/>
-                ${Array.from({ length: 13 }, (_, i) => {
-                  const a = (i / 13) * Math.PI * 2, w = 0.24;
-                  const x1 = 64 + Math.cos(a - w) * 29, y1 = 58 + Math.sin(a - w) * 28;
-                  const x2 = 64 + Math.cos(a) * 35, y2 = 58 + Math.sin(a) * 34;
-                  const x3 = 64 + Math.cos(a + w) * 29, y3 = 58 + Math.sin(a + w) * 28;
-                  return `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)}L${x2.toFixed(1)} ${y2.toFixed(1)}L${x3.toFixed(1)} ${y3.toFixed(1)}Z" fill="${p[3]}"/>`;
-                }).join('')}
-                <ellipse cx="64" cy="58" rx="31" ry="29" fill="${p[0]}"/>
-                <ellipse cx="64" cy="67" rx="23" ry="18" fill="${p[2]}"/>
-                <path d="M30 84q-11 7 -8 13q11 0 15 -8Z" fill="${p[1]}"/>`;
-      body = '';
-      eyes = 'happy'; mouth = 'cheer';
-      break;
-    case 'narwhal':
-      behind = `<path d="M60 28 64 -4 70 28Z" fill="${p[3]}"/>
-                <path d="M62 18l7 -2M63 10l5 -2" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
-                <path d="M96 86q16 -4 18 -16q4 20 -16 24Z" fill="${p[1]}"/>`;
-      eyes = 'sparkle'; mouth = 'grin';
-      break;
-    case 'fox':
-      behind = `<path d="M38 34 30 6l24 16Z" fill="${p[0]}"/><path d="M90 34 98 6 74 22Z" fill="${p[0]}"/>
-                <path d="M40 30 36 14l12 9Z" fill="${p[3]}"/><path d="M88 30 92 14 80 23Z" fill="${p[3]}"/>
-                <path d="M92 92q18 4 18 -10q4 18 -16 20Z" fill="${p[0]}"/>`;
-      front = `<ellipse cx="64" cy="66" rx="4.4" ry="3.4" fill="${ink}"/>`;
-      mouth = 'grin';
-      break;
-    case 'panda':
-      behind = `<circle cx="38" cy="30" r="12" fill="${p[3]}"/><circle cx="90" cy="30" r="12" fill="${p[3]}"/>`;
-      front = `<ellipse cx="52" cy="56" rx="11" ry="12" fill="${p[3]}"/><ellipse cx="76" cy="56" rx="11" ry="12" fill="${p[3]}"/>` +
-              `<ellipse cx="64" cy="66" rx="4.4" ry="3.2" fill="${ink}"/>`;
-      eyes = 'dot'; mouth = 'smile';
-      break;
-    case 'bunny':
-      behind = `<ellipse cx="50" cy="16" rx="8" ry="22" fill="${p[0]}"/><ellipse cx="78" cy="16" rx="8" ry="22" fill="${p[0]}"/>
-                <ellipse cx="50" cy="18" rx="4" ry="15" fill="${p[3]}"/><ellipse cx="78" cy="18" rx="4" ry="15" fill="${p[3]}"/>`;
-      front = `<ellipse cx="64" cy="65" rx="4" ry="3" fill="#e2708f"/>`;
-      eyes = 'happy'; mouth = 'grin';
-      break;
-    case 'bear':
-      behind = `<circle cx="38" cy="30" r="12" fill="${p[0]}"/><circle cx="90" cy="30" r="12" fill="${p[0]}"/>
-                <circle cx="38" cy="30" r="6" fill="${p[2]}"/><circle cx="90" cy="30" r="6" fill="${p[2]}"/>`;
-      front = `<ellipse cx="64" cy="65" rx="5" ry="3.6" fill="${ink}"/>`;
-      body = ztBody(p, 'up');
-      mouth = 'cheer'; eyes = 'happy';
-      break;
-    case 'cat':
-      behind = `<path d="M40 32 36 8l20 14Z" fill="${p[0]}"/><path d="M88 32 92 8 72 22Z" fill="${p[0]}"/>
-                <path d="M42 28 40 16l10 7Z" fill="#ffb9c8"/><path d="M86 28 88 16 78 23Z" fill="#ffb9c8"/>
-                <path d="M92 94q16 -2 14 -14q8 16 -12 20Z" fill="${p[0]}"/>`;
-      front = `<path d="M64 62l-4 4h8Z" fill="#e2708f"/>
-               <g stroke="${p[1]}" stroke-width="2" stroke-linecap="round" opacity=".8">
-                 <path d="M36 60h-9M36 66h-9M92 60h9M92 66h9"/></g>`;
-      eyes = 'sparkle'; mouth = 'smile';
-      break;
-    case 'penguin':
-      patch = false;
-      behind = `<ellipse cx="64" cy="56" rx="32" ry="29" fill="${p[1]}"/>
-                <ellipse cx="64" cy="62" rx="23" ry="21" fill="${p[2]}"/>`;
-      body = `<path d="M44 80h40q8 0 8 9v6q0 9 -9 9H45q-9 0 -9 -9v-6q0 -9 8 -9Z" fill="${p[1]}"/>
-              <ellipse cx="64" cy="96" rx="15" ry="9" fill="${p[2]}"/>
-              <ellipse cx="50" cy="105" rx="8" ry="4" fill="${p[3]}"/><ellipse cx="78" cy="105" rx="8" ry="4" fill="${p[3]}"/>`;
-      front = `<path d="M58 64h12l-6 8Z" fill="${p[3]}"/>`;
-      mouth = ''; eyes = 'dot';
-      break;
-    case 'owl':
-      patch = false;
-      behind = `<path d="M40 34 38 12l18 14Z" fill="${p[1]}"/><path d="M88 34 90 12 72 26Z" fill="${p[1]}"/>
-                <ellipse cx="64" cy="56" rx="31" ry="29" fill="${p[0]}"/>
-                <circle cx="51" cy="56" r="14" fill="${p[2]}"/><circle cx="77" cy="56" r="14" fill="${p[2]}"/>`;
-      body = `<path d="M40 82q-8 14 4 20q10 5 20 -2q10 7 20 2q12 -6 4 -20Z" fill="${p[1]}"/>
-              <ellipse cx="55" cy="104" rx="7" ry="4" fill="${p[3]}"/><ellipse cx="73" cy="104" rx="7" ry="4" fill="${p[3]}"/>`;
-      front = `<path d="M58 62h12l-6 10Z" fill="${p[3]}"/>`;
-      eyes = 'wide'; mouth = '';
-      break;
-    case 'frog':
-      behind = `<circle cx="46" cy="30" r="13" fill="${p[0]}"/><circle cx="82" cy="30" r="13" fill="${p[0]}"/>`;
-      front = `<circle cx="46" cy="30" r="7" fill="#fff"/><circle cx="82" cy="30" r="7" fill="#fff"/>` +
-              `<circle cx="47" cy="31" r="4" fill="${ink}"/><circle cx="83" cy="31" r="4" fill="${ink}"/>`;
-      patch = true;
-      eyes = ''; mouth = 'cheer';
-      body = ztBody(p, 'up');
-      break;
-    case 'dino':
-      behind = `<path d="M40 30l6 -12 6 12M56 24l6 -14 6 14M74 28l6 -12 6 12" fill="${p[3]}"/>
-                <path d="M94 90q18 2 18 -12q6 18 -16 22Z" fill="${p[0]}"/>`;
-      eyes = 'happy'; mouth = 'cheer';
-      body = ztBody(p, 'up');
-      break;
-    case 'sloth':
-      behind = `<g stroke="${p[0]}" stroke-width="10" stroke-linecap="round" fill="none">
-                  <path d="M42 84q-16 6 -16 20"/><path d="M86 84q16 6 16 20"/></g>`;
-      front = `<ellipse cx="51" cy="56" rx="12" ry="11" transform="rotate(-12 51 56)" fill="${p[3]}" opacity=".9"/>
-               <ellipse cx="77" cy="56" rx="12" ry="11" transform="rotate(12 77 56)" fill="${p[3]}" opacity=".9"/>
-               <ellipse cx="64" cy="67" rx="5" ry="3.6" fill="${ink}"/>`;
-      eyes = 'happy'; mouth = 'smile';
-      break;
-    case 'crown':
-      patch = false;
-      behind = `<path d="M64 14 76 44l32 2-25 21 8 31-27-18-27 18 8-31-25-21 32-2Z" fill="${p[0]}"/>`;
-      front = `<path d="M44 26 40 8l12 8 12-12 12 12 12-8-4 18Z" fill="${p[1]}"/>
-               <circle cx="52" cy="14" r="3" fill="#fff"/><circle cx="64" cy="8" r="3.4" fill="#fff"/><circle cx="76" cy="14" r="3" fill="#fff"/>`;
-      body = `<g stroke="${p[1]}" stroke-width="8" stroke-linecap="round"><path d="M44 92 34 102"/><path d="M84 92 94 102"/></g>`;
-      eyes = 'sparkle'; mouth = 'cheer';
-      break;
-    case 'trophy':
-      patch = false;
-      behind = `<path d="M38 26h52v22q0 24 -26 24T38 48Z" fill="${p[0]}"/>
-                <path d="M38 32q-16 0 -16 12t16 12M90 32q16 0 16 12t-16 12" fill="none" stroke="${p[1]}" stroke-width="6"/>
-                <path d="M56 72h16v10H56Z" fill="${p[1]}"/><path d="M44 82h40v9H44Z" fill="${p[1]}"/>`;
-      body = '';
-      front = `<path d="M50 34q6 -6 12 -4" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".6"/>`;
-      eyes = 'happy'; mouth = 'cheer';
-      break;
-    case 'rainbow':
-      patch = false;
-      behind = `<g fill="none" stroke-linecap="round">
-                  <path d="M20 88a44 44 0 0 1 88 0" stroke="#f4787c" stroke-width="10"/>
-                  <path d="M30 88a34 34 0 0 1 68 0" stroke="#ffc94a" stroke-width="10"/>
-                  <path d="M40 88a24 24 0 0 1 48 0" stroke="#6bcf9b" stroke-width="10"/>
-                  <path d="M50 88a14 14 0 0 1 28 0" stroke="#68b8ed" stroke-width="10"/></g>
-                <g fill="#fff">
-                  <circle cx="46" cy="62" r="17"/><circle cx="64" cy="52" r="21"/>
-                  <circle cx="82" cy="62" r="17"/><rect x="44" y="60" width="40" height="22" rx="11"/></g>`;
-      body = `<g fill="#fff"><circle cx="20" cy="88" r="11"/><circle cx="30" cy="92" r="9"/>
-               <circle cx="108" cy="88" r="11"/><circle cx="98" cy="92" r="9"/></g>`;
-      eyes = 'happy'; mouth = 'cheer';
-      break;
-    case 'gem':
-      patch = false;
-      behind = `<path d="M40 30h48l16 22-40 42-40-42Z" fill="${p[0]}"/>
-                <path d="M40 30 52 52h24l12-22M24 52h80M64 94 52 52M64 94l12-42" fill="none" stroke="${p[1]}" stroke-width="2.6" opacity=".7"/>`;
-      front = `<path d="M46 38q6 -4 12 -2" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".8"/>`;
-      body = '';
-      eyes = 'sparkle'; mouth = 'grin';
-      break;
-  }
-
-  const face = (eyes === '' ? '' : ztEyes(eyes)) + (mouth === '' ? '' : ztMouth(mouth)) + ztBlush(p[3] === '#ffffff' ? '#ff9fc0' : '#ff9fc0');
-  const head = (id === 'puffer' || id === 'penguin' || id === 'star' || id === 'crown' ||
-                id === 'trophy' || id === 'rainbow' || id === 'gem' || id === 'owl')
-    ? '' : ztHead(p, patch);
-  return `<g>${behind}${body}${head}${front}${face}</g>`;
-}
-
-/* The die-cut sticker shape everything sits on. */
-function ztStickerSvg(id, klass) {
-  const uid = 'zts' + (++ztStickerUid);
-  return `<svg class="${klass || 'sticker-illustration'}" viewBox="0 0 128 118" role="img" aria-hidden="true">` +
-    `<defs><filter id="${uid}s" x="-25%" y="-25%" width="150%" height="160%">` +
-    `<feDropShadow dx="0" dy="3" stdDeviation="2.4" flood-color="#173e4a" flood-opacity=".28"/></filter></defs>` +
-    `<g filter="url(#${uid}s)">` +
-    `<path d="M16 60Q6 46 20 36Q24 20 42 25Q51 8 66 19Q83 6 94 23Q113 18 113 38Q127 49 112 62Q123 78 106 85Q102 105 82 96Q67 110 54 97Q35 106 28 90Q9 89 15 74Q8 67 16 60Z" fill="#fff" stroke="#dbe8ec" stroke-width="2"/>` +
-    ztCharacter(id, uid) +
-    `</g></svg>`;
-}
-
-
-
-/* Stickers saved under the old names keep their place in the album. */
-const ZT_STICKER_OLD = {
-  teamwork:'turtle', curiosity:'jelly', helping:'octopus', creativity:'crab', focus:'dolphin',
-  pow:'star', bam:'crown', zam:'narwhal', lightbulb:'narwhal', rocket:'dino', graduate:'owl',
-  superstar:'crown', highfive:'penguin', levelup:'bear', chameleon:'frog', artist:'cat',
-  science:'owl', puzzle:'sloth', reader:'owl', maths:'sloth', magic:'gem', cactus:'turtle',
-  rainbow:'rainbow', frog:'frog', dino:'dino', whoosh:'bunny'
-};
-
-/* kept so older code paths still resolve */
-const OCEAN_STICKERS = ZT_STICKERS.filter(s => s.set === 'sea');
-const GENERAL_STICKERS = ZT_STICKERS.filter(s => s.set !== 'sea');
-
-function getOceanSticker(id) {
-  const key = ZT_STICKER_OLD[id] || id;
-  return ZT_STICKERS.find(s => s.id === key) || ZT_STICKERS[0];
-}
-
-function ztStickerStep(cls) {
-  return Math.max(1, Math.min(500, parseInt((classes[cls] || {}).stickerMilestone, 10) || 10));
-}
-
-/* The album fills in order, so the shiny ones are the last to arrive. */
-let ztLastSticker = null;
+function getOceanSticker(id) { return OCEAN_STICKERS.concat(GENERAL_STICKERS).find(s => s.id === id) || OCEAN_STICKERS[0]; }
 function awardStickerMilestones(desk, before, after) {
   if (after <= before || !desk.name) return 0;
-  const step = ztStickerStep(activeClass);
+  const step = Math.max(1, Math.min(500, parseInt(classes[activeClass].stickerMilestone, 10) || 10));
   if (!desk.stickers) desk.stickers = [];
   if (!desk.stickerMilestones) desk.stickerMilestones = [];
-  let awarded = 0, last = null;
+  let awarded = 0;
   for (let points = (Math.floor(before / step) + 1) * step; points <= after; points += step) {
     if (desk.stickerMilestones.includes(points)) continue;
-    const s = ZT_STICKERS[(Math.floor(points / step) - 1) % ZT_STICKERS.length];
+    const generalSticker = GENERAL_STICKERS[(Math.floor(points / step) - 1) % GENERAL_STICKERS.length];
     desk.stickerMilestones.push(points);
-    desk.stickers.push({ stickerId: s.id, date: new Date().toISOString(), reason: 'Reached ' + points + ' points', milestone: points });
-    awarded++; last = s;
+    desk.stickers.push({ stickerId: generalSticker.id, date: new Date().toISOString(), reason: 'Reached ' + points + ' points', milestone: points });
+    awarded++;
   }
-  if (last) ztLastSticker = last;
   return awarded;
 }
-
 function showStickerToast(message) {
   let note = document.getElementById('stickerAwardNotice');
   if (!note) { note = document.createElement('div'); note.id = 'stickerAwardNotice'; note.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:20000;background:#244b54;color:#fff;padding:11px 17px;border-radius:20px;box-shadow:0 4px 18px #244b5440;font-size:14px;'; document.body.appendChild(note); }
   note.textContent = message; note.style.display = 'block';
   clearTimeout(window.stickerNoticeTimer); window.stickerNoticeTimer = setTimeout(() => { note.style.display = 'none'; }, 2800);
 }
-/* Artwork lives in ztStickerSvg above. */
-function stickerArtworkSvg(id, klass) { return ztStickerSvg(getOceanSticker(id).id, klass); }
-
+let stickerSvgCounter = 0;
+function chibiOceanArt(kind, uid) {
+  const line = 'stroke="#284a55" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"';
+  if (kind === 'turtle') return `<g ${line}>
+    <path d="M41 71Q29 73 30 83Q34 90 45 81M68 74Q79 75 79 84Q75 91 66 82" fill="url(#${uid}body)" stroke="#fff" stroke-width="8"/><path d="M41 71Q29 73 30 83Q34 90 45 81M68 74Q79 75 79 84Q75 91 66 82" fill="url(#${uid}body)"/>
+    <ellipse cx="55" cy="68" rx="25" ry="17" fill="url(#${uid}shell)" stroke="#fff" stroke-width="9"/><ellipse cx="55" cy="68" rx="25" ry="17" fill="url(#${uid}shell)"/><path d="M55 51V84M33 67Q44 61 55 68Q66 61 77 67M40 56q8 7 7 20m23-20q-8 7-7 20" fill="none" stroke="#8c5549" stroke-width="2"/>
+    <path d="M69 48Q72 28 90 28Q108 29 108 47Q108 67 89 68Q71 68 69 48Z" fill="url(#${uid}body)" stroke="#fff" stroke-width="10"/><path d="M69 48Q72 28 90 28Q108 29 108 47Q108 67 89 68Q71 68 69 48Z" fill="url(#${uid}body)"/><path d="M78 35Q88 29 98 36" fill="none" stroke="#fff" stroke-width="4" opacity=".9"/>
+    <ellipse cx="83" cy="47" rx="4.2" ry="5.7" fill="#203d48" stroke="none"/><ellipse cx="98" cy="47" rx="4.2" ry="5.7" fill="#203d48" stroke="none"/><circle cx="84" cy="45" r="1.6" fill="white" stroke="none"/><circle cx="99" cy="45" r="1.6" fill="white" stroke="none"/><circle cx="77" cy="57" r="3.5" fill="#ffb4b6" stroke="none"/><circle cx="103" cy="57" r="3.5" fill="#ffb4b6" stroke="none"/><path d="M86 58q5 5 10 0" fill="none" stroke="#39705f" stroke-width="2"/></g>`;
+  if (kind === 'ray') return `<g ${line}>
+    <path d="M34 61Q27 53 22 49Q32 43 41 50Q48 34 64 34Q81 34 88 49Q99 42 108 49Q103 57 95 63L87 74Q74 68 63 70Q50 69 40 77Z" fill="url(#${uid}body)" stroke="#fff" stroke-width="10"/><path d="M34 61Q27 53 22 49Q32 43 41 50Q48 34 64 34Q81 34 88 49Q99 42 108 49Q103 57 95 63L87 74Q74 68 63 70Q50 69 40 77Z" fill="url(#${uid}body)"/><path d="M63 69q3 11 8 17" fill="none" stroke="#fff" stroke-width="8"/><path d="M63 69q3 11 8 17" fill="none" stroke="#318ea9" stroke-width="2.8"/><path d="M48 53q15-12 31 0" fill="none" stroke="#fff" stroke-width="4" opacity=".8"/><ellipse cx="55" cy="57" rx="4" ry="5.5" fill="#203c48" stroke="none"/><ellipse cx="73" cy="57" rx="4" ry="5.5" fill="#203c48" stroke="none"/><circle cx="56" cy="55" r="1.5" fill="white" stroke="none"/><circle cx="74" cy="55" r="1.5" fill="white" stroke="none"/><circle cx="46" cy="65" r="3.4" fill="#ffaeb8" stroke="none"/><circle cx="82" cy="65" r="3.4" fill="#ffaeb8" stroke="none"/><path d="M59 65q5 4 10 0" fill="none" stroke="#426879" stroke-width="2"/><path d="M50 65q-4 5-8 4m44-4q4 5 8 4" fill="none" stroke="#4886a0" stroke-width="1.6"/></g>`;
+  if (kind === 'octopus') return `<g ${line}>
+    <path d="M39 69Q28 78 35 87Q42 93 49 81Q51 93 58 92Q64 91 63 81Q69 93 76 90Q82 86 75 76Q88 84 93 77Q96 70 83 64" fill="none" stroke="#fff" stroke-width="13"/><path d="M39 69Q28 78 35 87Q42 93 49 81Q51 93 58 92Q64 91 63 81Q69 93 76 90Q82 86 75 76Q88 84 93 77Q96 70 83 64" fill="none" stroke="url(#${uid}accent)" stroke-width="7"/>
+    <path d="M34 52Q33 25 62 24Q91 25 90 53Q89 74 62 76Q35 75 34 52Z" fill="url(#${uid}accent)" stroke="#fff" stroke-width="10"/><path d="M34 52Q33 25 62 24Q91 25 90 53Q89 74 62 76Q35 75 34 52Z" fill="url(#${uid}accent)"/><path d="M42 37Q56 27 72 35" fill="none" stroke="#fff" stroke-width="4" opacity=".85"/>
+    <ellipse cx="51" cy="51" rx="4.6" ry="6.4" fill="#243e4c" stroke="none"/><ellipse cx="71" cy="51" rx="4.6" ry="6.4" fill="#243e4c" stroke="none"/><circle cx="52" cy="49" r="1.7" fill="#fff" stroke="none"/><circle cx="72" cy="49" r="1.7" fill="#fff" stroke="none"/><circle cx="43" cy="63" r="3.5" fill="#ffb6c3" stroke="none"/><circle cx="79" cy="63" r="3.5" fill="#ffb6c3" stroke="none"/><path d="M56 64q5 5 10 0" fill="none" stroke="#7e4776" stroke-width="2"/><circle cx="39" cy="83" r="1.8" fill="#fff2fa" stroke="none"/><circle cx="84" cy="80" r="1.8" fill="#fff2fa" stroke="none"/></g>`;
+  if (kind === 'crab') return `<g ${line}>
+    <path d="M42 68 34 79M53 72 50 84M70 72 73 84M81 68 90 78" fill="none" stroke="#fff" stroke-width="10"/><path d="M42 68 34 79M53 72 50 84M70 72 73 84M81 68 90 78" fill="none" stroke="#e87964" stroke-width="4.5"/><path d="M36 48Q25 38 20 46Q17 54 33 59M84 47Q96 37 102 45Q104 53 88 59" fill="url(#${uid}accent)" stroke="#fff" stroke-width="9"/><path d="M36 48Q25 38 20 46Q17 54 33 59M84 47Q96 37 102 45Q104 53 88 59" fill="url(#${uid}accent)"/><path d="M34 56Q33 35 61 33Q89 35 88 57Q87 78 61 79Q35 78 34 56Z" fill="url(#${uid}accent)" stroke="#fff" stroke-width="10"/><path d="M34 56Q33 35 61 33Q89 35 88 57Q87 78 61 79Q35 78 34 56Z" fill="url(#${uid}accent)"/><path d="M43 43Q58 35 73 43" fill="none" stroke="#fff" stroke-width="4"/>
+    <path d="M46 41V32Q46 26 51 26Q56 26 56 34M67 34Q67 26 72 26Q77 26 77 32V42" fill="none" stroke="#fff" stroke-width="9"/><path d="M46 41V32Q46 26 51 26Q56 26 56 34M67 34Q67 26 72 26Q77 26 77 32V42" fill="none" stroke="#e87964" stroke-width="4"/><circle cx="52" cy="51" r="4.6" fill="#263f49" stroke="none"/><circle cx="71" cy="51" r="4.6" fill="#263f49" stroke="none"/><circle cx="53" cy="49" r="1.6" fill="#fff" stroke="none"/><circle cx="72" cy="49" r="1.6" fill="#fff" stroke="none"/><circle cx="42" cy="63" r="3.5" fill="#ffbac1" stroke="none"/><circle cx="80" cy="63" r="3.5" fill="#ffbac1" stroke="none"/><path d="M57 64q5 4 10 0" fill="none" stroke="#8b4251" stroke-width="2"/></g>`;
+  return `<g ${line}>
+    <path d="M33 60Q41 39 66 38Q81 37 90 48L105 43 98 57Q103 63 98 69Q90 79 73 76L56 85 59 74Q43 78 33 60Z" fill="url(#${uid}body)" stroke="#fff" stroke-width="11"/><path d="M33 60Q41 39 66 38Q81 37 90 48L105 43 98 57Q103 63 98 69Q90 79 73 76L56 85 59 74Q43 78 33 60Z" fill="url(#${uid}body)"/><path d="M57 72Q73 79 92 67Q83 83 58 78Z" fill="#fff4e8" stroke="#5d9cba" stroke-width="1.2"/><path d="M69 45Q67 36 74 32Q82 37 81 46M56 73Q49 82 43 84Q52 85 60 76" fill="url(#${uid}accent)" stroke="#fff" stroke-width="8"/><path d="M69 45Q67 36 74 32Q82 37 81 46M56 73Q49 82 43 84Q52 85 60 76" fill="url(#${uid}accent)"/><circle cx="87" cy="54" r="4.8" fill="#203e4a" stroke="none"/><circle cx="88" cy="52" r="1.7" fill="white" stroke="none"/><path d="M93 64q-6 5-13 1" fill="none" stroke="#315766" stroke-width="2"/><path d="M43 56Q56 44 71 46" fill="none" stroke="#fff" stroke-width="4" opacity=".9"/></g>`;
+}
+function stickerArtworkSvg(stickerId) {
+  const uid = 'oceanSticker' + (++stickerSvgCounter);
+  const ocean = {
+    teamwork: 'turtle', curiosity: 'ray', helping: 'octopus', creativity: 'crab', focus: 'dolphin'
+  };
+  const general = {
+    pow:'star', bam:'star', zam:'star', superstar:'star', highfive:'star',
+    lightbulb:'bulb', science:'bulb', rocket:'rocket', rainbow:'rainbow',
+    graduate:'planet', levelup:'heart', chameleon:'frog', frog:'frog', cactus:'cactus',
+    artist:'palette', puzzle:'puzzle', reader:'books', maths:'calculator', magic:'hat',
+    dino:'dino', whoosh:'sneaker'
+  };
+  const kind = ocean[stickerId] || general[stickerId] || 'star';
+  const outline = 'stroke="#284a55" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"';
+  let art = '';
+  if (kind === 'turtle') art = `
+    <g ${outline}>
+      <path d="M39 68Q26 70 24 82Q22 89 33 84L45 78M80 68Q96 69 100 80Q102 89 91 84L79 78M43 78Q34 84 38 92Q45 96 52 82M76 78Q85 84 81 92Q74 96 67 82" fill="url(#${uid}body)" stroke="#fff" stroke-width="8"/><path d="M39 68Q26 70 24 82Q22 89 33 84L45 78M80 68Q96 69 100 80Q102 89 91 84L79 78M43 78Q34 84 38 92Q45 96 52 82M76 78Q85 84 81 92Q74 96 67 82" fill="url(#${uid}body)"/>
+      <ellipse cx="61" cy="60" rx="28" ry="23" fill="url(#${uid}shell)" stroke="#fff" stroke-width="9"/><ellipse cx="61" cy="60" rx="28" ry="23" fill="url(#${uid}shell)"/>
+      <path d="M61 38V82M35 59Q48 53 61 60Q75 52 87 59M43 44Q50 52 48 70M79 44Q72 52 74 70" fill="none" stroke="#39806f" stroke-width="2"/>
+      <path d="M88 49Q105 43 108 55Q111 67 98 70L84 65Z" fill="url(#${uid}body)" stroke="#fff" stroke-width="8"/><path d="M88 49Q105 43 108 55Q111 67 98 70L84 65Z" fill="url(#${uid}body)"/>
+      <circle cx="101" cy="55" r="3.2" fill="#263e48" stroke="none"/><circle cx="102" cy="54" r="1.1" fill="white" stroke="none"/><path d="M96 62q5 4 9 0" fill="none" stroke="#477d67" stroke-width="1.8"/>
+      <path d="M49 49Q59 41 73 48" fill="none" stroke="#fff" stroke-width="3.5" opacity=".8"/>
+    </g>`;
+  else if (kind === 'ray') art = `
+    <g ${outline}><path d="M24 57Q36 38 60 40Q84 37 104 57Q95 60 85 76Q75 71 64 72Q48 72 38 80Q34 66 24 57Z" fill="url(#${uid}body)" stroke="#fff" stroke-width="10"/><path d="M24 57Q36 38 60 40Q84 37 104 57Q95 60 85 76Q75 71 64 72Q48 72 38 80Q34 66 24 57Z" fill="url(#${uid}body)"/><path d="M61 70Q65 82 69 91Q72 98 68 101" fill="none" stroke="#fff" stroke-width="9"/><path d="M61 70Q65 82 69 91Q72 98 68 101" fill="none" stroke="#358eae" stroke-width="3"/><path d="M40 58Q61 48 87 58Q78 68 64 67Q49 67 40 58Z" fill="#fff4e8" stroke="#68a9b7" stroke-width="1.5"/><ellipse cx="53" cy="57" rx="3.4" ry="4.5" fill="#243e4c" stroke="none"/><ellipse cx="74" cy="57" rx="3.4" ry="4.5" fill="#243e4c" stroke="none"/><circle cx="54" cy="56" r="1.2" fill="white" stroke="none"/><circle cx="75" cy="56" r="1.2" fill="white" stroke="none"/><circle cx="44" cy="64" r="3" fill="#f29aa1" stroke="none"/><circle cx="83" cy="64" r="3" fill="#f29aa1" stroke="none"/><path d="M60 64q4 3 8 0" fill="none" stroke="#456776" stroke-width="1.8"/></g>`;
+  else if (kind === 'octopus') art = `
+    <g ${outline}><path d="M37 71Q24 81 31 91Q38 97 47 83Q51 101 60 96Q66 93 64 82Q72 100 81 94Q86 90 78 79Q94 89 99 80Q102 72 84 66" fill="none" stroke="#fff" stroke-width="13"/><path d="M37 71Q24 81 31 91Q38 97 47 83Q51 101 60 96Q66 93 64 82Q72 100 81 94Q86 90 78 79Q94 89 99 80Q102 72 84 66" fill="none" stroke="url(#${uid}body)" stroke-width="7"/><path d="M35 56Q34 30 61 29Q88 30 86 57Q85 75 61 77Q37 76 35 56Z" fill="url(#${uid}body)" stroke="#fff" stroke-width="10"/><path d="M35 56Q34 30 61 29Q88 30 86 57Q85 75 61 77Q37 76 35 56Z" fill="url(#${uid}body)"/><path d="M43 39Q56 29 71 37" fill="none" stroke="#fff" stroke-width="4" opacity=".75"/><ellipse cx="52" cy="54" rx="4" ry="5" fill="#253e4a" stroke="none"/><ellipse cx="70" cy="54" rx="4" ry="5" fill="#253e4a" stroke="none"/><circle cx="53" cy="52" r="1.5" fill="white" stroke="none"/><circle cx="71" cy="52" r="1.5" fill="white" stroke="none"/><circle cx="44" cy="64" r="3" fill="#ffabb4" stroke="none"/><circle cx="78" cy="64" r="3" fill="#ffabb4" stroke="none"/><path d="M57 63q4 4 8 0" fill="none" stroke="#704774" stroke-width="2"/><circle cx="42" cy="84" r="2" fill="#f9d2e5" stroke="none"/><circle cx="84" cy="84" r="2" fill="#f9d2e5" stroke="none"/></g>`;
+  else if (kind === 'crab') art = `
+    <g ${outline}><path d="M38 62 28 55 22 60 30 72M47 68 39 82M61 69 59 86M75 68 83 82M85 61 96 54 103 60 94 73" fill="none" stroke="#fff" stroke-width="11"/><path d="M38 62 28 55 22 60 30 72M47 68 39 82M61 69 59 86M75 68 83 82M85 61 96 54 103 60 94 73" fill="none" stroke="url(#${uid}body)" stroke-width="5"/><path d="M26 55Q16 47 20 40Q26 35 33 44L37 50M97 54Q108 45 105 39Q100 34 93 43L89 50" fill="url(#${uid}body)" stroke="#fff" stroke-width="9"/><path d="M26 55Q16 47 20 40Q26 35 33 44L37 50M97 54Q108 45 105 39Q100 34 93 43L89 50" fill="url(#${uid}body)"/><ellipse cx="62" cy="62" rx="32" ry="22" fill="url(#${uid}body)" stroke="#fff" stroke-width="10"/><ellipse cx="62" cy="62" rx="32" ry="22" fill="url(#${uid}body)"/><path d="M42 52Q61 42 80 52" fill="none" stroke="#ffd0ad" stroke-width="4"/><ellipse cx="53" cy="57" rx="3.6" ry="5" fill="#28424a" stroke="none"/><ellipse cx="70" cy="57" rx="3.6" ry="5" fill="#28424a" stroke="none"/><circle cx="54" cy="55" r="1.3" fill="white" stroke="none"/><circle cx="71" cy="55" r="1.3" fill="white" stroke="none"/><circle cx="44" cy="65" r="3" fill="#ffbac0" stroke="none"/><circle cx="79" cy="65" r="3" fill="#ffbac0" stroke="none"/><path d="M58 66q4 4 8 0" fill="none" stroke="#8e4050" stroke-width="1.8"/></g>`;
+  else if (kind === 'dolphin') art = `
+    <g ${outline}><path d="M25 66Q39 47 67 43Q81 41 92 49L105 43 99 57Q105 64 99 69Q89 80 70 78L53 89 56 75Q37 82 25 66Z" fill="url(#${uid}body)" stroke="#fff" stroke-width="11"/><path d="M25 66Q39 47 67 43Q81 41 92 49L105 43 99 57Q105 64 99 69Q89 80 70 78L53 89 56 75Q37 82 25 66Z" fill="url(#${uid}body)"/><path d="M53 73Q73 78 91 67Q80 83 57 80Z" fill="#fff1df" stroke="#5d9cba" stroke-width="1.2"/><path d="M69 48Q67 38 75 34Q83 41 82 48M57 77Q50 86 43 90Q53 90 61 80" fill="url(#${uid}accent)" stroke="#fff" stroke-width="8"/><path d="M69 48Q67 38 75 34Q83 41 82 48M57 77Q50 86 43 90Q53 90 61 80" fill="url(#${uid}accent)"/><circle cx="89" cy="56" r="3.2" fill="#203e4a" stroke="none"/><circle cx="90" cy="55" r="1.1" fill="white" stroke="none"/><path d="M91 64q-6 5-12 1" fill="none" stroke="#315766" stroke-width="1.8"/><path d="M38 61Q55 48 72 49" fill="none" stroke="#fff" stroke-width="3.5" opacity=".85"/><path d="M46 93Q61 98 73 93" fill="none" stroke="#65b5c8" stroke-width="2"/></g>`;
+  else {
+    const common = {
+      star:`<path d="M63 25 72 43 92 40 82 57 96 70 76 73 70 92 57 78 39 86 43 66 26 56 46 51 47 31 63 43Z" fill="url(#${uid}accent)" ${outline}/><path d="M48 51Q61 44 74 51" fill="none" stroke="#fff" stroke-width="4" opacity=".85"/><circle cx="55" cy="62" r="2.2" fill="#375060"/><circle cx="69" cy="62" r="2.2" fill="#375060"/><path d="M57 69q5 4 10 0" fill="none" stroke="#8b5260" stroke-width="1.7"/>`,
+      bulb:`<path d="M48 67Q36 57 39 44Q42 26 62 25Q83 25 86 44Q88 57 76 67L73 76H51Z" fill="url(#${uid}accent)" ${outline}/><path d="M51 76h22v7H51zM53 85h18v6H53z" fill="#74b3c4" ${outline}/><path d="M49 44Q52 34 64 34" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M54 58q8 6 16 0" fill="none" stroke="#f8ffe7" stroke-width="3"/>`,
+      rocket:`<path d="M48 72Q43 46 69 26Q87 20 91 23Q94 45 75 67Q64 78 48 72Z" fill="url(#${uid}accent)" ${outline}/><circle cx="73" cy="43" r="8" fill="#c9f3f2" ${outline}/><path d="m49 61-14 3 9-18M61 75l-2 14 15-13" fill="#ff8e74" ${outline}/><path d="M48 76Q39 87 48 94Q53 84 58 79" fill="#ffd166" stroke="#d97848" stroke-width="2"/><path d="M60 34Q73 25 82 27" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>`,
+      rainbow:`<path d="M30 78A34 34 0 0 1 98 78" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round"/><path d="M30 78A34 34 0 0 1 98 78" fill="none" stroke="#f47779" stroke-width="7" stroke-linecap="round"/><path d="M37 77A27 27 0 0 1 91 77" fill="none" stroke="#ffd166" stroke-width="7"/><path d="M44 77A20 20 0 0 1 84 77" fill="none" stroke="#6bcf9b" stroke-width="7"/><path d="M51 77A13 13 0 0 1 77 77" fill="none" stroke="#68b8ed" stroke-width="7"/><path d="M26 76q-5-8 2-12 6-4 12 2 6-7 12-1 5 6-1 12Z M85 77q-6-8 1-12 6-4 12 2 6-7 12-1 5 6-1 12Z" fill="#fff" stroke="#bddfe9" stroke-width="2"/>`,
+      planet:`<circle cx="63" cy="58" r="25" fill="url(#${uid}accent)" ${outline}/><ellipse cx="63" cy="61" rx="43" ry="12" transform="rotate(-18 63 61)" fill="none" stroke="#fff" stroke-width="11"/><ellipse cx="63" cy="61" rx="43" ry="12" transform="rotate(-18 63 61)" fill="none" stroke="#dfaa68" stroke-width="5"/><path d="M48 47Q61 39 75 47" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><circle cx="57" cy="58" r="2.5" fill="#334759"/><circle cx="69" cy="58" r="2.5" fill="#334759"/><path d="M58 65q5 4 10 0" fill="none" stroke="#8b5260" stroke-width="1.8"/>`,
+      heart:`<path d="M64 88 31 58Q20 43 32 31Q45 20 64 39Q82 20 96 31Q108 44 96 59Z" fill="url(#${uid}accent)" ${outline}/><path d="M39 39Q48 31 57 40" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M47 58Q62 65 79 59" fill="none" stroke="#fff" stroke-width="2" opacity=".6"/>`,
+      palette:`<path d="M61 25Q92 25 96 51Q99 67 84 72Q73 75 74 84Q73 94 58 91Q32 87 28 62Q24 39 44 29Q51 26 61 25Z" fill="url(#${uid}accent)" ${outline}/><path d="M72 38Q88 43 85 56" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><circle cx="47" cy="46" r="5" fill="#f27d88"/><circle cx="62" cy="39" r="5" fill="#ffd15c"/><circle cx="77" cy="47" r="5" fill="#6ed1bb"/><circle cx="48" cy="64" r="5" fill="#78bbed"/><circle cx="64" cy="67" r="5" fill="#b398e8"/>`,
+      puzzle:`<path d="M43 34H56Q55 23 64 23Q74 23 72 34H87Q92 34 92 40V52Q103 51 103 61Q103 70 92 69V84Q92 90 86 90H72Q73 79 63 79Q53 79 54 90H42Q36 90 36 84V70Q25 71 25 61Q25 51 36 52V41Q36 34 43 34Z" fill="url(#${uid}accent)" ${outline}/><path d="M46 42H56M42 76V84" stroke="#fff" stroke-width="4" stroke-linecap="round"/>`,
+      books:`<path d="M31 39Q47 31 63 42V83Q47 73 31 81Z" fill="#ffe0a7" ${outline}/><path d="M63 42Q79 31 95 39V81Q79 73 63 83Z" fill="url(#${uid}accent)" ${outline}/><path d="M63 42V84M37 47Q49 44 56 50M70 49Q81 43 90 47" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`,
+      calculator:`<rect x="39" y="23" width="49" height="70" rx="10" fill="url(#${uid}accent)" ${outline}/><rect x="47" y="31" width="33" height="15" rx="3" fill="#e7fff2" stroke="#527766" stroke-width="1.5"/><path d="M48 38h16" stroke="#6ab493" stroke-width="2"/><g fill="#fff2c4" stroke="#ab8661" stroke-width="1"><circle cx="51" cy="57" r="4"/><circle cx="64" cy="57" r="4"/><circle cx="77" cy="57" r="4"/><circle cx="51" cy="70" r="4"/><circle cx="64" cy="70" r="4"/><circle cx="77" cy="70" r="4"/><circle cx="51" cy="83" r="4"/><circle cx="64" cy="83" r="4"/><circle cx="77" cy="83" r="4"/></g><path d="M49 28h17" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`,
+      hat:`<path d="M35 65Q40 48 50 39Q64 27 76 43Q82 51 82 65Z" fill="url(#${uid}accent)" ${outline}/><path d="M25 66Q58 59 101 66Q100 77 63 78Q28 78 25 66Z" fill="#4c5285" stroke="#fff" stroke-width="8"/><path d="M25 66Q58 59 101 66Q100 77 63 78Q28 78 25 66Z" fill="#4c5285"/><path d="M50 47Q62 37 71 47" fill="none" stroke="#fff" stroke-width="4"/><path d="M56 62q8-8 14 0-7 9-14 0Z" fill="#fff2b0" stroke="#9881bb" stroke-width="1.5"/>`,
+      frog:`<path d="M34 51Q29 37 42 34Q52 32 56 43Q66 39 75 43Q80 31 91 35Q102 40 94 54Q102 65 92 77Q81 91 62 88Q42 88 33 75Q25 64 34 51Z" fill="url(#${uid}body)" ${outline}/><circle cx="47" cy="45" r="9" fill="#b9ef71" stroke="#284a55" stroke-width="2"/><circle cx="82" cy="45" r="9" fill="#b9ef71" stroke="#284a55" stroke-width="2"/><circle cx="49" cy="45" r="3" fill="#28404a"/><circle cx="81" cy="45" r="3" fill="#28404a"/><path d="M47 63Q64 78 82 62" fill="none" stroke="#416b4a" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="64" cy="72" rx="18" ry="10" fill="#d8f5a5" opacity=".85"/><path d="M41 79q-10 7-15 2M84 79q10 7 15 2" fill="none" stroke="#3b7856" stroke-width="4" stroke-linecap="round"/>`,
+      cactus:`<path d="M57 81V43Q57 31 67 31Q77 31 77 43V50Q77 57 84 57Q91 57 91 50V44" fill="none" stroke="#fff" stroke-width="17" stroke-linecap="round"/><path d="M57 81V43Q57 31 67 31Q77 31 77 43V50Q77 57 84 57Q91 57 91 50V44" fill="none" stroke="url(#${uid}body)" stroke-width="11" stroke-linecap="round"/><path d="M57 62Q57 53 48 53Q40 53 40 62V68" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round"/><path d="M57 62Q57 53 48 53Q40 53 40 62V68" fill="none" stroke="#57b67f" stroke-width="10" stroke-linecap="round"/><path d="M48 94Q64 84 81 94L76 102H52Z" fill="#d17954" ${outline}/><path d="M63 39v7M72 55v7M51 63v5M67 71v7" stroke="#e0ffc2" stroke-width="2" stroke-linecap="round"/>`,
+      dino:`<path d="M31 79Q26 68 34 60L38 45 49 50 55 40 66 47 75 36 82 48Q99 49 101 65Q103 78 90 83L88 94H78L75 84H56L52 94H42L42 81Z" fill="url(#${uid}body)" ${outline}/><circle cx="82" cy="61" r="4" fill="#253f48"/><circle cx="83" cy="60" r="1.3" fill="white"/><path d="M87 72q-9 6-18 0" fill="none" stroke="#315b4e" stroke-width="2"/><path d="M42 62Q51 58 58 62" stroke="#c9f58b" stroke-width="3"/><path d="M43 51 48 57M57 46 61 53M75 43 77 51" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`,
+      sneaker:`<path d="M31 65Q43 68 50 49L61 56Q68 65 82 66L96 68Q103 70 101 80Q99 87 87 88H34Q25 85 27 75Z" fill="url(#${uid}accent)" ${outline}/><path d="M28 78Q55 81 101 76L99 84Q92 91 34 88Q26 86 28 78Z" fill="#fff7e7" stroke="#536477" stroke-width="2"/><path d="m50 58 13 7M47 64l14 2M44 69l14-1" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M67 68 76 69" stroke="#ffda74" stroke-width="3"/>`
+    };
+    art = common[kind] || common.star;
+    const mascotFaces = {
+      rocket:'<g fill="#24404b"><circle cx="70" cy="42" r="1.7"/><circle cx="76" cy="42" r="1.7"/></g><path d="M71 47q2 2 4 0" fill="none" stroke="#365563" stroke-width="1.5" stroke-linecap="round"/>',
+      rainbow:'<g fill="#304b58"><circle cx="36" cy="68" r="1.7"/><circle cx="44" cy="68" r="1.7"/><circle cx="90" cy="68" r="1.7"/><circle cx="98" cy="68" r="1.7"/></g><path d="M37 72q3 3 6 0m48 0q3 3 6 0" fill="none" stroke="#53727e" stroke-width="1.4" stroke-linecap="round"/>',
+      heart:'<g fill="#6b4053"><circle cx="55" cy="53" r="2"/><circle cx="70" cy="53" r="2"/></g><path d="M58 61q5 4 10 0" fill="none" stroke="#8b5260" stroke-width="1.8" stroke-linecap="round"/>',
+      palette:'<g fill="#304b58"><circle cx="57" cy="78" r="1.8"/><circle cx="68" cy="78" r="1.8"/></g><path d="M59 84q4 3 8 0" fill="none" stroke="#53727e" stroke-width="1.5" stroke-linecap="round"/>',
+      puzzle:'<g fill="#304b58"><circle cx="56" cy="56" r="2"/><circle cx="71" cy="56" r="2"/></g><path d="M59 64q5 4 10 0" fill="none" stroke="#53727e" stroke-width="1.8" stroke-linecap="round"/>',
+      books:'<g fill="#304b58"><circle cx="49" cy="61" r="1.8"/><circle cx="57" cy="61" r="1.8"/><circle cx="70" cy="61" r="1.8"/><circle cx="78" cy="61" r="1.8"/></g><path d="M50 66q3 3 6 0m15 0q3 3 6 0" fill="none" stroke="#53727e" stroke-width="1.5" stroke-linecap="round"/>',
+      calculator:'<g fill="#304b58"><circle cx="57" cy="38" r="1.7"/><circle cx="70" cy="38" r="1.7"/></g><path d="M59 42q4 3 8 0" fill="none" stroke="#53727e" stroke-width="1.4" stroke-linecap="round"/>',
+      hat:'<g fill="#f8e9b3"><circle cx="57" cy="52" r="1.8"/><circle cx="68" cy="52" r="1.8"/></g><path d="M59 57q4 3 8 0" fill="none" stroke="#f8e9b3" stroke-width="1.5" stroke-linecap="round"/>',
+      cactus:'<g fill="#245344"><circle cx="62" cy="58" r="1.7"/><circle cx="71" cy="58" r="1.7"/></g><path d="M64 64q3 3 6 0" fill="none" stroke="#245344" stroke-width="1.4" stroke-linecap="round"/>',
+      sneaker:'<g fill="#304b58"><circle cx="39" cy="73" r="1.8"/><circle cx="48" cy="73" r="1.8"/></g><path d="M41 78q3 3 6 0" fill="none" stroke="#53727e" stroke-width="1.5" stroke-linecap="round"/>'
+    };
+    if (mascotFaces[kind]) art += mascotFaces[kind];
+  }
+  if (ocean[stickerId]) {
+    art = chibiOceanArt(kind, uid);
+    if (kind === 'ray' || kind === 'dolphin') art = art.split('url(#' + uid + 'body)').join('url(#' + uid + 'sea)');
+    if (kind === 'octopus') art = art.split('url(#' + uid + 'accent)').join('url(#' + uid + 'purple)');
+  }
+  return `<svg class="sticker-illustration" viewBox="0 0 128 112" role="img" aria-hidden="true"><defs>
+    <linearGradient id="${uid}body" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#d8ff66"/><stop offset=".45" stop-color="#48e6a4"/><stop offset="1" stop-color="#00a99d"/></linearGradient>
+    <linearGradient id="${uid}shell" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe77f"/><stop offset=".48" stop-color="#ffad4f"/><stop offset="1" stop-color="#ed6451"/></linearGradient>
+    <linearGradient id="${uid}accent" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff76c"/><stop offset=".42" stop-color="#ff9850"/><stop offset="1" stop-color="#f24487"/></linearGradient>
+    <linearGradient id="${uid}sea" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#82f7f3"/><stop offset=".45" stop-color="#21c7e1"/><stop offset="1" stop-color="#367ce5"/></linearGradient>
+    <linearGradient id="${uid}purple" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#f2a8ff"/><stop offset=".45" stop-color="#c45bea"/><stop offset="1" stop-color="#793fc6"/></linearGradient>
+    <filter id="${uid}shadow" x="-25%" y="-25%" width="150%" height="165%"><feDropShadow dx="0" dy="3" stdDeviation="2" flood-color="#173e4a" flood-opacity=".25"/></filter>
+  </defs><g filter="url(#${uid}shadow)"><path d="M18 61Q9 49 22 39Q26 25 42 29Q50 14 65 24Q81 13 91 29Q108 25 109 42Q122 52 109 64Q118 78 103 84Q99 101 81 93Q67 105 55 94Q37 102 31 87Q13 87 18 73Q12 67 18 61Z" fill="#fff" stroke="#d5e5e9" stroke-width="2"/><path d="M23 61Q15 50 27 42Q30 31 43 34Q51 21 64 29Q78 20 88 34Q102 30 103 44Q115 53 103 64Q112 76 99 80Q95 94 80 88Q67 98 55 88Q40 94 35 82Q20 82 24 71Q18 66 23 61Z" fill="#f5fbfa"/>${art}<path d="M32 38Q40 29 48 31M84 30Q93 29 98 37" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85"/></g></svg>`;
+}
 function openStickerPicker(idx) {
   const desk = classes[activeClass].desks[idx];
   if (!desk.name) { showStickerToast('Add a student name first.'); return; }
@@ -4490,30 +4048,32 @@ function openStickerPicker(idx) {
   document.getElementById('stickerPickerModal').classList.add('show');
 }
 function renderStickerPickerGroup(groupId) {
+  const groupSpecs = [
+    { id:'strengths', label:'Character strengths', stickers:OCEAN_STICKERS },
+    { id:'celebration', label:'Celebration', stickers:GENERAL_STICKERS.filter(s => ['pow','bam','zam','rocket','graduate','superstar','highfive','levelup','magic','cactus','rainbow','frog','dino','whoosh'].includes(s.id)) },
+    { id:'learning', label:'Learning', stickers:GENERAL_STICKERS.filter(s => ['lightbulb','chameleon','artist','science','puzzle','reader','maths'].includes(s.id)) }
+  ];
   const tabs = document.getElementById('stickerPickerTabs');
   tabs.innerHTML = '';
-  ZT_STICKER_SETS.forEach(set => {
+  groupSpecs.forEach(group => {
     const tab = document.createElement('button');
-    tab.type = 'button';
-    tab.className = 'sticker-picker-tab' + (set.id === groupId ? ' active' : '');
-    tab.textContent = set.label;
-    tab.onclick = () => renderStickerPickerGroup(set.id);
+    tab.type = 'button'; tab.className = 'sticker-picker-tab' + (group.id === groupId ? ' active' : '');
+    tab.textContent = group.label;
+    tab.onclick = () => renderStickerPickerGroup(group.id);
     tabs.appendChild(tab);
   });
   const grid = document.getElementById('stickerPickerGrid');
   grid.innerHTML = '';
-  const chosen = ZT_STICKER_SETS.some(s => s.id === groupId) ? groupId : ZT_STICKER_SETS[0].id;
-  ZT_STICKERS.filter(s => s.set === chosen).forEach(s => {
+  const selectedGroup = groupSpecs.find(group => group.id === groupId) || groupSpecs[0];
+  selectedGroup.stickers.forEach(s => {
     const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'ocean-sticker-choice';
+    btn.type = 'button'; btn.className = 'ocean-sticker-choice';
     btn.setAttribute('aria-label', s.name + ': ' + s.note);
-    btn.innerHTML = '<span class="ocean-sticker-art">' + ztStickerSvg(s.id) + '</span><strong>' + s.name + '</strong>';
+    btn.innerHTML = '<span class="ocean-sticker-art">' + stickerArtworkSvg(s.id) + '</span><strong>' + s.name + '</strong>';
     btn.onclick = () => awardOceanSticker(window.stickerPickerDeskIdx, s.id);
     grid.appendChild(btn);
   });
 }
-
 function closeStickerPicker() {
   document.getElementById('stickerPickerModal').classList.remove('show');
   window.stickerPickerDeskIdx = null;
@@ -4526,58 +4086,21 @@ function awardOceanSticker(idx, stickerId) {
   saveState(); closeStickerPicker(); renderSeatingCanvas();
   if (document.getElementById('deskDetailModal').classList.contains('show')) closeDeskDetail();
   if (profileDeskIdx === idx && document.getElementById('profileModal').classList.contains('show')) renderProfileStickers();
-  showStickerToast(sticker.name + ' added to ' + desk.name + "'s album");
+  showStickerToast(sticker.icon + ' ' + sticker.name + ' added to ' + desk.name + "'s profile");
 }
 function renderProfileStickers() {
   const el = document.getElementById('profileStickerSection');
   if (!el || profileDeskIdx === null) return;
   const desk = classes[activeClass].desks[profileDeskIdx];
-  const owned = desk.stickers || [];
-  const cls = classes[activeClass];
-  if (!cls.stickerMilestone) cls.stickerMilestone = 10;
-  const step = ztStickerStep(activeClass);
-
-  /* the newest copy of each sticker, so repeats don't clutter the album */
-  const have = {}, tally = {};
-  owned.forEach(x => {
-    const id = getOceanSticker(x.stickerId).id;
-    tally[id] = (tally[id] || 0) + 1;
-    if (!have[id] || x.date > have[id].date) have[id] = x;   // keep the newest, count the rest
-  });
-  const got = Object.keys(have).length;
-  const next = (Math.floor(desk.points / step) + 1) * step;
-
-  let html = '<section class="profile-sticker-card">' +
-    '<div class="profile-sticker-heading"><div><h4>Sticker album</h4>' +
-    '<p><b>' + got + ' of ' + ZT_STICKERS.length + '</b> collected &middot; next sticker at <b>' + next + ' points</b> (' + (next - desk.points) + ' to go)</p></div>' +
-    '<button type="button" class="sticker-add-button" onclick="openStickerPicker(' + profileDeskIdx + ')">&#65291; Give a sticker</button></div>';
-
-  html += '<div class="sticker-milestone-settings"><span>For this class, a sticker every</span>' +
-    '<input id="stickerMilestoneInput" type="number" min="1" max="500" value="' + cls.stickerMilestone + '" aria-label="Points between stickers">' +
-    '<span>points</span><button type="button" class="sticker-add-button" onclick="saveStickerMilestone()">Save</button></div>';
-
-  ZT_STICKER_SETS.forEach(set => {
-    const list = ZT_STICKERS.filter(s => s.set === set.id);
-    const mine = list.filter(s => have[s.id]).length;
-    html += '<div class="sticker-set-row"><span>' + set.label + '</span><b>' + mine + '/' + list.length + '</b></div>';
-    html += '<div class="profile-sticker-grid">' + list.map(s => {
-      const own = have[s.id];
-      if (!own) {
-        return '<div class="profile-sticker-item locked" title="Still to collect">' +
-                 '<span class="sticker-shade">' + ztStickerSvg(s.id) + '<em>?</em></span>' +
-                 '<strong>?</strong></div>';
-      }
-      return '<div class="profile-sticker-item" title="' + pfEscape(s.note) + '">' +
-               '<span>' + ztStickerSvg(s.id) + (tally[s.id] > 1 ? '<i class="sticker-dupe">&times;' + tally[s.id] + '</i>' : '') + '</span>' +
-               '<strong>' + s.name + '</strong>' +
-               '<small>' + new Date(own.date).toLocaleDateString() + '</small></div>';
-    }).join('') + '</div>';
-  });
-
-  html += '</section>';
-  el.innerHTML = html;
+  const stickers = desk.stickers || [];
+  const classData = classes[activeClass];
+  if (!classData.stickerMilestone) classData.stickerMilestone = 10;
+  let html = '<section class="profile-sticker-card"><div class="profile-sticker-heading"><div><h4>Sticker collection</h4><p>Little moments worth celebrating</p></div><button type="button" class="sticker-add-button" onclick="openStickerPicker(' + profileDeskIdx + ')">＋ Give a sticker</button></div>';
+  html += '<div class="sticker-milestone-settings"><span>For this class, give a fun sticker every</span><input id="stickerMilestoneInput" type="number" min="1" max="500" value="' + classData.stickerMilestone + '" aria-label="Points between automatic sticker rewards"><span>points</span><button type="button" class="sticker-add-button" onclick="saveStickerMilestone()">Save</button></div>';
+  if (!stickers.length) html += '<p class="sticker-empty">No stickers yet. Choose one when you want to celebrate a kind or curious moment.</p>';
+  else html += '<div class="profile-sticker-grid">' + stickers.slice().reverse().map(x => { const s=getOceanSticker(x.stickerId); return '<div class="profile-sticker-item"><span>' + stickerArtworkSvg(x.stickerId) + '</span><strong>' + s.name + '</strong><small>' + new Date(x.date).toLocaleDateString() + '</small>' + (x.reason ? '<small>' + x.reason + '</small>' : '') + '</div>'; }).join('') + '</div>';
+  html += '</section>'; el.innerHTML = html;
 }
-
 function saveStickerMilestone() {
   const input = document.getElementById('stickerMilestoneInput');
   const amount = Math.max(1, Math.min(500, parseInt(input.value, 10) || 10));
@@ -5029,7 +4552,7 @@ function saveState() {
   }
   let json;
   try {
-    json = JSON.stringify({ classes, activeClass, globalRules, globalRoleCategories, helperQuestions, animalGroups });
+    json = JSON.stringify({ classes, activeClass, globalRules, globalRoleCategories, helperQuestions });
     localStorage.setItem(STORAGE_KEY, json);
   } catch (e) {
     showStorageCriticalBanner();
@@ -5092,7 +4615,10 @@ function loadState() {
         helperQuestions = data.helperQuestions;
       }
       if (data.animalGroups) {
-        animalGroups = data.animalGroups;
+        const legacyOwner = classes[activeClass];
+        if (legacyOwner && !Array.isArray(legacyOwner.teamSettings)) {
+          legacyOwner.teamSettings = data.animalGroups.map(g => ({ name: g.name, icon: g.icon || '⭐', points: 0 }));
+        }
       }
       return true;
     }
@@ -5106,7 +4632,7 @@ const BACKUP_REMINDER_HOURS = 20;
 function exportBackup() {
   // flashcardBank lives under its own storage key, so it has to be named here
   // explicitly or a restore would silently lose every custom card
-  const data = JSON.stringify({ classes, activeClass, globalRules, globalRoleCategories, helperQuestions, animalGroups, flashcardBank }, null, 2);
+  const data = JSON.stringify({ classes, activeClass, globalRules, globalRoleCategories, helperQuestions, flashcardBank }, null, 2);
   const blob = new Blob([data], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -5255,7 +4781,9 @@ function applyBackupPicker() {
     if (data.globalRules) globalRules = data.globalRules;
     if (data.globalRoleCategories) globalRoleCategories = data.globalRoleCategories;
     if (data.helperQuestions) helperQuestions = data.helperQuestions;
-    if (data.animalGroups) animalGroups = data.animalGroups;
+    if (data.animalGroups && classes[activeClass] && !Array.isArray(classes[activeClass].teamSettings)) {
+      classes[activeClass].teamSettings = data.animalGroups.map(g => ({ name: g.name, icon: g.icon || '⭐', points: 0 }));
+    }
     if (data.flashcardBank) { flashcardBank = data.flashcardBank; saveFlashcards(); }
   }
   if (!classes[activeClass]) activeClass = Object.keys(classes)[0];
@@ -5274,6 +4802,7 @@ function resetAllData() {
   if (!confirm('This will erase ALL classes, points, seating, and rules on this computer and cannot be undone. Continue?')) return;
   classes = makeInitialClasses();
   activeClass = 'Class 1';
+  groupRosterLoadedForClass = null;
   saveState();
   renderClassGrid();
   renderClassContent();
@@ -5347,6 +4876,7 @@ function syncPickerFromClass(className) {
 function syncNamesFromClass(textareaId) {
   const el = document.getElementById(textareaId);
   if (el) el.value = collectRosterNames(activeClass).join('\n');
+  if (textareaId === 'groupNames') saveGroupRosterInput(true);
 }
 
 // ========== WHEEL ==========
@@ -5861,16 +5391,70 @@ function rollDice() {
 }
 
 // ========== GROUPS ==========
-function setGroupCount(n) {
-  if (BUILD_TYPE === 'trial' && n > 3) { showUpgradeLock('More than 3 groups'); return; }
-  groupCount = n;
-  document.getElementById('groupCountLabel').textContent = n + ' groups';
+let groupRosterSaveTimer = null;
+let groupRosterLoadedForClass = null;
+
+function saveGroupRosterInput(flush = false) {
+  const field = document.getElementById('groupNames');
+  const cls = classes[activeClass];
+  if (!field || !cls || groupRosterLoadedForClass !== activeClass) return;
+  cls.groupRoster = field.value;
+  if (groupRosterSaveTimer) clearTimeout(groupRosterSaveTimer);
+  if (flush) {
+    groupRosterSaveTimer = null;
+    saveState();
+  } else {
+    groupRosterSaveTimer = setTimeout(() => { groupRosterSaveTimer = null; saveState(); }, 350);
+  }
 }
 
-function shuffleGroups() {
+function loadGroupOrganizerForClass() {
+  const cls = classes[activeClass];
+  const field = document.getElementById('groupNames');
+  if (!cls || !field) return;
+  getClassTeamSettings(activeClass);
+  const groups = getClassGroups(activeClass);
+  if (typeof cls.groupRoster !== 'string') cls.groupRoster = groups.flat().join('\n');
+  field.value = cls.groupRoster;
+  groupRosterLoadedForClass = activeClass;
+  groupCount = Math.max(1, Math.min(8, Number(cls.groupCount) || groups.length || (BUILD_TYPE === 'trial' ? 3 : 4)));
+  const label = document.getElementById('groupCountLabel');
+  if (label) label.textContent = groupCount + (groupCount === 1 ? ' group' : ' groups');
+  renderGroupGrid();
+  const details = document.getElementById('manageGroupsDetails');
+  if (details && details.open) renderManageGroups();
+}
+
+function setGroupCount(n) {
+  if (BUILD_TYPE === 'trial' && n > 3) { showUpgradeLock('More than 3 groups'); return; }
+  if (!classes[activeClass]) return;
+  groupCount = n;
+  classes[activeClass].groupCount = n;
+  const label = document.getElementById('groupCountLabel');
+  if (label) label.textContent = n + ' groups';
+  getClassTeamSettings(activeClass);
+  saveState();
+}
+
+function closeGroupCycleDialog() {
+  const modal = document.getElementById('groupCycleModal');
+  if (modal) modal.classList.remove('show');
+}
+
+function shuffleGroups(resetScores = null) {
   const text = document.getElementById('groupNames').value;
   let names = text.split('\n').map(n => n.trim()).filter(n => n.length > 0);
-  if (names.length === 0) return;
+  if (names.length === 0) { alert('Add or sync the class roster before making groups.'); return; }
+  const existingGroups = getClassGroups(activeClass);
+  const teamsBeforeShuffle = getClassTeamSettings(activeClass);
+  const hasPriorCycle = existingGroups.some(group => Array.isArray(group) && group.length > 0) || teamsBeforeShuffle.some(team => Number(team.points) > 0);
+  if (hasPriorCycle && resetScores === null) {
+    const modal = document.getElementById('groupCycleModal');
+    if (modal) modal.classList.add('show');
+    return;
+  }
+  closeGroupCycleDialog();
+  if (resetScores === true) teamsBeforeShuffle.forEach(team => { team.points = 0; });
   for (let i = names.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [names[i], names[j]] = [names[j], names[i]];
@@ -5880,7 +5464,39 @@ function shuffleGroups() {
     groups[i % groupCount].push(name);
   });
   classes[activeClass].groups = groups;
+  classes[activeClass].groupRoster = text;
+  classes[activeClass].groupCount = groupCount;
+  getClassTeamSettings(activeClass);
   saveState();
+  renderGroupGrid();
+  renderClassContent();
+}
+
+function resetClassPoints(scope) {
+  const cls = classes[activeClass];
+  if (!cls) return;
+  const resetStudents = scope === 'individual' || scope === 'both';
+  const resetTeams = scope === 'group' || scope === 'both';
+  const affectedStudents = resetStudents ? (cls.desks || []).filter(desk => desk && desk.name && Number(desk.points) > 0).length : 0;
+  const affectedTeams = resetTeams ? getClassTeamSettings(activeClass).filter(team => Number(team.points) > 0).length : 0;
+  if (!affectedStudents && !affectedTeams) {
+    showReward('ℹ️', 'These point totals are already at zero. Stickers, profiles and mascot growth are unchanged.');
+    return;
+  }
+  let summary = scope === 'individual' ? 'Reset all student points in ' + activeClass + ' to zero?' :
+    scope === 'group' ? 'Reset all group scores in ' + activeClass + ' to zero?' :
+    'Reset both student points and group scores in ' + activeClass + ' to zero?';
+  summary += '\n\nCollected stickers, student profiles, and mascot growth will stay unchanged.';
+  if (!confirm(summary)) return;
+  if (resetStudents) (cls.desks || []).forEach(desk => {
+    if (!desk || !desk.name) return;
+    desk.points = 0;
+    desk.stickerMilestones = [];
+  });
+  if (resetTeams) getClassTeamSettings(activeClass).forEach(team => { team.points = 0; });
+  saveState();
+  renderClassGrid();
+  renderClassContent();
   renderGroupGrid();
 }
 
@@ -5890,11 +5506,16 @@ function renderGroupGrid() {
   const grid = document.getElementById('groupGrid');
   if (!grid) return;
   const groups = getClassGroups(activeClass);
+  const teamSettings = getClassTeamSettings(activeClass);
+  while (teamSettings.length < groups.length) {
+    const fallback = DEFAULT_ANIMAL_GROUPS[teamSettings.length % DEFAULT_ANIMAL_GROUPS.length];
+    teamSettings.push({ name: fallback.name, icon: fallback.icon, points: 0 });
+  }
   grid.innerHTML = '';
   const applyBtn = document.getElementById('applyGroupsToSeatingBtn');
   if (applyBtn) applyBtn.style.display = groups.some(g => g.length > 0) ? 'block' : 'none';
   groups.forEach((g, i) => {
-    const animal = animalGroups[i % animalGroups.length];
+    const team = teamSettings[i] || { name: 'Group ' + (i + 1), icon: '⭐', points: 0 };
     const color = GROUP_COLORS[i % GROUP_COLORS.length];
     const card = document.createElement('div');
     card.className = 'group-card';
@@ -5915,13 +5536,20 @@ function renderGroupGrid() {
       liveGroups[i].push(member);
       saveState();
       renderGroupGrid();
+      renderClassContent();
     };
 
     const heading = document.createElement('h4');
     heading.style.color = color;
     heading.style.fontSize = '20px';
-    heading.textContent = animal.icon + ' ' + animal.name;
+    heading.textContent = team.icon + ' ' + team.name;
     card.appendChild(heading);
+
+    const score = document.createElement('div');
+    score.className = 'group-score';
+    score.setAttribute('aria-label', (Number(team.points) || 0) + ' group points');
+    score.innerHTML = '<strong>' + (Number(team.points) || 0) + '</strong><span>Group points</span>';
+    card.appendChild(score);
 
     const memberList = document.createElement('div');
     memberList.className = 'group-member-list';
@@ -5934,7 +5562,14 @@ function renderGroupGrid() {
       g.forEach((name, memberIdx) => {
         const memberEl = document.createElement('div');
         memberEl.className = 'group-member';
-        memberEl.textContent = name;
+        const memberIcon = document.createElement('span');
+        memberIcon.className = 'group-member-icon';
+        memberIcon.textContent = team.icon;
+        memberIcon.setAttribute('aria-hidden', 'true');
+        memberEl.appendChild(memberIcon);
+        const memberName = document.createElement('span');
+        memberName.textContent = name;
+        memberEl.appendChild(memberName);
         memberEl.draggable = true;
         memberEl.ondragstart = (e) => {
           e.dataTransfer.setData('text/plain', JSON.stringify({ groupIdx: i, memberIdx: memberIdx }));
@@ -5954,13 +5589,13 @@ function renderGroupGrid() {
     plusBtn.className = 'btn btn-success';
     plusBtn.style.flex = '1';
     plusBtn.style.fontSize = '13px';
-    plusBtn.textContent = '➕ +1 Group';
+    plusBtn.textContent = '＋ Group point';
     plusBtn.onclick = () => awardGroupPoints(i, 1);
     const minusBtn = document.createElement('button');
     minusBtn.className = 'btn btn-danger';
     minusBtn.style.flex = '1';
     minusBtn.style.fontSize = '13px';
-    minusBtn.textContent = '➖ -1 Group';
+    minusBtn.textContent = '− Group point';
     minusBtn.onclick = () => awardGroupPoints(i, -1);
     btnRow.appendChild(plusBtn);
     btnRow.appendChild(minusBtn);
@@ -5973,6 +5608,8 @@ function awardGroupPoints(groupIdx, delta) {
   const groups = getClassGroups(activeClass);
   const group = groups[groupIdx];
   if (!group || group.length === 0) return;
+  const team = getClassTeamSettings(activeClass)[groupIdx];
+  if (!team) return;
   const desks = classes[activeClass].desks;
   let matched = 0;
   let totalGain = 0;
@@ -5986,15 +5623,16 @@ function awardGroupPoints(groupIdx, delta) {
       matched++;
     }
   });
-  if (matched === 0) {
-    alert('None of this group\'s names match a seated student in ' + activeClass + '. Use "🌊 Sync Roster" style names, or seat these students first.');
-    return;
-  }
+  team.points = Math.max(0, (Number(team.points) || 0) + delta);
   addMascotProgress(activeClass, totalGain);
   saveState();
   renderClassGrid();
   renderClassContent();
-  showReward(delta > 0 ? '➕' : '➖', matched + ' student' + (matched === 1 ? '' : 's') + ' in that group ' + (delta > 0 ? 'gained' : 'lost') + ' ' + Math.abs(delta) + ' point' + (Math.abs(delta) === 1 ? '' : 's') + '.');
+  renderGroupGrid();
+  const memberNote = matched
+    ? matched + ' seated student' + (matched === 1 ? '' : 's') + ' also had an individual point updated.'
+    : 'No seated students matched, so no individual points changed.';
+  showReward(delta > 0 ? '🌟' : '↩️', team.name + ' now has ' + team.points + ' group point' + (team.points === 1 ? '' : 's') + '. ' + memberNote);
 }
 
 // ========== APPLY GROUPS TO SEATING ==========
@@ -6189,25 +5827,36 @@ function resetRoles() {
 }
 
 // ========== MANAGE GROUP NAMES & ICONS ==========
-let selectedGroupEmoji = '⭐';
+const selectedGroupEmojiByClass = {};
 
-function openGroupIconPicker() {
+function openGroupIconPicker(teamIndex) {
   openIconPicker((icon) => {
-    selectedGroupEmoji = icon;
-    const preview = document.getElementById('groupIconPreview');
-    if (preview) preview.textContent = icon;
-  });
+    if (Number.isInteger(teamIndex)) {
+      const team = getClassTeamSettings(activeClass)[teamIndex];
+      if (!team) return;
+      team.icon = icon;
+      saveState();
+      renderManageGroups();
+      renderGroupGrid();
+      renderClassContent();
+    } else {
+      selectedGroupEmojiByClass[activeClass] = icon;
+      const preview = document.getElementById('groupIconPreview');
+      if (preview) preview.textContent = icon;
+    }
+  }, GROUP_ICON_CHOICES);
 }
 
 function renderManageGroups() {
   const container = document.getElementById('manageGroupsBody');
   if (!container) return;
+  const teams = getClassTeamSettings(activeClass);
   let html = '<div class="manage-role-row" style="font-weight:800; color:#888; font-size:11px; text-transform:uppercase;"><span style="width:28px;"></span><span style="flex:1;">Team Name</span><span style="width:20px;"></span></div>';
-  animalGroups.forEach((g, i) => {
+  teams.forEach((g, i) => {
     html += '<div class="manage-role-row">' +
-      '<span class="manage-role-icon">' + g.icon + '</span>' +
-      '<input type="text" class="manage-group-name-input" data-idx="' + i + '" value="' + g.name.replace(/"/g, '&quot;') + '">' +
-      (animalGroups.length > 1 ? '<button class="manage-role-delete" data-idx="' + i + '">✕</button>' : '<span style="width:20px; display:inline-block;"></span>') +
+      '<button type="button" class="icon-preview-btn" aria-label="Change icon for ' + escapeHtml(g.name) + '" onclick="openGroupIconPicker(' + i + ')">' + g.icon + '</button>' +
+      '<input type="text" class="manage-group-name-input" data-idx="' + i + '" value="' + escapeHtml(g.name) + '">' +
+      (teams.length > 1 ? '<button class="manage-role-delete" data-idx="' + i + '" aria-label="Delete ' + escapeHtml(g.name) + '">✕</button>' : '<span style="width:20px; display:inline-block;"></span>') +
       '</div>';
   });
   container.innerHTML = html;
@@ -6216,7 +5865,7 @@ function renderManageGroups() {
     input.onchange = () => {
       const idx = parseInt(input.dataset.idx, 10);
       const trimmed = input.value.trim();
-      if (trimmed) { animalGroups[idx].name = trimmed; saveState(); }
+      if (trimmed) { teams[idx].name = trimmed; saveState(); renderGroupGrid(); renderClassContent(); }
     };
   });
   container.querySelectorAll('.manage-role-delete').forEach(btn => {
@@ -6229,7 +5878,7 @@ function renderManageGroups() {
   formDiv.style.paddingTop = '14px';
   formDiv.innerHTML =
     '<div class="rule-add-row" style="margin-bottom:8px;">' +
-    '<button type="button" class="icon-preview-btn" onclick="openGroupIconPicker()"><span id="groupIconPreview">' + selectedGroupEmoji + '</span></button>' +
+    '<button type="button" class="icon-preview-btn" onclick="openGroupIconPicker()"><span id="groupIconPreview">' + (selectedGroupEmojiByClass[activeClass] || '⭐') + '</span></button>' +
     '<input type="text" id="newGroupName" placeholder="Team name (e.g. Shark Team)">' +
     '<button class="btn btn-primary" id="addGroupBtn">+ Add</button>' +
     '</div>' +
@@ -6244,25 +5893,35 @@ function addAnimalGroup() {
   const nameInput = document.getElementById('newGroupName');
   const name = nameInput.value.trim();
   if (!name) { alert('Please enter a team name.'); return; }
-  animalGroups.push({ name, icon: selectedGroupEmoji || '⭐' });
+  getClassTeamSettings(activeClass).push({ name, icon: selectedGroupEmojiByClass[activeClass] || '⭐', points: 0 });
   nameInput.value = '';
-  selectedGroupEmoji = '⭐';
+  selectedGroupEmojiByClass[activeClass] = '⭐';
   saveState();
   renderManageGroups();
 }
 
 function deleteAnimalGroup(idx) {
-  if (animalGroups.length <= 1) { alert('You need at least one team.'); return; }
-  animalGroups.splice(idx, 1);
+  const teams = getClassTeamSettings(activeClass);
+  if (teams.length <= 1) { alert('You need at least one team.'); return; }
+  const groups = getClassGroups(activeClass);
+  const hasSavedWork = (groups[idx] && groups[idx].length) || (Number(teams[idx] && teams[idx].points) || 0) > 0;
+  if (hasSavedWork && !confirm('This team has students assigned or group points saved. Delete the team and its saved group details? You can create teams again by shuffling the roster.')) return;
+  if (groups[idx] !== undefined) groups.splice(idx, 1);
+  teams.splice(idx, 1);
+  if (groups.length && classes[activeClass].groupCount > groups.length) classes[activeClass].groupCount = groups.length;
   saveState();
   renderManageGroups();
+  renderGroupGrid();
+  renderClassContent();
 }
 
 function resetAnimalGroups() {
-  if (!confirm('Reset team names back to the standard set? Any custom teams you added will be removed.')) return;
-  animalGroups = DEFAULT_ANIMAL_GROUPS.map(g => ({ ...g }));
+  if (!confirm('Reset team names and icons to the standard sea-creature set? Custom team names and group scores will be cleared. Current student assignments, individual points, stickers, profiles, and mascot growth will stay. Continue?')) return;
+  classes[activeClass].teamSettings = DEFAULT_ANIMAL_GROUPS.map(g => ({ ...g, points: 0 }));
   saveState();
   renderManageGroups();
+  renderGroupGrid();
+  renderClassContent();
 }
 
 // ========== NOTES TAB ==========
@@ -9554,8 +9213,6 @@ function playLockedButtons() {
 }
 
 function refreshPlayLocks() {
-  /* lets the guide say the right thing in the app and on the web */
-  document.body.classList.toggle('play-app', isPlayApp());
   const locked = !hasFullVersion();
   playLockedButtons().forEach(b => {
     b.classList.toggle('pw-locked', locked);
@@ -10061,21 +9718,7 @@ function renderHangmanRound(){
   }).join('');
 }
 
-const HELP_SEEN_KEY = 'ztOceanHelpSeen_v1';
-function showHelpWelcomeIfNew() {
-  let seen = false;
-  try { seen = localStorage.getItem(HELP_SEEN_KEY) === '1'; } catch (e) {}
-  const el = document.getElementById('helpWelcome');
-  if (el && !seen) el.style.display = 'flex';
-}
-function dismissHelpWelcome() {
-  const el = document.getElementById('helpWelcome');
-  if (el) el.style.display = 'none';
-  try { localStorage.setItem(HELP_SEEN_KEY, '1'); } catch (e) {}
-}
-
 // ========== INIT ==========
-showHelpWelcomeIfNew();
 if (checkTrialStatus()) {
   loadState();
   migrateDeskCounts();
