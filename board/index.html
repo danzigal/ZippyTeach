@@ -276,6 +276,12 @@
   .dice-controls { display: flex; gap: 12px; justify-content: center; margin-top: 16px; align-items: center; }
   .dice-sum { font-size: 28px; font-weight: 700; color: #e74c3c; text-align: center; margin-top: 12px; }
   .group-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px; }
+  .group-unassigned-panel { margin-top: 12px; padding: 12px; border: 2px dashed #9ed6de; border-radius: 12px; background: #f4fdff; }
+  .group-unassigned-title { color: #315e59; font-size: 13px; font-weight: 800; margin-bottom: 8px; }
+  .group-unassigned-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .group-unassigned-row .unassigned-name { flex: 1 1 150px; min-width: 120px; color: #333; font-size: 14px; font-weight: 700; }
+  .group-unassigned-row select { flex: 2 1 190px; min-width: 170px; padding: 8px 10px; border: 2px solid #caf0f8; border-radius: 8px; font-size: 14px; background: #fff; }
+  .group-unassigned-row .btn { flex: 0 0 auto; }
   .group-card { background: white; border-radius: 12px; padding: 16px; border-left: 5px solid; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: background 0.15s ease, box-shadow 0.15s ease; }
   .group-card.group-card-dragover { background: #eef6f9; box-shadow: 0 0 0 3px #0077b6 inset; }
   .group-card h4 { margin: 0 0 10px 0; font-size: 16px; }
@@ -2018,7 +2024,7 @@
       <div id="tools-panel-groups" class="sub-panel">
         <div class="card">
           <h3 style="margin-bottom: 8px; color: #333;"><svg class="ico ico-h"><use href="#i-users"/></svg>Group Organizer</h3>
-          <p style="color: #888; font-size: 13px; margin-bottom: 12px;">Set up teams for this class, then keep them in place and award points as you go. You can drag a student to another group whenever needed.</p>
+          <p style="color: #888; font-size: 13px; margin-bottom: 12px;">Set up teams for this class, then keep them in place and award points as you go. Drag students between groups, or use the unassigned list to place newly registered students without reshuffling everyone.</p>
           <p class="group-class-scope-note" style="padding:9px 11px;border-radius:8px;background:#eff8f6;color:#426b67;font-size:12px;margin-bottom:10px;">Each class has its own roster, team names, icons, and group scores. Changing a group point also adds or removes one point for each seated student in that team.</p>
           <textarea class="group-input" id="groupNames" oninput="saveGroupRosterInput()" placeholder="One student name per line"></textarea>
           <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
@@ -2032,6 +2038,7 @@
             <span id="groupCountLabel" style="color: #0077b6; font-weight: 700; margin-left: 8px;">4 groups</span>
           </div>
           <button class="btn btn-success" onclick="shuffleGroups()" style="width: 100%; font-size: 17px; padding: 13px;"><svg class="ico"><use href="#i-shuffle"/></svg>Shuffle into Groups!</button>
+          <div id="ungroupedStudentsPanel" class="group-unassigned-panel" style="display:none;"></div>
           <div class="group-grid" id="groupGrid"></div>
           <button class="btn btn-teal" id="applyGroupsToSeatingBtn" onclick="applyGroupsToSeating()" style="width: 100%; font-size: 15px; padding: 11px; margin-top: 12px; display:none;"><svg class="ico"><use href="#i-seat"/></svg>Apply to Seating Arrangement</button>
         </div>
@@ -5408,6 +5415,23 @@ function saveGroupRosterInput(flush = false) {
   }
 }
 
+function ensureGroupRosterIncludesClassNames(className) {
+  const cls = classes[className];
+  if (!cls) return;
+  const lines = String(cls.groupRoster || '').split('\n').map(n => n.trim()).filter(Boolean);
+  const seen = new Set(lines.map(n => n.toLocaleLowerCase()));
+  const additions = collectRosterNames(className).filter(name => {
+    const clean = String(name || '').trim();
+    const key = clean.toLocaleLowerCase();
+    return clean && !seen.has(key) && (seen.add(key), true);
+  });
+  if (additions.length) {
+    lines.push(...additions);
+    cls.groupRoster = lines.join('\n');
+    saveState();
+  }
+}
+
 function loadGroupOrganizerForClass() {
   const cls = classes[activeClass];
   const field = document.getElementById('groupNames');
@@ -5415,6 +5439,7 @@ function loadGroupOrganizerForClass() {
   getClassTeamSettings(activeClass);
   const groups = getClassGroups(activeClass);
   if (typeof cls.groupRoster !== 'string') cls.groupRoster = groups.flat().join('\n');
+  ensureGroupRosterIncludesClassNames(activeClass);
   field.value = cls.groupRoster;
   groupRosterLoadedForClass = activeClass;
   groupCount = Math.max(1, Math.min(8, Number(cls.groupCount) || groups.length || (BUILD_TYPE === 'trial' ? 3 : 4)));
@@ -5501,6 +5526,132 @@ function resetClassPoints(scope) {
 }
 
 const GROUP_COLORS = ['#e74c3c', '#3498db', '#06d6a0', '#f39c12', '#5e60ce', '#00b4d8', '#f58231', '#911eb4'];
+
+function normalizeStudentName(name) {
+  return String(name || '').trim();
+}
+
+function studentNameKey(name) {
+  return normalizeStudentName(name).toLocaleLowerCase();
+}
+
+function getGroupedStudentKeySet(className) {
+  const keys = new Set();
+  getClassGroups(className).forEach(group => {
+    if (!Array.isArray(group)) return;
+    group.forEach(name => {
+      const key = studentNameKey(name);
+      if (key) keys.add(key);
+    });
+  });
+  return keys;
+}
+
+function getGroupCandidateNames(className) {
+  const cls = classes[className];
+  const seen = new Set();
+  const names = [];
+  const addName = name => {
+    const clean = normalizeStudentName(name);
+    const key = studentNameKey(clean);
+    if (!clean || seen.has(key)) return;
+    seen.add(key);
+    names.push(clean);
+  };
+  collectRosterNames(className).forEach(addName);
+  if (cls && typeof cls.groupRoster === 'string') cls.groupRoster.split('\n').forEach(addName);
+  getClassGroups(className).flat().forEach(addName);
+  return names;
+}
+
+function getUngroupedStudentNames(className) {
+  const grouped = getGroupedStudentKeySet(className);
+  return getGroupCandidateNames(className).filter(name => !grouped.has(studentNameKey(name)));
+}
+
+function addNameToSavedGroupRoster(className, studentName) {
+  const cls = classes[className];
+  if (!cls) return;
+  const clean = normalizeStudentName(studentName);
+  if (!clean) return;
+  const lines = String(cls.groupRoster || '').split('\n').map(n => n.trim()).filter(Boolean);
+  if (!lines.some(name => studentNameKey(name) === studentNameKey(clean))) {
+    lines.push(clean);
+    cls.groupRoster = lines.join('\n');
+    const field = document.getElementById('groupNames');
+    if (field && groupRosterLoadedForClass === className) field.value = cls.groupRoster;
+  }
+}
+
+function addStudentToExistingGroup(groupIdx, studentName) {
+  const clean = normalizeStudentName(studentName);
+  if (!clean || !classes[activeClass]) return;
+  const groups = getClassGroups(activeClass);
+  while (groups.length <= groupIdx) groups.push([]);
+  let target = groups[groupIdx];
+  const key = studentNameKey(clean);
+  if (!Array.isArray(target)) groups[groupIdx] = target = [];
+  if (target.some(name => studentNameKey(name) === key)) {
+    alert(clean + ' is already in that group.');
+    return;
+  }
+  groups.forEach((group, idx) => {
+    if (idx === groupIdx || !Array.isArray(group)) return;
+    const existingIdx = group.findIndex(name => studentNameKey(name) === key);
+    if (existingIdx >= 0) group.splice(existingIdx, 1);
+  });
+  const canonical = getGroupCandidateNames(activeClass).find(name => studentNameKey(name) === key) || clean;
+  target.push(canonical);
+  addNameToSavedGroupRoster(activeClass, canonical);
+  classes[activeClass].groupCount = Math.max(Number(classes[activeClass].groupCount) || 0, groups.length);
+  saveState();
+  renderGroupGrid();
+  renderClassContent();
+}
+
+function renderUngroupedStudents() {
+  const panel = document.getElementById('ungroupedStudentsPanel');
+  if (!panel) return;
+  const names = getUngroupedStudentNames(activeClass);
+  if (names.length === 0) {
+    panel.style.display = 'none';
+    panel.innerHTML = '';
+    return;
+  }
+  const groups = getClassGroups(activeClass);
+  const teamSettings = getClassTeamSettings(activeClass);
+  panel.style.display = 'block';
+  panel.innerHTML = '';
+  const title = document.createElement('div');
+  title.className = 'group-unassigned-title';
+  title.textContent = 'Students not in a group yet';
+  panel.appendChild(title);
+  names.forEach(name => {
+    const row = document.createElement('div');
+    row.className = 'group-unassigned-row';
+    const label = document.createElement('span');
+    label.className = 'unassigned-name';
+    label.textContent = name;
+    row.appendChild(label);
+    const select = document.createElement('select');
+    select.setAttribute('aria-label', 'Choose a group for ' + name);
+    groups.forEach((group, idx) => {
+      const team = teamSettings[idx] || { name: 'Group ' + (idx + 1), icon: '⭐' };
+      const opt = document.createElement('option');
+      opt.value = String(idx);
+      opt.textContent = 'Add to ' + team.icon + ' ' + team.name;
+      select.appendChild(opt);
+    });
+    row.appendChild(select);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn btn-primary';
+    btn.textContent = 'Add';
+    btn.onclick = () => addStudentToExistingGroup(Number(select.value), name);
+    row.appendChild(btn);
+    panel.appendChild(row);
+  });
+}
 
 function renderGroupGrid() {
   const grid = document.getElementById('groupGrid');
@@ -5602,6 +5753,7 @@ function renderGroupGrid() {
     card.appendChild(btnRow);
     grid.appendChild(card);
   });
+  renderUngroupedStudents();
 }
 
 function awardGroupPoints(groupIdx, delta) {
